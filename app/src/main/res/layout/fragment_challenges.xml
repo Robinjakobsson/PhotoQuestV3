@@ -43,7 +43,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView2"
+            android:id="@+id/challengesRecyclerView"
             android:layout_width="409dp"
             android:layout_height="659dp"
             app:layout_constraintBottom_toBottomOf="parent"

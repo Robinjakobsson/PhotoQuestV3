@@ -30,6 +30,7 @@
 
 
                 <TextView
+                    android:id="@+id/challengesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -43,7 +44,7 @@
                 </TextView>
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/starImageView"
                     android:layout_width="72dp"
                     android:layout_height="66dp"
                     android:layout_marginEnd="16dp"
@@ -64,4 +65,3 @@
 
 
 </LinearLayout>
-  

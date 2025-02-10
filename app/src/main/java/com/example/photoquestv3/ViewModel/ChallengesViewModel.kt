@@ -1,4 +1,4 @@
-package com.example.photoquestv3.Views.Fragments
+package com.example.photoquestv3.ViewModel
 
 import androidx.lifecycle.ViewModel
 
