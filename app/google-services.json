@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "836432747588",
+    "project_id": "photoquestv3",
+    "storage_bucket": "photoquestv3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836432747588:android:1ef20e8245ab93103cf011",
+        "android_client_info": {
+          "package_name": "com.example.photoquestv3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU_I0gfBRoFnxXXUVHfKQf-1kH0MOPQe8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
