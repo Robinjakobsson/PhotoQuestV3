@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Views.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,14 +10,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Views.FeedActivity
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//// TODO: Rename parameter arguments, choose names that match
+//// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+//private const val ARG_PARAM1 = "param1"
+//private const val ARG_PARAM2 = "param2"
 
-lateinit var login_email: String
-lateinit var login_password: String
 
 /**
  * A simple [Fragment] subclass.
@@ -25,16 +26,16 @@ lateinit var login_password: String
  */
 class LoginFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+//    private var param1: String? = null
+//    private var param2: String? = null
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        arguments?.let {
+//            param1 = it.getString(ARG_PARAM1)
+//            param2 = it.getString(ARG_PARAM2)
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,43 +53,46 @@ class LoginFragment : Fragment() {
         val button_login: Button = view.findViewById(R.id.button_login)
 
         button_login.setOnClickListener {
-            val user_email = login_email.text.toString()
-            val user_pw = login_pw.text.toString()
-            Log.d("MyFragment", "Text från EditText: $user_email")
-            Log.d("MyFragment", "Text från EditText: $user_pw")
+            val user_email = login_email.text.toString().trim()
+            val user_pw = login_pw.text.toString().trim()
 
             FirebaseAuth.getInstance().signInWithEmailAndPassword(user_email, user_pw)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         // Inloggning lyckades
-                        val user = FirebaseAuth.getInstance().currentUser
-                        Log.d("Auth", "Inloggning lyckades: ${user?.email}")
+                        startFeedActivity()
+
                     } else {
                         // Inloggning misslyckades
-                        Log.w("Auth", "Inloggning misslyckades", task.exception)
+                        Log.w("logcheck", "Login failed", task.exception)
                     }
-
-        }
-
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
-            }
+        }
     }
-}
+
+//            companion object {
+//            /**
+//             * Use this factory method to create a new instance of
+//             * this fragment using the provided parameters.
+//             *
+//             * @param param1 Parameter 1.
+//             * @param param2 Parameter 2.
+//             * @return A new instance of fragment LoginFragment.
+//             */
+//            // TODO: Rename and change types and number of parameters
+//            @JvmStatic
+//            fun newInstance(param1: String, param2: String) =
+//                LoginFragment().apply {
+//                    arguments = Bundle().apply {
+//                        putString(ARG_PARAM1, param1)
+//                        putString(ARG_PARAM2, param2)
+//                    }
+//                }
+//
+//               }
+
+    fun startFeedActivity() {
+        val intent = Intent(requireActivity(), FeedActivity::class.java)
+        requireActivity().startActivity(intent)
+    }
+    }
