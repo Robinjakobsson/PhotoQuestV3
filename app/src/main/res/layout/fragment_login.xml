@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_centerVertical="true"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     >
 
 
@@ -71,6 +73,7 @@
         android:layout_height="15dp" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_login"
         android:elevation="0dp"
         android:text="@string/letsgo"
         android:textSize="18sp"

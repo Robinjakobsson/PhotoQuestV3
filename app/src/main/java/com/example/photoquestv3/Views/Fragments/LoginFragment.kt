@@ -1,16 +1,22 @@
 package com.example.photoquestv3.Views.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import com.example.photoquestv3.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+lateinit var login_email: String
+lateinit var login_password: String
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +42,34 @@ class LoginFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val login_email: EditText = view.findViewById(R.id.login_email)
+        val login_pw: EditText = view.findViewById(R.id.login_password)
+        val button_login: Button = view.findViewById(R.id.button_login)
+
+        button_login.setOnClickListener {
+            val user_email = login_email.text.toString()
+            val user_pw = login_pw.text.toString()
+            Log.d("MyFragment", "Text från EditText: $user_email")
+            Log.d("MyFragment", "Text från EditText: $user_pw")
+
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(user_email, user_pw)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Inloggning lyckades
+                        val user = FirebaseAuth.getInstance().currentUser
+                        Log.d("Auth", "Inloggning lyckades: ${user?.email}")
+                    } else {
+                        // Inloggning misslyckades
+                        Log.w("Auth", "Inloggning misslyckades", task.exception)
+                    }
+
+        }
+
     }
 
     companion object {
