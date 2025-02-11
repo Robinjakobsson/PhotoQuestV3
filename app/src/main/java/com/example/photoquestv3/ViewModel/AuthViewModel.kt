@@ -21,4 +21,8 @@ class AuthViewModel : ViewModel() {
 
     }
 
+    fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        auth.forgotPassword(email,onSuccess,onFailure)
+    }
+
 }

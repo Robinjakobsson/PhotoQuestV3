@@ -17,5 +17,6 @@
     <string name="more">more</string>
     <string name="comment_section">comment_section</string>
     <string name="userprofile">userProfile</string>
+    <string name="forgotpassword">Forgot password?</string>
 </resources>
 

@@ -55,6 +55,25 @@ class AuthRepository {
         }
     }
 
+    fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                auth.sendPasswordResetEmail(email).await()
+
+                withContext(Dispatchers.Main) {
+                    Log.d("AuthRepository", "Password reset email sent to $email")
+                    onSuccess()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.d("AuthRepository", "Could not send password reset email...$e")
+                    onFailure(e)
+                }
+            }
+        }
+    }
+
+
     private suspend fun uploadPicture(imageUri: Uri): String {
         return storage.uploadProfileImage(imageUri)
     }
