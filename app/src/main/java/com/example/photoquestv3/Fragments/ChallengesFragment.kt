@@ -33,16 +33,16 @@ class ChallengesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_challenges, container, false)
 
         val challenges = mutableListOf(
-            Challenges("Photograph a sunset", false),
-            Challenges("Take a picture from an unusual angle", true),
-            Challenges("Photograph something that symbolizes happiness", true),
-            Challenges("Take a photo of something in the rain", false),
-            Challenges("Photograph something in nature that is reflecting", false),
-            Challenges("Take a black-and-white photo", true),
-            Challenges("Take a picture of something in motion", false),
-            Challenges("Photograph something old or antique", true),
-            Challenges("Take a portrait of someone", true),
-            Challenges("Take a picture of a reflection", false)
+            Challenges("Photograph a sunset", "2025-02-11", true),
+            Challenges("Take a picture from an unusual angle","2025-02-10", true),
+            Challenges("Photograph something that symbolizes happiness","2025-02-09", true),
+            Challenges("Take a photo of something in the rain","2025-02-08", false),
+            Challenges("Photograph something in nature that is reflecting", "2025-02-07",false),
+            Challenges("Take a black-and-white photo", "2025-02-06",true),
+            Challenges("Take a picture of something in motion","2025-02-05", false),
+            Challenges("Photograph something old or antique", "2025-02-04",true),
+            Challenges("Take a portrait of someone", "2025-02-03",true),
+            Challenges("Take a picture of a reflection", "2025-02-02",false)
 
         )
 
