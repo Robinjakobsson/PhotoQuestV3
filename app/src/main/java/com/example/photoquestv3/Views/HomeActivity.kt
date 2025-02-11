@@ -7,9 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import com.example.photoquestv3.Fragments.RegisterFragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.Fragments.LoginFragment
-import com.example.photoquestv3.Views.Fragments.RegisterFragment
 import com.example.photoquestv3.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -21,12 +22,14 @@ class HomeActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_home)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
         binding.signUpButton.setOnClickListener {
             startRegisterFragment()
         }
@@ -44,8 +47,8 @@ class HomeActivity : AppCompatActivity() {
 
         //do not remove, need to check buttons behaviour.
         // Most likely should make isAvailable and isVisible = true upon closing Register or login fragments
-//        binding.signInButton.isGone = true
-//        binding.signUpButton.isGone = true
+        binding.signInButton.isGone = true
+       binding.signUpButton.isGone = true
     }
 
     fun startRegisterFragment() {
@@ -54,5 +57,13 @@ class HomeActivity : AppCompatActivity() {
             .replace(R.id.registerFrameLayout, registerFragment, "RegisterFragment")
             .addToBackStack(null)
             .commit()
+        binding.signInButton.isGone = true
+        binding.signUpButton.isGone = true
+    }
+    fun getButtonsBack () {
+        binding.signUpButton.isVisible = true
+        binding.signInButton.isVisible = true
+        binding.signUpButton.isClickable = true
+        binding.signInButton.isVisible = true
     }
 }
