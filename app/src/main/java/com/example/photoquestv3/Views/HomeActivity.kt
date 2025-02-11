@@ -38,11 +38,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun startLoginFragment() {
-        val loginFragment = LoginFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.loginFrameLayout, loginFragment, "LoginFragment")
-            .addToBackStack(null)
-            .commit()
+//        val loginFragment = LoginFragment()
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.loginFrameLayout, loginFragment, "LoginFragment")
+//            .addToBackStack(null)
+//            .commit()
 
         //do not remove, need to check buttons behaviour.
         // Most likely should make isAvailable and isVisible = true upon closing Register or login fragments
