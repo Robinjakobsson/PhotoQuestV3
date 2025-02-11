@@ -31,4 +31,6 @@ class PostFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+//    test commit
 }
