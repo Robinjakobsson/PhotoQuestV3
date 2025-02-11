@@ -13,83 +13,37 @@ import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.FeedActivity
 import com.google.firebase.auth.FirebaseAuth
 
-//// TODO: Rename parameter arguments, choose names that match
-//// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//private const val ARG_PARAM1 = "param1"
-//private const val ARG_PARAM2 = "param2"
-
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val login_email: EditText = view.findViewById(R.id.login_email)
-        val login_pw: EditText = view.findViewById(R.id.login_password)
-        val button_login: Button = view.findViewById(R.id.button_login)
+        val loginEmail: EditText = view.findViewById(R.id.login_email)
+        val loginPw: EditText = view.findViewById(R.id.login_password)
+        val buttonLogin: Button = view.findViewById(R.id.button_login)
 
-        button_login.setOnClickListener {
-            val user_email = login_email.text.toString().trim()
-            val user_pw = login_pw.text.toString().trim()
+        buttonLogin.setOnClickListener {
+            val userEmail = loginEmail.text.toString().trim()
+            val userPw = loginPw.text.toString().trim()
 
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(user_email, user_pw)
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail, userPw)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        // Inloggning lyckades
                         startFeedActivity()
 
                     } else {
-                        // Inloggning misslyckades
-                        Log.w("logcheck", "Login failed", task.exception)
+                        Log.w("!!!", "Login failed", task.exception)
                     }
                 }
         }
     }
-
-//            companion object {
-//            /**
-//             * Use this factory method to create a new instance of
-//             * this fragment using the provided parameters.
-//             *
-//             * @param param1 Parameter 1.
-//             * @param param2 Parameter 2.
-//             * @return A new instance of fragment LoginFragment.
-//             */
-//            // TODO: Rename and change types and number of parameters
-//            @JvmStatic
-//            fun newInstance(param1: String, param2: String) =
-//                LoginFragment().apply {
-//                    arguments = Bundle().apply {
-//                        putString(ARG_PARAM1, param1)
-//                        putString(ARG_PARAM2, param2)
-//                    }
-//                }
-//
-//               }
 
     fun startFeedActivity() {
         val intent = Intent(requireActivity(), FeedActivity::class.java)
