@@ -7,11 +7,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.photoquestv3.Fragments.ChallengesFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Fragments.HomeFragment
-import com.example.photoquestv3.Views.Fragments.PostFragment
-import com.example.photoquestv3.Views.Fragments.ProfileFragment
-import com.example.photoquestv3.Views.Fragments.SearchFragment
 import com.example.photoquestv3.databinding.ActivityFeedBinding
 
 class FeedActivity : AppCompatActivity() {
@@ -22,12 +22,13 @@ class FeedActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         binding = ActivityFeedBinding.inflate(layoutInflater)
-
+        mockData()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+
         }
 
 
@@ -42,16 +43,22 @@ class FeedActivity : AppCompatActivity() {
            else -> return@setOnItemSelectedListener false
        }
        true
+    }
 
-   }
+    //  fun for replacing fragment.
+    private fun replaceFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout,fragment).commit()
+    }
 
+    private fun mockData() {
+
+        val postList = Post.mockData()
+        val postAdapter = PostAdapter(postList)
+
+        binding.recContainer.layoutManager = LinearLayoutManager(this)
+        binding.recContainer.adapter = postAdapter
 
 
     }
-
-//  fun for replacing fragment.
-private fun replaceFragment(fragment: Fragment){
-    supportFragmentManager.beginTransaction().replace(R.id.frame_layout,fragment).commit()
-}
 
 }

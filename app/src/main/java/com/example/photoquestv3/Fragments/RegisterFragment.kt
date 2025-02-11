@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
+import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
 
@@ -31,7 +34,12 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
-
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as? HomeActivity)?.getButtonsBack()
+                parentFragmentManager.beginTransaction().remove(this@RegisterFragment).commit()
+            }
+        })
         val pickImageLauncher =
             registerForActivityResult(ActivityResultContracts.GetContent()) {uri: Uri? ->
                 if (uri != null) {
@@ -81,5 +89,7 @@ class RegisterFragment : Fragment() {
 
         binding = null
     }
+
+
 
 }

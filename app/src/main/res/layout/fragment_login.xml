@@ -5,20 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_centerVertical="true"
-    android:background="@drawable/background_gradient"
-    android:padding="40dp">
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
 
-
-    <ImageView
-        android:id="@+id/logo_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/photo_quest_logo"
-        android:adjustViewBounds="true"
-        android:padding="20dp"
-        >
-
-    </ImageView>
 
     <Space
         android:layout_width="match_parent"
@@ -32,8 +21,7 @@
         android:fontFamily="@font/impetus"
         android:textSize="30sp"
         android:textColor="#000000"
-        android:includeFontPadding="false"
-        >
+        android:includeFontPadding="false">
     </TextView>
 
     <Space
@@ -83,6 +71,7 @@
         android:layout_height="15dp" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_login"
         android:elevation="0dp"
         android:text="@string/letsgo"
         android:textSize="18sp"
