@@ -56,7 +56,7 @@
         android:layout_marginTop="80dp"/>
 
     <Button
-        android:id="@+id/mockButton"
+        android:id="@+id/galleryImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/createPost"
@@ -68,9 +68,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-<!--Cardview?-->

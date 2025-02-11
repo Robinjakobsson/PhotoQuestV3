@@ -59,6 +59,15 @@ data class Post(
                     description = "First selfie",
                     userId = "5",
                     likes = 1,
+                ),
+                Post(
+                    postId = "6",
+                    username = "StormTrooper12",
+                    profilePic = R.drawable.ic_person,
+                    imagePostUrl = "https://images.unsplash.com/photo-1478479405421-ce83c92fb3ba?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    description = "Ah here we go again..",
+                    userId = "6",
+                    likes = 0,
                 )
             )
         }
