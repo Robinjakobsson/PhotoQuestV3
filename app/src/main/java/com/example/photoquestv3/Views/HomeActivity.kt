@@ -29,12 +29,8 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
-        binding.signUpButton.setOnClickListener {
-            startRegisterFragment()
-            
-        }
-        binding.signInButton.setOnClickListener {
-            startLoginFragment()
+        binding.signUpButton.setOnClickListener { startRegisterFragment() }
+        binding.signInButton.setOnClickListener { startLoginFragment()
         }
     }
 

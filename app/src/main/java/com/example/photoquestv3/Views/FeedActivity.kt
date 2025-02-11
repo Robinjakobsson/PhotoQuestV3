@@ -23,9 +23,7 @@ class FeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityFeedBinding.inflate(layoutInflater)
-        mockData()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -33,9 +31,9 @@ class FeedActivity : AppCompatActivity() {
             insets
 
         }
+        startHomeFragment()
 
 
-        //  Bottom nav flow.
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())
@@ -53,16 +51,7 @@ class FeedActivity : AppCompatActivity() {
         private fun replaceFragment(fragment: Fragment) {
             supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
         }
-
-        private fun mockData() {
-
-            val postList = Post.mockData()
-            val postAdapter = PostAdapter(postList)
-
-            binding.recContainer.layoutManager = LinearLayoutManager(this)
-            binding.recContainer.adapter = postAdapter
-
-
-        }
-
+    private fun startHomeFragment() {
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout,HomeFragment()).commit()
+    }
     }
