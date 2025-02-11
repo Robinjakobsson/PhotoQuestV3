@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Fragments.RegisterFragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.Fragments.LoginFragment
@@ -30,13 +31,24 @@ class HomeActivity : AppCompatActivity() {
 
 
         binding.signUpButton.setOnClickListener {
-            startRegisterFragment()
-            
+//            startRegisterFragment()
+            navigateToHomeFrag()
         }
         binding.signInButton.setOnClickListener {
-            startLoginFragment()
+//            startLoginFragment()
+            navigateToHomeFrag()
         }
     }
+
+    private fun navigateToHomeFrag() {
+        val homeFragment = HomeFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, homeFragment, "HomeFragment")
+            .addToBackStack(null)
+            .commit()
+    }
+
+
 
     fun startLoginFragment() {
         val loginFragment = LoginFragment()
