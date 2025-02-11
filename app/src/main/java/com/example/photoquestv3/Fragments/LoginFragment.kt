@@ -55,16 +55,23 @@ class LoginFragment : Fragment() {
         val email = binding.loginEmail.text.toString().trim()
         val password = binding.loginPassword.text.toString().trim()
 
-        binding.progressBarLogin.visibility = View.VISIBLE
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(requireContext(),"All fields are required!",Toast.LENGTH_SHORT).show()
+            return
 
-        auth.signIn(email,password, onSuccess = {
-            binding.progressBarLogin.visibility = View.GONE
-            Toast.makeText(requireContext(),"Welcome! $email",Toast.LENGTH_SHORT).show()
-            startFeedActivity()
-        }, onFailure = {
-            binding.progressBarLogin.visibility = View.GONE
-            Toast.makeText(requireContext(),"Login failed..",Toast.LENGTH_SHORT).show()
-        })
+        } else {
+
+            binding.progressBarLogin.visibility = View.VISIBLE
+
+            auth.signIn(email, password, onSuccess = {
+                binding.progressBarLogin.visibility = View.GONE
+                Toast.makeText(requireContext(), "Welcome! $email", Toast.LENGTH_SHORT).show()
+                startFeedActivity()
+            }, onFailure = {
+                binding.progressBarLogin.visibility = View.GONE
+                Toast.makeText(requireContext(), "Login failed..", Toast.LENGTH_SHORT).show()
+            })
+        }
     }
 
     override fun onDestroyView() {
