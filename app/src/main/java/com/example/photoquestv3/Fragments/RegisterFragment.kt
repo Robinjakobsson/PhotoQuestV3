@@ -55,6 +55,8 @@ class RegisterFragment : Fragment() {
 
         val imageUri = selectedImageUri
 
+        binding?.progressBar?.visibility = View.VISIBLE
+
         if (email.isEmpty() || password.isEmpty() || name.isEmpty() || bio.isEmpty() || username.isEmpty()) {
             Toast.makeText(requireContext(),"All fields are required!",Toast.LENGTH_SHORT).show()
             return
@@ -65,7 +67,9 @@ class RegisterFragment : Fragment() {
         }else {
             auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
                 Toast.makeText(requireContext(),"Welcome $username",Toast.LENGTH_SHORT).show()
+                binding?.progressBar?.visibility = View.GONE
             }, onFailure = {
+                binding?.progressBar?.visibility = View.GONE
                 Toast.makeText(requireContext(),"Account not created..",Toast.LENGTH_SHORT).show()
             })
         }
