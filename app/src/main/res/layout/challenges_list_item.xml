@@ -31,12 +31,14 @@
 
                 <TextView
                     android:id="@+id/challengesTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Challenge"
+                    android:text="@string/Challenges"
                     android:textSize="20sp"
+                    android:maxLines="2"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/starImageView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
