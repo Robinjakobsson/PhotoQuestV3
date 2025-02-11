@@ -21,7 +21,7 @@ class FireStoreRepository {
 
             Log.d("FireStoreRepo","User: $userName Successfully added!")
         }catch (e : Exception) {
-            Log.d("FireStoreRepo","User: $userName not added...")
+            Log.d("FireStoreRepo","User: $userName not added... ${e.message}")
             throw e
         }
     }
