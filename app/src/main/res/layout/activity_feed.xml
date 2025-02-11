@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".Views.FeedActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:listitem="@layout/post_item"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        />
+
         <FrameLayout
             android:id="@+id/frame_layout"
             android:layout_width="0dp"
@@ -28,15 +39,6 @@
             app:menu="@menu/bottom_navbar"
             />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rec_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:listitem="@layout/post_item"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
