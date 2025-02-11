@@ -42,7 +42,7 @@ class HomeActivity : AppCompatActivity() {
     fun startLoginFragment() {
         val loginFragment = LoginFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.loginFrameLayout, loginFragment, "LoginFragment")
+            .replace(R.id.frame_layout, loginFragment, "LoginFragment")
             .addToBackStack(null)
             .commit()
 
