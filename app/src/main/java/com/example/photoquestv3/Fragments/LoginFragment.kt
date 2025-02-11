@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.HomeActivity
 
 
@@ -21,6 +24,7 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private lateinit var auth: AuthViewModel
 
 
     override fun onCreateView(
@@ -34,13 +38,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        auth = ViewModelProvider(this)[AuthViewModel::class.java]
 
-
-        binding.signInButton.setOnClickListener {
-            val intent = Intent(requireContext(), FeedActivity::class.java)
-            startActivity(intent)
-        }
-         requireActivity().onBackPressedDispatcher.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -48,6 +48,23 @@ class LoginFragment : Fragment() {
                     parentFragmentManager.beginTransaction().remove(this@LoginFragment).commit()
                 }
             })
+        binding.buttonLogin.setOnClickListener { signIn() }
+    }
+
+    private fun signIn() {
+        val email = binding.loginEmail.text.toString().trim()
+        val password = binding.loginPassword.text.toString().trim()
+
+        binding.progressBarLogin.visibility = View.VISIBLE
+
+        auth.signIn(email,password, onSuccess = {
+            binding.progressBarLogin.visibility = View.GONE
+            Toast.makeText(requireContext(),"Welcome! $email",Toast.LENGTH_SHORT).show()
+            startFeedActivity()
+        }, onFailure = {
+            binding.progressBarLogin.visibility = View.GONE
+            Toast.makeText(requireContext(),"Login failed..",Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onDestroyView() {
@@ -55,30 +72,10 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
-}
-
-        val loginEmail: EditText = view.findViewById(R.id.login_email)
-        val loginPw: EditText = view.findViewById(R.id.login_password)
-        val buttonLogin: Button = view.findViewById(R.id.button_login)
-
-        buttonLogin.setOnClickListener {
-            val userEmail = loginEmail.text.toString().trim()
-            val userPw = loginPw.text.toString().trim()
-
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail, userPw)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        startFeedActivity()
-
-                    } else {
-                        Log.w("!!!", "Login failed", task.exception)
-                    }
-                }
-        }
-    }
 
     fun startFeedActivity() {
         val intent = Intent(requireActivity(), FeedActivity::class.java)
         requireActivity().startActivity(intent)
-      }
+
     }
+}

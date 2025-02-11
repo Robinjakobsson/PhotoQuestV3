@@ -60,7 +60,6 @@ class RegisterFragment : Fragment() {
         val name = binding?.nameEt?.text.toString()
         val bio = binding?.biographyEt?.text.toString()
         val username = binding?.usernameEt?.text.toString()
-
         val imageUri = selectedImageUri
 
         binding?.progressBar?.visibility = View.VISIBLE
@@ -76,20 +75,15 @@ class RegisterFragment : Fragment() {
             auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
                 Toast.makeText(requireContext(),"Welcome $username",Toast.LENGTH_SHORT).show()
                 binding?.progressBar?.visibility = View.GONE
+
             }, onFailure = {
                 binding?.progressBar?.visibility = View.GONE
                 Toast.makeText(requireContext(),"Account not created..",Toast.LENGTH_SHORT).show()
             })
         }
-
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
-
         binding = null
     }
-
-
-
 }
