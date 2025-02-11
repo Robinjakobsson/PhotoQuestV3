@@ -48,4 +48,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //  Lottie splash screen
+    implementation(libs.lottie)
+
+
+
 }
