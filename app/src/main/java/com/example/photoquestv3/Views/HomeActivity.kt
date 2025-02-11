@@ -57,11 +57,13 @@ class HomeActivity : AppCompatActivity() {
             .commit()
         binding.signInButton.isGone = true
         binding.signUpButton.isGone = true
+        binding.appLogoImage.isGone = true
     }
     fun getButtonsBack () {
         binding.signUpButton.isVisible = true
         binding.signInButton.isVisible = true
         binding.signUpButton.isClickable = true
         binding.signInButton.isVisible = true
+        binding.appLogoImage.isVisible = true
     }
 }
