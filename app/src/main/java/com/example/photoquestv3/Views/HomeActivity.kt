@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.Fragments.LoginFragment
-import com.example.photoquestv3.Views.Fragments.RegisterFragment
+import com.example.photoquestv3.Fragments.RegisterFragment
 import com.example.photoquestv3.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -22,7 +22,6 @@ class HomeActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_home)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -31,9 +30,11 @@ class HomeActivity : AppCompatActivity() {
 
         binding.signUpButton.setOnClickListener {
             startRegisterFragment()
+            Log.d("Hello world","asdasd")
         }
         binding.signInButton.setOnClickListener {
             startLoginFragment()
+            Log.d("Hello world","asdasdasdadadada")
         }
     }
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:id="@+id/home"
+        android:icon="@drawable/home_vector"
+        />
+
+    <item android:title="Star"
+        android:id="@+id/star"
+        android:icon="@drawable/star_vector"
+        />
+
+
+    <item android:title="Post"
+        android:id="@+id/post"
+        android:icon="@drawable/post_vector"
+        />
+
+    <item android:title="Search"
+        android:id="@+id/search"
+        android:icon="@drawable/search_vector"
+        />
+
+
+    <item android:title="Profile"
+        android:id="@+id/profile"
+        android:icon="@drawable/profile_vector"
+        />
+</menu>
