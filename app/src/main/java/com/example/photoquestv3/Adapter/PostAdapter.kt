@@ -34,7 +34,7 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
         holder.userName.text = post.username
         holder.description.text = post.description
 
-        holder.profileImage.setImageResource(post.profileImage)
+        holder.profileImage.setImageResource(post.profilePic)
 
         Glide.with(holder.itemView.context)
             .load(post.imagePostUrl)

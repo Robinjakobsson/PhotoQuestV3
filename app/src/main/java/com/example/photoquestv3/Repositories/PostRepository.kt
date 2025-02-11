@@ -11,13 +11,14 @@ import java.util.UUID
 class PostRepository {
 
     private val dbStorage = Firebase.storage
+    private val dbFirestore = Firebase.firestore
 
     suspend fun createPost(
         imageUri: Uri,
         description: String,
         userId: String,
         userName: String,
-        profileImage: Int
+        profilePic: Int
     ) : String {
 
         val postId = UUID.randomUUID().toString()
@@ -25,9 +26,22 @@ class PostRepository {
         storageRef.putFile(imageUri).await()
         val imageUrl = storageRef.downloadUrl.await().toString()
 
+        val post = Post(
+            postId = postId,
+            imagePostUrl = imageUrl,
+            description = description,
+            userId = userId,
+            username = userName,
+            profilePic = profilePic,
+            likes = 0
+        )
 
+        dbFirestore.collection("posts")
+            .document(postId)
+            .set(post)
+            .await()
 
-        return  ""
+        return postId
     }
 
     suspend fun uploadPost(post: Post) {}
@@ -39,8 +53,13 @@ class PostRepository {
     suspend fun getAllPosts() {}
 
     //    Show all posts by user
-    suspend fun getPostsByUserId(userId: String) {}
-
+    suspend fun fetchUserPosts(userId: String) :List<Post> {
+        val postsByUser = dbFirestore.collection("posts")
+            .whereEqualTo("userId", userId)
+            .get()
+            .await()
+        return postsByUser.toObjects(Post::class.java)
+    }
     //    For future references = Have the ability to see all liked posts in activity or fragment?
     suspend fun likePost(postId: String) {}
 
