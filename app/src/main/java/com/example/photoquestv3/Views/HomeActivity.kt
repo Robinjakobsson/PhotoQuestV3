@@ -35,7 +35,6 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.signInButton.setOnClickListener {
             startLoginFragment()
-            )
         }
     }
 

@@ -36,11 +36,11 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.signInButton.setOnClickListener {
+        binding.buttonLogin.setOnClickListener {
             val intent = Intent(requireContext(), FeedActivity::class.java)
             startActivity(intent)
         }
-         requireActivity().onBackPressedDispatcher.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -57,28 +57,29 @@ class LoginFragment : Fragment() {
 
 }
 
-        val loginEmail: EditText = view.findViewById(R.id.login_email)
-        val loginPw: EditText = view.findViewById(R.id.login_password)
-        val buttonLogin: Button = view.findViewById(R.id.button_login)
+//val loginEmail: EditText = view.findViewById(R.id.login_email)
+//val loginPw: EditText = view.findViewById(R.id.login_password)
+//val buttonLogin: Button = view.findViewById(R.id.button_login)
+//
+//buttonLogin.setOnClickListener {
+//    val userEmail = loginEmail.text.toString().trim()
+//    val userPw = loginPw.text.toString().trim()
+//
+//    FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail, userPw)
+//        .addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                startFeedActivity()
+//
+//            } else {
+//                Log.w("!!!", "Login failed", task.exception)
+//            }
+//        }
+//}
+//}
+//
+//fun startFeedActivity() {
+//    val intent = Intent(requireActivity(), FeedActivity::class.java)
+//    requireActivity().startActivity(intent)
+//}
 
-        buttonLogin.setOnClickListener {
-            val userEmail = loginEmail.text.toString().trim()
-            val userPw = loginPw.text.toString().trim()
 
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail, userPw)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        startFeedActivity()
-
-                    } else {
-                        Log.w("!!!", "Login failed", task.exception)
-                    }
-                }
-        }
-    }
-
-    fun startFeedActivity() {
-        val intent = Intent(requireActivity(), FeedActivity::class.java)
-        requireActivity().startActivity(intent)
-      }
-    }
