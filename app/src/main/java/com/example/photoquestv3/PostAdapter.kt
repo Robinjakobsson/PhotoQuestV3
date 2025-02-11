@@ -1,5 +1,6 @@
 package com.example.photoquestv3
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,18 +15,21 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
+        val likes: TextView = itemView.findViewById(R.id.likeIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
+        return PostViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+       return  postList.size
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val post = postList[position]
+
     }
 
 }

@@ -19,5 +19,3 @@ class FeedActivity : AppCompatActivity() {
         }
     }
 }
-
-//Create a button just to navigate to the recycleview:
