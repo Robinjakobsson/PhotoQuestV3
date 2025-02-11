@@ -52,6 +52,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_et"
             android:layout_margin="5dp"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -66,6 +67,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_et"
             android:layout_margin="5dp"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -80,6 +82,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/biography_et"
             android:layout_margin="5dp"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -101,5 +104,12 @@
         android:textStyle="italic"
         android:text="@string/register"
         android:layout_gravity="center_horizontal"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 
 </LinearLayout>
