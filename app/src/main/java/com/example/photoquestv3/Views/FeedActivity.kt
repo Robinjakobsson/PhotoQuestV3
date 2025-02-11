@@ -12,6 +12,9 @@ import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Fragments.HomeFragment
+import com.example.photoquestv3.Views.Fragments.PostFragment
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
+import com.example.photoquestv3.Views.Fragments.SearchFragment
 import com.example.photoquestv3.databinding.ActivityFeedBinding
 
 class FeedActivity : AppCompatActivity() {
@@ -32,17 +35,18 @@ class FeedActivity : AppCompatActivity() {
         }
 
 
-   //  Bottom nav flow.
-   binding.bottomNavigationView.setOnItemSelectedListener {
-       when(it.itemId) {
-           R.id.home -> replaceFragment(HomeFragment())
-           R.id.star -> replaceFragment (ChallengesFragment())
-           R.id.post -> replaceFragment (PostFragment())
-           R.id.search -> replaceFragment (SearchFragment())
-           R.id.profile -> replaceFragment (ProfileFragment())
-           else -> return@setOnItemSelectedListener false
-       }
-       true
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> replaceFragment(HomeFragment())
+                R.id.star -> replaceFragment(ChallengesFragment())
+                R.id.post -> replaceFragment(PostFragment())
+                R.id.search -> replaceFragment(SearchFragment())
+                R.id.profile -> replaceFragment(ProfileFragment())
+                else -> return@setOnItemSelectedListener false
+            }
+            true
+        }
     }
 
     //  fun for replacing fragment.
@@ -57,8 +61,5 @@ class FeedActivity : AppCompatActivity() {
 
         binding.recContainer.layoutManager = LinearLayoutManager(this)
         binding.recContainer.adapter = postAdapter
-
-
-    }
-
+     }
 }

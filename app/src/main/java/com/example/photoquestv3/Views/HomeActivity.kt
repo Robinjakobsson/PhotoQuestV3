@@ -35,14 +35,13 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.signInButton.setOnClickListener {
             startLoginFragment()
-            )
         }
     }
 
     fun startLoginFragment() {
         val loginFragment = LoginFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, loginFragment, "LoginFragment")
+            .replace(R.id.loginFrameLayout, loginFragment, "LoginFragment")
             .addToBackStack(null)
             .commit()
 

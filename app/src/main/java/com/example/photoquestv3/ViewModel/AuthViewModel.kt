@@ -16,5 +16,9 @@ class AuthViewModel : ViewModel() {
             auth.createAccount(email,password,name,username,imageUri,biography,onSuccess,onFailure)
         }
     }
+    fun signIn(email: String,password: String,onSuccess: () -> Unit,onFailure: (Exception) -> Unit) {
+        auth.signIn(email,password,onSuccess,onFailure)
+
+    }
 
 }

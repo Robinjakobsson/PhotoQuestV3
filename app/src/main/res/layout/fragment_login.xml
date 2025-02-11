@@ -84,4 +84,12 @@
         android:textAllCaps="false"
         />
 
+    <ProgressBar
+        android:layout_marginTop="5dp"
+        android:id="@+id/progress_bar_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
 </LinearLayout>

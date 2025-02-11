@@ -17,7 +17,6 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
-        val likes: TextView = itemView.findViewById(R.id.likeIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -34,7 +33,6 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
 
         holder.userName.text = post.username
         holder.description.text = post.description
-        holder.likes.text = post.likes.toString()
 
         holder.profileImage.setImageResource(post.profileImage)
 
