@@ -1,15 +1,36 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+# =============== 
+# OS-specifika filer
+# ===============
 .DS_Store
+Thumbs.db
+
+# =============== 
+# Gradle
+# ===============
+*.gradle
+.gradle
 /build
 /captures
 .externalNativeBuild
 .cxx
+
+# =============== 
+# Android-specifikt
+# ===============
 local.properties
+/local.properties
+
+# =============== 
+# IntelliJ/Android Studio
+# ===============
+*.iml
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/appInsightsSettings.xml
+.idea/.name
