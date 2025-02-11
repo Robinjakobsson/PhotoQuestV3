@@ -18,7 +18,7 @@ class ChallengesFragment : Fragment() {
         fun newInstance() = ChallengesFragment()
     }
 
-  //  private val viewModel: ChallengesViewModel by viewModels()
+    //  private val viewModel: ChallengesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +33,25 @@ class ChallengesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_challenges, container, false)
 
         val challenges = mutableListOf(
-            Challenges("Challenge 1", true),
-            Challenges("Challenge 2", false)
+            Challenges("Challenge 1", false),
+            Challenges("Challenge 2", true),
+            Challenges("Challenge 3", false),
+            Challenges("Challenge 4", true),
+            Challenges("Challenge 5", false),
+            Challenges("Challenge 6", true),
+            Challenges("Challenge 7", false),
+            Challenges("Challenge 8", true),
+            Challenges("Challenge 9", false),
+            Challenges("Challenge 10", true),
+            Challenges("Challenge 11", true),
+            Challenges("Challenge 12", true)
+
         )
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.challengesRecyclerView)
-
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         val adapter = ChallengesRecyclerAdapter(requireContext(), challenges)
-
         recyclerView.adapter = adapter
 
         return view
