@@ -1,4 +1,4 @@
-package com.example.photoquestv3.Views
+package com.example.photoquestv3.Adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
