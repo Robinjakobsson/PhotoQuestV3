@@ -9,14 +9,13 @@
     tools:context=".Views.HomeActivity"
     android:background="@drawable/background_gradient">
 
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-150dp"
-        android:padding="70dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/photo_quest_logo_start" />
 
@@ -48,7 +47,13 @@
     <FrameLayout
         android:id="@+id/loginFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        android:layout_height="0dp">
+
+
+    </FrameLayout>
 
     <FrameLayout
 

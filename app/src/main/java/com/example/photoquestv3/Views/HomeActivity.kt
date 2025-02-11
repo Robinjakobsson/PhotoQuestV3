@@ -45,8 +45,6 @@ class HomeActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
 
-        //do not remove, need to check buttons behaviour.
-        // Most likely should make isAvailable and isVisible = true upon closing Register or login fragments
         binding.signInButton.isGone = true
        binding.signUpButton.isGone = true
     }

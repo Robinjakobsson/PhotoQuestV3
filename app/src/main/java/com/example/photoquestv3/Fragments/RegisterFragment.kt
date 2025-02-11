@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Fragments
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
+import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
@@ -75,6 +77,7 @@ class RegisterFragment : Fragment() {
             auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
                 Toast.makeText(requireContext(),"Welcome $username",Toast.LENGTH_SHORT).show()
                 binding?.progressBar?.visibility = View.GONE
+                startFeedActivity()
 
             }, onFailure = {
                 binding?.progressBar?.visibility = View.GONE
@@ -85,5 +88,10 @@ class RegisterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+    fun startFeedActivity() {   //copypaste from LoginFragment
+        val intent = Intent(requireActivity(), FeedActivity::class.java)
+        requireActivity().startActivity(intent)
+
     }
 }
