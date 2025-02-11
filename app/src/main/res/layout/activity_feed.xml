@@ -7,4 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".Views.FeedActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/post_item"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
