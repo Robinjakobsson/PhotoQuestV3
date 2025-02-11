@@ -35,7 +35,7 @@ class FeedActivity : AppCompatActivity() {
         }
 
 
-
+        //  Bottom nav flow.
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(HomeFragment())
@@ -49,17 +49,20 @@ class FeedActivity : AppCompatActivity() {
         }
     }
 
-    //  fun for replacing fragment.
-    private fun replaceFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout,fragment).commit()
+        //  fun for replacing fragment.
+        private fun replaceFragment(fragment: Fragment) {
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+        }
+
+        private fun mockData() {
+
+            val postList = Post.mockData()
+            val postAdapter = PostAdapter(postList)
+
+            binding.recContainer.layoutManager = LinearLayoutManager(this)
+            binding.recContainer.adapter = postAdapter
+
+
+        }
+
     }
-
-    private fun mockData() {
-
-        val postList = Post.mockData()
-        val postAdapter = PostAdapter(postList)
-
-        binding.recContainer.layoutManager = LinearLayoutManager(this)
-        binding.recContainer.adapter = postAdapter
-     }
-}
