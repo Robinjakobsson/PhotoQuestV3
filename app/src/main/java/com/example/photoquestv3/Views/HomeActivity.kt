@@ -1,6 +1,7 @@
 package com.example.photoquestv3.Views
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,10 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,9 +31,11 @@ class HomeActivity : AppCompatActivity() {
 
         binding.signUpButton.setOnClickListener {
             startRegisterFragment()
+            
         }
         binding.signInButton.setOnClickListener {
             startLoginFragment()
+            )
         }
     }
 

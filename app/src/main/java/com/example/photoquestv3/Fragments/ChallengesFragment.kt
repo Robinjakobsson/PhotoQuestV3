@@ -1,6 +1,6 @@
-package com.example.photoquestv3.Views.Fragments
+package com.example.photoquestv3.Fragments
 
-import androidx.fragment.app.viewModels
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.photoquestv3.Models.ChallengeObjects
 import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.R
-import com.example.photoquestv3.ViewModel.ChallengesViewModel
-import com.example.photoquestv3.Views.ChallengesRecyclerAdapter
+import com.example.photoquestv3.Adapter.ChallengesRecyclerAdapter
 
 class ChallengesFragment : Fragment() {
 
@@ -20,7 +18,7 @@ class ChallengesFragment : Fragment() {
         fun newInstance() = ChallengesFragment()
     }
 
-    private val viewModel: ChallengesViewModel by viewModels()
+  //  private val viewModel: ChallengesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
