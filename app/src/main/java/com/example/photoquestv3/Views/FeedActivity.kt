@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.photoquestv3.Fragments.ChallengesFragment
 import com.example.photoquestv3.R
-import com.example.photoquestv3.Views.Fragments.HomeFragment
+import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Views.Fragments.PostFragment
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.Views.Fragments.SearchFragment
-import com.example.photoquestv3.Views.Fragments.StarFragment
 import com.example.photoquestv3.databinding.ActivityFeedBinding
 
 class FeedActivity : AppCompatActivity() {
@@ -35,7 +35,7 @@ class FeedActivity : AppCompatActivity() {
    binding.bottomNavigationView.setOnItemSelectedListener {
        when(it.itemId) {
            R.id.home -> replaceFragment(HomeFragment())
-           R.id.star -> replaceFragment (StarFragment())
+           R.id.star -> replaceFragment (ChallengesFragment())
            R.id.post -> replaceFragment (PostFragment())
            R.id.search -> replaceFragment (SearchFragment())
            R.id.profile -> replaceFragment (ProfileFragment())
