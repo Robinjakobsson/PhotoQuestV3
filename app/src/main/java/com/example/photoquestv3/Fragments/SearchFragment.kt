@@ -39,8 +39,8 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                showSearchResults() // Här får du sökfrågan när användaren är klar
-                // Gör något med frågan, t.ex. starta en sökning
+                showSearchResults()
+
                 Log.d("!!!", "Användaren söker efter: $query")
                 return false
             }
@@ -86,12 +86,12 @@ class SearchFragment : Fragment() {
     fun startRecycleViewWithResults(matchingUsers: MutableList<User>) {
 
         binding?.searchResultsRecyclerView?.layoutManager =
-            GridLayoutManager(requireContext(), 3) //определяет, что элементы идут по порядку
+            GridLayoutManager(requireContext(), 3)
         val adapter = SearchResultsAdapter(
             requireContext(),
             matchingUsers
-        )//создает объект класса адаптер(нашего конкретно, засылает в него список)
+        )
         binding?.searchResultsRecyclerView?.adapter = adapter
     }
-} //вставляет адаптер в наш ресайкл
+}
 

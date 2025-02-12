@@ -18,9 +18,9 @@ class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName: TextView =
-            itemView.findViewById(R.id.userNameTextView) //находит кнопки и прочее внутри одного элемента ресайкла
+            itemView.findViewById(R.id.userNameTextView)
         val userImage: ImageView = itemView.findViewById(R.id.userImageView)
-        //обычная штука, как в мейнАктивити
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,7 +28,7 @@ class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<
             R.layout.found_user_item,
             parent,
             false
-        ) //создает элемен внутри ресайкла, находит по названию файла, в теории
+        )
         return ViewHolder(itemView)
     }
 

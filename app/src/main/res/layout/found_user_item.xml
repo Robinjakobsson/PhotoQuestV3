@@ -14,8 +14,7 @@
         android:layout_marginStart="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="272dp"
-        android:background="#00FFFFFF">
+        tools:layout_editor_absoluteY="272dp">
 
 
 
