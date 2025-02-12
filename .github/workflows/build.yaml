@@ -24,7 +24,7 @@ jobs:
 
 
       - name: Create google-services-json
-        uses: echo '${{KEY}}' > app/google-services.json
+        run: echo '${{KEY}}' > app/google-services.json
 
       - name: Gradle permission
         run: chmod +x gradlew
