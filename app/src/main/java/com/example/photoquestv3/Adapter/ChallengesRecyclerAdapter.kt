@@ -29,7 +29,7 @@ class ChallengesRecyclerAdapter (
             holder.dateTextView.text = challenge.date
 
             // Changes the star to yellow if challenge is completed, else, an empty star is shown.
-            if (challenge.completed) {
+            if (challenge.completed == true) {
                 holder.starImageView.setImageResource(R.drawable.baseline_star_24)
             } else {
                 holder.starImageView.setImageResource(R.drawable.baseline_star_outline_24)

@@ -1,6 +1,8 @@
 package com.example.photoquestv3.Models
 
-data class Challenges(val challenge: String, val date : String, val completed: Boolean)
+import java.util.Date
+
+data class Challenges(val challenge: String? = null, val date : String? = null, val completed: Boolean? = null)
 
 
 
