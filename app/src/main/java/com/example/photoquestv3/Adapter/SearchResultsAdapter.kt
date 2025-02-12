@@ -33,7 +33,7 @@ class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.userName.text = matchingUsers[position].name
+        holder.userName.text = matchingUsers[position].username
         Glide.with(context)
             .load(matchingUsers[position].imageUrl)
             .apply(RequestOptions.bitmapTransform(CircleCrop()))

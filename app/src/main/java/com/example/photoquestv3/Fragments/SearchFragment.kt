@@ -52,12 +52,17 @@ class SearchFragment : Fragment() {
         })
     }
 
-    fun showSearchResults() { //TODO make search case insensitive
-        val searchedUserName = binding!!.searchView.query.toString()
-        if (searchedUserName.isNotEmpty()) {
+    fun showSearchResults() { //TODO make search case insensitive, new variable with lowercase should be added to firebase
+        val searchedUserNamePrefix = binding!!.searchView.query.toString()
+        val searchEnd = searchedUserNamePrefix + '\uf8ff'
+        if (searchedUserNamePrefix.isNotEmpty()) {
             var matchingUsers = mutableListOf<User>()
             val collectionRef = db.collection("users")
-            val query = collectionRef.whereEqualTo("username", searchedUserName)
+
+
+
+            val query = collectionRef.whereGreaterThanOrEqualTo("usernamesearch", searchedUserNamePrefix)
+                .whereLessThanOrEqualTo("usernamesearch", searchEnd)
             query.get()
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
@@ -86,7 +91,7 @@ class SearchFragment : Fragment() {
             requireContext(),
             matchingUsers
         )//создает объект класса адаптер(нашего конкретно, засылает в него список)
-            binding?.searchResultsRecyclerView?.adapter = adapter
+        binding?.searchResultsRecyclerView?.adapter = adapter
     }
 } //вставляет адаптер в наш ресайкл
 
