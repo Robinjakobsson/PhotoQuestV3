@@ -12,8 +12,13 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Views.Fragments.LoginFragment
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 
-class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<User>) :
+class SearchResultsAdapter(
+    val context: Context,
+    val matchingUsers: MutableList<User>,
+) :
     RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,11 +34,16 @@ class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<
             parent,
             false
         )
+
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val chosenUser = matchingUsers[position]
         holder.userName.text = matchingUsers[position].username
+        holder.itemView.setOnClickListener {
+            //TODO add something that will open a profile fragment
+        }
         Glide.with(context)
             .load(matchingUsers[position].imageUrl)
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
@@ -44,5 +54,6 @@ class SearchResultsAdapter(val context: Context, val matchingUsers: MutableList<
     override fun getItemCount(): Int {
         return matchingUsers.size
     }
+
 
 }

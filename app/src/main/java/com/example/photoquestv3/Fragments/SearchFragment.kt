@@ -89,7 +89,7 @@ class SearchFragment : Fragment() {
             GridLayoutManager(requireContext(), 3)
         val adapter = SearchResultsAdapter(
             requireContext(),
-            matchingUsers
+            matchingUsers,
         )
         binding?.searchResultsRecyclerView?.adapter = adapter
     }
