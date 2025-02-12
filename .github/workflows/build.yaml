@@ -22,8 +22,11 @@ jobs:
           cache: gradle
 
 
+      - name: google-services.json
+        run: echo "$google_service_json"
+        shell: bash
 
-      - name: Create google-services-json
+      - name: API key for auth
         run: echo '${{secrets.KEY}}' > app/google-services.json
 
       - name: Gradle permission
