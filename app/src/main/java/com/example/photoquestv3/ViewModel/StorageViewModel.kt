@@ -1,4 +1,6 @@
 package com.example.photoquestv3.ViewModel
 
-class StorageViewModel {
+import androidx.lifecycle.ViewModel
+
+class StorageViewModel : ViewModel() {
 }

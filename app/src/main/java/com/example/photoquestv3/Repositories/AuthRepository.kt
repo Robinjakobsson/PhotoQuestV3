@@ -99,5 +99,8 @@ class AuthRepository {
         return authResult.user ?: throw Exception("Failed to retrieve User...")
     }
 
+    fun getCurrentUser() : FirebaseUser? {
+        return auth.currentUser
+    }
 
 }
