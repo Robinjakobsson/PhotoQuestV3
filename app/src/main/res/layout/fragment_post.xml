@@ -1,70 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Views.Fragments.PostFragment"
-    android:padding="8dp"
     android:background="@drawable/background_gradient"
-    >
+    android:padding="8dp"
+    tools:context=".Views.Fragments.PostFragment">
 
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/new_post"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+  <TextView
+      android:id="@+id/textTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/new_post"
+      android:textSize="26sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
   <ImageView
       android:id="@+id/selectedImage"
       android:layout_width="match_parent"
       android:layout_height="200dp"
+      android:layout_marginTop="20dp"
       android:contentDescription="@string/family"
       android:scaleType="centerCrop"
-      app:layout_constraintTop_toBottomOf="@id/textTitle"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
       android:src="@drawable/family"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/textTitle" />
+
+  <EditText
+      android:id="@+id/textDescription"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="80dp"
+      android:autofillHints="string"
+      android:background="@drawable/et_border"
+      android:hint="@string/caption"
+      android:inputType="text"
+      app:layout_constraintTop_toBottomOf="@id/selectedImage" />
+
+  <Button
+      android:id="@+id/createPost"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="80dp"
+      android:background="@drawable/background_gradient"
+      android:text="@string/create_post"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/textDescription" />
+
+  <Button
+      android:id="@+id/galleryImage"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="80dp"
+      android:background="@drawable/background_gradient"
+      android:text="@string/select_image"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/createPost" />
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/challenge_CardView"
+      android:layout_width="261dp"
+      android:layout_height="54dp"
+      android:layout_marginStart="10dp"
       android:layout_marginTop="20dp"
-      />
+      android:layout_marginEnd="10dp"
+      android:layout_marginBottom="20dp"
+      android:background="@drawable/custom_cardview"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/galleryImage">
 
-    <EditText
-        android:id="@+id/textDescription"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/daily_challenge_TextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints="string"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/selectedImage"
-        android:background="@drawable/et_border"
-        android:hint="@string/caption"
-        android:layout_marginTop="80dp"/>
+        android:layout_gravity="center"
+        android:text="Dont forget about\n the daily challenge!" />
 
-    <Button
-        android:id="@+id/createPost"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/challenge_StarIcon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/create_post"
-        android:background="@drawable/background_gradient"
-        android:layout_marginTop="80dp"/>
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/baseline_star_24" />
 
-    <Button
-        android:id="@+id/galleryImage"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/daily_challenge_TextView_Time"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/createPost"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/select_image"
-        android:background="@drawable/background_gradient"
-        android:layout_marginTop="80dp"/>
+        android:layout_gravity="end"
+        android:text="9:41 Am" />
+  </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

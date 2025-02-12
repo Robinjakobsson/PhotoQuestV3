@@ -12,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.Fragments.ChallengesFragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.databinding.FragmentPostBinding
@@ -42,6 +45,16 @@ class PostFragment : Fragment() {
             Log.d("Gallery", "Gallery button clicked")
         }
 
+
+        binding.challengeCardView.setOnClickListener{
+            daily_challenge_popUp()
+        }
+
+
+
+
+
+
     }
 
 
@@ -67,4 +80,26 @@ class PostFragment : Fragment() {
             }
         }
     }
+
+    private fun daily_challenge_popUp(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("Dagens Utmaning")
+            .setMessage("Vill du se dagens utmaning?")
+            .setPositiveButton("Ja"){_,_->
+                replaceFragment(ChallengesFragment())
+
+            }
+
+            .setNegativeButton("Nej",null)
+            .show()
+
+    }
+
+
+    //  fun for replacing fragment.
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+
+    }
+
 }
