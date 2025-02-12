@@ -49,6 +49,7 @@ class LoginFragment : Fragment() {
                 }
             })
         binding.buttonLogin.setOnClickListener { signIn() }
+        binding.forgotPassword.setOnClickListener { forgotPassword() }
     }
 
     private fun signIn() {
@@ -56,7 +57,7 @@ class LoginFragment : Fragment() {
         val password = binding.loginPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(requireContext(),"All fields are required!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
             return
 
         } else {
@@ -73,6 +74,21 @@ class LoginFragment : Fragment() {
             })
         }
     }
+
+    private fun forgotPassword() {
+        val email = binding.loginEmail.text.toString().trim()
+        if (email.isNotEmpty()) {
+            auth.forgotPassword(email,
+                onSuccess = { Toast.makeText(context, "Mail sent!", Toast.LENGTH_SHORT).show() },
+                onFailure = { exception ->
+                    Toast.makeText(context, "Ooops: ${exception.message}", Toast.LENGTH_SHORT)
+                        .show() }
+            )
+        } else {
+            Toast.makeText(context, "Enter a valid email-address", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

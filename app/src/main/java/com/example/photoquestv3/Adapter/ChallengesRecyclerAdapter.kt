@@ -26,6 +26,7 @@ class ChallengesRecyclerAdapter (
 
             //Writes the challenge in the textView.
             holder.challengesTextView.text = challenge.challenge
+            holder.dateTextView.text = challenge.date
 
             // Changes the star to yellow if challenge is completed, else, an empty star is shown.
             if (challenge.completed) {
@@ -40,5 +41,6 @@ class ChallengesRecyclerAdapter (
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val challengesTextView: TextView = itemView.findViewById(R.id.challengesTextView)
             val starImageView : ImageView = itemView.findViewById(R.id.starImageView)
+        val dateTextView : TextView = itemView.findViewById(R.id.dateTextView)
         }
     }

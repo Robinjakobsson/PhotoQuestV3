@@ -41,8 +41,6 @@ class HomeActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
 
-        //do not remove, need to check buttons behaviour.
-        // Most likely should make isAvailable and isVisible = true upon closing Register or login fragments
         binding.signInButton.isGone = true
        binding.signUpButton.isGone = true
     }
@@ -55,11 +53,13 @@ class HomeActivity : AppCompatActivity() {
             .commit()
         binding.signInButton.isGone = true
         binding.signUpButton.isGone = true
+        binding.appLogoImage.isGone = true
     }
     fun getButtonsBack () {
         binding.signUpButton.isVisible = true
         binding.signInButton.isVisible = true
         binding.signUpButton.isClickable = true
         binding.signInButton.isVisible = true
+        binding.appLogoImage.isVisible = true
     }
 }
