@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.photoquestv3.Adapter.SearchResultsAdapter
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
@@ -36,9 +39,9 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-               showSearchResults() // Här får du sökfrågan när användaren är klar
+                showSearchResults() // Här får du sökfrågan när användaren är klar
                 // Gör något med frågan, t.ex. starta en sökning
-                Log.d("!!!","Användaren söker efter: $query")
+                Log.d("!!!", "Användaren söker efter: $query")
                 return false
             }
 
@@ -48,6 +51,7 @@ class SearchFragment : Fragment() {
             }
         })
     }
+
     fun showSearchResults() { //TODO make search case insensitive
         val searchedUserName = binding!!.searchView.query.toString()
         if (searchedUserName.isNotEmpty()) {
@@ -58,18 +62,31 @@ class SearchFragment : Fragment() {
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
                         for (document in documents) {
-                            Log.d("!!!","Hittade dokument")
+                            Log.d("!!!", "Hittade dokument")
                             val foundMatchingUser = document.toObject(User::class.java)
                             matchingUsers.add(foundMatchingUser)
-                            Log.d("!!!",matchingUsers.toString())
+                            Log.d("!!!", matchingUsers.toString())
+                            startRecycleViewWithResults(matchingUsers)
                         }
                     } else {
-                        Log.d("!!!","Inga dokument hittades")
+                        Log.d("!!!", "Inga dokument hittades")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.d("!!!","Fel vid hämtning av dokument: $exception")
+                    Log.d("!!!", "Fel vid hämtning av dokument: $exception")
                 }
         }
     }
-}
+
+    fun startRecycleViewWithResults(matchingUsers: MutableList<User>) {
+
+        binding?.searchResultsRecyclerView?.layoutManager =
+            GridLayoutManager(requireContext(), 3) //определяет, что элементы идут по порядку
+        val adapter = SearchResultsAdapter(
+            requireContext(),
+            matchingUsers
+        )//создает объект класса адаптер(нашего конкретно, засылает в него список)
+            binding?.searchResultsRecyclerView?.adapter = adapter
+    }
+} //вставляет адаптер в наш ресайкл
+
