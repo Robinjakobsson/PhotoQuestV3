@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.Fragments.PostFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Views.Fragments.PostFragment"
+    android:padding="8dp"
+    android:background="@drawable/background_gradient"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_post"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</FrameLayout>
+  <ImageView
+      android:id="@+id/selectedImage"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:contentDescription="@string/family"
+      android:scaleType="centerCrop"
+      app:layout_constraintTop_toBottomOf="@id/textTitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:src="@drawable/family"
+      android:layout_marginTop="20dp"
+      />
+
+    <EditText
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="string"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/selectedImage"
+        android:background="@drawable/et_border"
+        android:hint="@string/caption"
+        android:layout_marginTop="80dp"/>
+
+    <Button
+        android:id="@+id/createPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/create_post"
+        android:background="@drawable/background_gradient"
+        android:layout_marginTop="80dp"/>
+
+    <Button
+        android:id="@+id/galleryImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/createPost"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/select_image"
+        android:background="@drawable/background_gradient"
+        android:layout_marginTop="80dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
