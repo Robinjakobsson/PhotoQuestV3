@@ -24,7 +24,6 @@ import com.google.firebase.firestore.toObject
 class ChallengesFragment : Fragment() {
 
     lateinit var binding: FragmentChallengesBinding
-
     val listOfChallenges = mutableListOf<Challenges>()
     lateinit var adapter: ChallengesRecyclerAdapter
     lateinit var vmChallenges: ChallengesViewModel
@@ -57,6 +56,8 @@ class ChallengesFragment : Fragment() {
 
         vmChallenges.challenges.observe(viewLifecycleOwner) { challenges ->
             adapter.updateChallenges(challenges)
+            binding.challengesRecyclerView.scrollToPosition(challenges.size-1)
+
         }
         vmChallenges.getChallengesFromDatabase()
     }
