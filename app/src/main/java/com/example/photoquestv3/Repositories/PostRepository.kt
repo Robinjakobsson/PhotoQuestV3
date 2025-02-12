@@ -52,7 +52,7 @@ class PostRepository {
 
     suspend fun getAllPosts() {}
 
-    //    Show all posts by user
+    //    Show all posts by user - ,maybe on some settings? show all the posts you have done?
     suspend fun fetchUserPosts(userId: String) :List<Post> {
         val postsByUser = dbFirestore.collection("posts")
             .whereEqualTo("userId", userId)
