@@ -45,7 +45,7 @@
         android:layout_marginTop="80dp"/>
 
     <Button
-        android:id="@+id/createPost"
+        android:id="@+id/post_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/textDescription"
@@ -56,10 +56,10 @@
         android:layout_marginTop="80dp"/>
 
     <Button
-        android:id="@+id/galleryImage"
+        android:id="@+id/select_image_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/createPost"
+        app:layout_constraintTop_toBottomOf="@id/post_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/select_image"

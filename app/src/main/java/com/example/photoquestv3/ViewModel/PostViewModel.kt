@@ -16,51 +16,5 @@ class PostViewModel: ViewModel() {
 
     private val postRepository = PostRepository()
 
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
 
-
-//    Methods:
-
-    fun createPost(
-        imageUri: Uri,
-        description: String,
-        username: String,
-        profilePic: Int,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val currentUser = Firebase.auth.currentUser
-        if (currentUser == null) {
-            onFailure(Exception("No user is logged in"))
-            return
-        }
-        val userId = currentUser.uid
-
-        viewModelScope.launch {
-            try {
-                postRepository.createPost(imageUri, description, userId, username, profilePic)
-                onSuccess()
-            } catch (e: Exception) {
-                onFailure(e)
-            }
-
-        }
-    }
-
-    fun fetchUserPosts() {
-        val currentUser = Firebase.auth.currentUser ?: return
-        val userId = currentUser.uid
-
-        viewModelScope.launch {
-            try {
-                val posts = postRepository.fetchUserPosts(userId)
-                _posts.postValue(posts)
-            } catch (e: Exception) {
-                Log.e("PostViewModel", "Error fetching user posts", e)
-            }
-
-
-        }
-    }
 }
