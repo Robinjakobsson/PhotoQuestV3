@@ -55,6 +55,10 @@ class AuthRepository {
         }
     }
 
+    fun signOut(){
+        auth.signOut()
+    }
+
     fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
