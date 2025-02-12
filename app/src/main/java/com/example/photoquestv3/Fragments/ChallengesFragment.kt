@@ -45,8 +45,6 @@ class ChallengesFragment : Fragment() {
 
     }
 
-
-
     private fun recycleViewSetup() {
         binding.challengesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = ChallengesRecyclerAdapter(requireContext(), listOfChallenges)
