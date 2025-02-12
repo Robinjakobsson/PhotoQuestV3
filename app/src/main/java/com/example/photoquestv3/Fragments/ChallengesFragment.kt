@@ -65,18 +65,18 @@ class ChallengesFragment : Fragment() {
             Challenges("Photograph an animal in its natural habitat","2025-02-01", false)
         )*/
         val recyclerView = view.findViewById<RecyclerView>(R.id.challengesRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = ChallengesRecyclerAdapter(requireContext(), listOfChallenges)
         recyclerView.adapter = adapter
 
         return view
-
     }
 
     fun getChallengesFromDatabase() {
 
         // val today = Calendar.getInstance().time
+
         collection
             .get()
             .addOnSuccessListener { documentSnapShot ->
@@ -89,9 +89,11 @@ class ChallengesFragment : Fragment() {
                     if (challenge != null) {
                         listOfChallenges.add(challenge)
 
-                        Log.d("!!!", "Success fetched challenges and added to list")
+                        Log.d("!!!", "Success $document")
                     }
                 }
+                adapter.notifyDataSetChanged()
+
             }.addOnFailureListener { exception ->
                 Log.w("!!!", "Error getting documents: ", exception)
             }
