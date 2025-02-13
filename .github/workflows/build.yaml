@@ -23,10 +23,9 @@ jobs:
 
 
 
-      - name: Auth key
-        run: echo '${{KEY}}' > app/google-services.json
       - name: Google-Service-json
-        run: echo '${{SECRET_json}}' > app/google-services.json
+        run: echo "$SECRETV2" | base64 --decode > app/google-services.json
+        shell: bash
 
       - name: Gradle permission
         run: chmod +x gradlew
