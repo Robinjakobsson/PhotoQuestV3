@@ -59,8 +59,16 @@ class PostFragment : Fragment() {
     private fun uploadPost() {
         val description = binding.textDescription.text.toString()
 
+        binding.progressBar.visibility = View.VISIBLE
+
         if (selectedImageUri != null && description.isNotBlank()) {
-            storageVm.uploadPost(selectedImageUri!!,description,)
+            storageVm.uploadPost(selectedImageUri!!,description, onSuccess = {
+                Toast.makeText(requireContext(),"Successfully Uploaded Post!",Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+            }, onFailure = {
+                Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+            })
         } else {
             Toast.makeText(requireContext(),"Please Enter a text and a picture!",Toast.LENGTH_SHORT).show()
         }

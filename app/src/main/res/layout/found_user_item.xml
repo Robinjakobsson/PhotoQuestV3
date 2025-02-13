@@ -14,13 +14,15 @@
         android:layout_marginStart="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="272dp">
+        tools:layout_editor_absoluteY="272dp"
+        android:background="#00FFFFFF">
 
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF">
 
             <TextView
                 android:id="@+id/userNameTextView"

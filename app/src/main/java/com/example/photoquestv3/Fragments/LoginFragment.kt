@@ -48,6 +48,8 @@ class LoginFragment : Fragment() {
                     parentFragmentManager.beginTransaction().remove(this@LoginFragment).commit()
                 }
             })
+
+
         binding.buttonLogin.setOnClickListener { signIn() }
         binding.forgotPassword.setOnClickListener { forgotPassword() }
     }

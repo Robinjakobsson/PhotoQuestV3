@@ -12,9 +12,9 @@ class StorageViewModel : ViewModel() {
 
     private val storage = StorageRepository()
 
-    fun uploadPost(imageUri: Uri,description : String) {
+    fun uploadPost(imageUri: Uri,description : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
         viewModelScope.launch {
-            storage.uploadPost(imageUri,description)
+            storage.uploadPost(imageUri,description,onSuccess,onFailure)
         }
     }
 }

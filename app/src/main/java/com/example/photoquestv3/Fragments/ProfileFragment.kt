@@ -12,11 +12,15 @@ import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentLoginBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class ProfileFragment : Fragment() {
 
     lateinit var signOutButton: Button
     private lateinit var auth: AuthViewModel
+    lateinit var authUser: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,11 +32,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        authUser = Firebase.auth
     signOutButton = view.findViewById(R.id.button_logout)
         signOutButton.setOnClickListener{
+            authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
             returnHomeActivity()
-            auth.signOut()
+
         }
     }
 

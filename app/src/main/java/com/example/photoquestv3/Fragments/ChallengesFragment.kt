@@ -18,6 +18,7 @@ import com.example.photoquestv3.Models.ChallengeObjects
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.databinding.FragmentChallengesBinding
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 
@@ -28,7 +29,6 @@ class ChallengesFragment : Fragment() {
     lateinit var adapter: ChallengesRecyclerAdapter
     lateinit var vmChallenges: ChallengesViewModel
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +36,6 @@ class ChallengesFragment : Fragment() {
 
         binding = FragmentChallengesBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,6 +45,7 @@ class ChallengesFragment : Fragment() {
     }
 
     private fun recycleViewSetup() {
+
         binding.challengesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = ChallengesRecyclerAdapter(requireContext(), listOfChallenges)
         binding.challengesRecyclerView.adapter = adapter
@@ -54,11 +54,13 @@ class ChallengesFragment : Fragment() {
 
         vmChallenges.challenges.observe(viewLifecycleOwner) { challenges ->
             adapter.updateChallenges(challenges)
-            binding.challengesRecyclerView.scrollToPosition(challenges.size-1)
+            binding.challengesRecyclerView.scrollToPosition(challenges.size - 1)
 
         }
         vmChallenges.getChallengesFromDatabase()
+
     }
 
-
 }
+
+
