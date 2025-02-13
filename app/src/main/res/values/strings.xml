@@ -26,5 +26,7 @@
     <string name="Challenges">Challenges</string>
     <string name="password">Password</string>
     <string name="sign_out">Sign out</string>
+    <string name="todays_challenge_is">Today\'s challenge is...</string>
+    <string name="daily_challenge">Daily challenge</string>
 </resources>
 

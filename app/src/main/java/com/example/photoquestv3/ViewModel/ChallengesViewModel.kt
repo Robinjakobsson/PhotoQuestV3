@@ -11,8 +11,14 @@ class ChallengesViewModel : ViewModel() {
 
     val challenges: LiveData<List<Challenges>> = challengesRepository.listOfChallenges
 
+
     fun getChallengesFromDatabase() {
         challengesRepository.getChallengesFromDatabase()
     }
 
-}
+        fun getDailyChallenge(onResult: (Challenges?) -> Unit) {
+            challengesRepository.getLatestChallenge { latestChallenge ->
+                onResult(latestChallenge)
+            }
+        }
+    }
