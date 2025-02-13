@@ -2,16 +2,14 @@ package com.example.photoquestv3.Views.Fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
-import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
-import com.example.photoquestv3.databinding.FragmentLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -33,7 +31,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         authUser = Firebase.auth
-    signOutButton = view.findViewById(R.id.button_logout)
+        signOutButton = view.findViewById(R.id.button_logout)
         signOutButton.setOnClickListener{
             authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
             returnHomeActivity()
