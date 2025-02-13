@@ -12,11 +12,13 @@ import kotlinx.coroutines.launch
 
 class FireStoreViewModel: ViewModel() {
 
-    val fireStoreDb = FireStoreRepository()
+    private val fireStoreDb = FireStoreRepository()
 
     private val _posts = MutableLiveData<List<Post>>()
-    val posts: MutableLiveData<List<Post>> = _posts
+    val posts: MutableLiveData<List<Post>> = _posts //Don't delete, is needed for observing data
 
+
+//    Call in Fragment or Activity.
     fun fetchPosts() {
         viewModelScope.launch {
             try {

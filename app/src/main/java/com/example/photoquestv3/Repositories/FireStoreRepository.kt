@@ -57,6 +57,7 @@ class FireStoreRepository {
         }
     }
 
+//    Fetches all posts by time order
     suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
