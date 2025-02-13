@@ -42,7 +42,7 @@ class FireStoreRepository {
         val post = hashMapOf(
             "postId" to postId,
             "username" to (currentUser?.displayName ?: ""),
-            "profilepicture" to (currentUser?.photoUrl.toString()),
+            "profilePic" to (currentUser?.photoUrl.toString()),
             "imageUrl" to imageUrl,
             "description" to description,
             "userid" to (currentUser?.uid ?: ""),

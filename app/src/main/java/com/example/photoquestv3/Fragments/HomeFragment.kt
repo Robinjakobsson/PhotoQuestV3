@@ -13,13 +13,17 @@ import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
+import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
 
 class HomeFragment : Fragment() {
-    private var binding : FragmentHomeBinding? = null
+    private var _binding : FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var challengesVm : ChallengesViewModel
+    private lateinit var vmFireStore : FireStoreViewModel
 
 
 
@@ -27,38 +31,41 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater,container,false)
-        return binding?.root
+        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
+        vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
 
-        mockData()
-
+        fetchPosts()
         showDailyChallenge()
 
 
     }
-    private fun mockData() {
-
-        val postList = Post.mockData()
-        val postAdapter = PostAdapter(postList)
-
-        binding?.recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.recyclerView?.adapter = postAdapter
-
-
+    private fun fetchPosts() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
+            val adapter = PostAdapter(posts)
+            binding.recyclerView.adapter = adapter
+        }
+        vmFireStore.fetchPosts()
     }
 
     private fun showDailyChallenge() {
         challengesVm.getDailyChallenge { latestChallenge ->
             if (latestChallenge != null) {
-                binding?.dailyChallengeTv?.text = latestChallenge.challenge
+                binding.dailyChallengeTv.text = latestChallenge.challenge
             } else {
                 Log.d("HomeFragment","No challenges.")
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
