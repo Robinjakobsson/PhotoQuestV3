@@ -17,17 +17,19 @@ class StorageRepository {
         profileImageRef.putFile(imageUri).await()
         return  profileImageRef.downloadUrl.await().toString()
     }
-    suspend fun uploadPost(imageUri: Uri, description : String) {
+    suspend fun uploadPost(imageUri: Uri, description : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit ) {
         try {
             val imageFileName = "posts/${UUID.randomUUID()}.jpg"
             val storageRef = storage.reference.child(imageFileName)
 
-            val uploadTask = storageRef.putFile(imageUri).await()
+            storageRef.putFile(imageUri).await()
 
             val downloadUrl = storageRef.downloadUrl.await().toString()
 
             savePostToDataBase(downloadUrl,description)
+            onSuccess()
         } catch (e : Exception) {
+            onFailure(e)
             Log.d("Could not upload picture to Database...", e.toString())
         }
     }
