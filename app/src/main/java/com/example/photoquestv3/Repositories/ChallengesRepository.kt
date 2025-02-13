@@ -19,12 +19,9 @@ class ChallengesRepository {
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user?.uid
     val collection = uid?.let { db.collection("users").document(it) }
-<<<<<<< HEAD
 
 
 //    val listOfChallenges = mutableListOf<Challenges>()
-=======
->>>>>>> origin/master
 
     val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
@@ -35,10 +32,7 @@ class ChallengesRepository {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedDate = dateFormat.format(today)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
         collection?.collection("challenges")?.whereLessThanOrEqualTo("date", formattedDate)
             ?.get()
             ?.addOnSuccessListener { documentSnapShot ->
@@ -62,7 +56,6 @@ class ChallengesRepository {
             }
     }
 
-<<<<<<< HEAD
 
     fun getLatestChallenge(onResult: (Challenges?) -> Unit) {
         getChallengesFromDatabase()
@@ -72,11 +65,6 @@ class ChallengesRepository {
             onResult(latestChallenge)
         }
     }
-
-
-
-
-
 
 
     //Does not work (tried in ChallengesFragment). GoogleServices?!?!?!
@@ -113,41 +101,40 @@ class ChallengesRepository {
 //        }
 //    }
 }
-=======
-    //Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
-    fun addChallengesToDatabase() {
 
-        val db = FirebaseFirestore.getInstance()
-       // val user = FirebaseAuth.getInstance().currentUser
+//Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
+fun addChallengesToDatabase() {
 
-        val userIds = mutableListOf<String>()
+    val db = FirebaseFirestore.getInstance()
+    // val user = FirebaseAuth.getInstance().currentUser
 
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val uid = document.id
-                    userIds.add(uid)
-                }
-                Log.d("!!!!", "All userIDs: $userIds")
+    val userIds = mutableListOf<String>()
 
-               // listOfChallenges.clear()
-
-                for (uid in userIds) {
-                    val userDocRef = db.collection("users").document(uid)
-
-                    for (challenge in ChallengeObjects.ChallengeLists) {
-                        userDocRef.collection("challenges").add(challenge)
-                            .addOnSuccessListener {
-                                Log.d("!!!", "challenge added Success")
-                            }.addOnFailureListener {
-                                Log.d("!!!", "challenge added Failed.")
-                            }
-                    }
-                }
-            }.addOnFailureListener { exception ->
-                Log.d("!!!", "Error getting documents: $exception")
+    db.collection("users")
+        .get()
+        .addOnSuccessListener { result ->
+            for (document in result) {
+                val uid = document.id
+                userIds.add(uid)
             }
-    }
+            Log.d("!!!!", "All userIDs: $userIds")
+
+            // listOfChallenges.clear()
+
+            for (uid in userIds) {
+                val userDocRef = db.collection("users").document(uid)
+
+                for (challenge in ChallengeObjects.ChallengeLists) {
+                    userDocRef.collection("challenges").add(challenge)
+                        .addOnSuccessListener {
+                            Log.d("!!!", "challenge added Success")
+                        }.addOnFailureListener {
+                            Log.d("!!!", "challenge added Failed.")
+                        }
+                }
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("!!!", "Error getting documents: $exception")
+        }
 }
->>>>>>> origin/master
+
