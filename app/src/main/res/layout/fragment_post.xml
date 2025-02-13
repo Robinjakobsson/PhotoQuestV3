@@ -91,12 +91,19 @@
         android:layout_gravity="center"
         android:text="Dont forget about\n the daily challenge!" />
 
+
     <ImageView
         android:id="@+id/challenge_StarIcon"
         android:layout_width="wrap_content"
+
+    <Button
+        android:id="@+id/post_button"
+        android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:src="@drawable/baseline_star_24" />
+
 
     <TextView
         android:id="@+id/daily_challenge_TextView_Time"
@@ -105,6 +112,18 @@
         android:layout_gravity="end"
         android:text="9:41 Am" />
   </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/select_image_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/post_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/select_image"
+        android:background="@drawable/background_gradient"
+        android:layout_marginTop="80dp"/>
+
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

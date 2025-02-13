@@ -1,60 +1,97 @@
 package com.example.photoquestv3.Views.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.photoquestv3.Adapter.SearchResultsAdapter
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
+import com.example.photoquestv3.databinding.FragmentRegisterBinding
+import com.example.photoquestv3.databinding.FragmentSearchBinding
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private var binding: FragmentSearchBinding? = null
+    val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                showSearchResults()
+
+                Log.d("!!!", "Användaren söker efter: $query")
+                return false
             }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //TODO I don't use this method, onQueryTextSubmit() doesn't want to work without this one, fix later
+                return false
+            }
+        })
+    }
+
+    fun showSearchResults() { //TODO make search case insensitive, new variable with lowercase should be added to firebase
+        val searchedUserNamePrefix = binding!!.searchView.query.toString()
+        val searchEnd = searchedUserNamePrefix + '\uf8ff'
+        if (searchedUserNamePrefix.isNotEmpty()) {
+            var matchingUsers = mutableListOf<User>()
+            val collectionRef = db.collection("users")
+
+
+
+            val query = collectionRef.whereGreaterThanOrEqualTo("usernamesearch", searchedUserNamePrefix)
+                .whereLessThanOrEqualTo("usernamesearch", searchEnd)
+            query.get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        for (document in documents) {
+                            Log.d("!!!", "Hittade dokument")
+                            val foundMatchingUser = document.toObject(User::class.java)
+                            matchingUsers.add(foundMatchingUser)
+                            Log.d("!!!", matchingUsers.toString())
+                            startRecycleViewWithResults(matchingUsers)
+                        }
+                    } else {
+                        Log.d("!!!", "Inga dokument hittades")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("!!!", "Fel vid hämtning av dokument: $exception")
+                }
+        }
+    }
+
+    fun startRecycleViewWithResults(matchingUsers: MutableList<User>) {
+
+        binding?.searchResultsRecyclerView?.layoutManager =
+            GridLayoutManager(requireContext(), 3)
+        val adapter = SearchResultsAdapter(
+            requireContext(),
+            matchingUsers,
+        )
+        binding?.searchResultsRecyclerView?.adapter = adapter
     }
 }
+

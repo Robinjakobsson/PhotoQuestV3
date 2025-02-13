@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Repositories.AuthRepository
+import com.example.photoquestv3.Repositories.FireStoreRepository
+import com.example.photoquestv3.Repositories.StorageRepository
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -19,6 +21,10 @@ class AuthViewModel : ViewModel() {
     fun signIn(email: String,password: String,onSuccess: () -> Unit,onFailure: (Exception) -> Unit) {
         auth.signIn(email,password,onSuccess,onFailure)
 
+    }
+
+    fun signOut(){
+        auth.signOut()
     }
 
     fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {

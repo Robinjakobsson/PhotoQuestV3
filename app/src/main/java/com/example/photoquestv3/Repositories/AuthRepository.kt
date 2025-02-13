@@ -1,9 +1,9 @@
 package com.example.photoquestv3.Repositories
-
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +16,14 @@ class AuthRepository {
     private val auth = Firebase.auth
     private val storage = StorageRepository()
     private val db = FireStoreRepository()
+    private var currentUser = auth.currentUser
 
     fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val imageUrl = uploadPicture(imageUri) // Laddar upp en bild till vår databas
 
-                val uid = createFireBaseUser(email, password) // Funktion som returnar Uid
+                val uid = createFireBaseUser(email, password,name,imageUrl) // Funktion som returnar Uid
 
                 saveUserToDatabase(email, username, uid, imageUrl, name, biography) // Sparar användaren till våran databas
 
@@ -40,10 +41,15 @@ class AuthRepository {
     fun signIn(email: String,password: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                signInFirebaseUser(email,password)
+                val user = signInFirebaseUser(email,password)
+                currentUser = user
+
+                if (currentUser != null) {
+                    Log.d("Auth","Currentuser : ${currentUser!!.displayName}")
+                }
 
                 withContext(Dispatchers.Main) {
-                    Log.d("AuthRepository","Welcome $email")
+                    Log.d("AuthRepository","Welcome ${currentUser!!.displayName}")
                     onSuccess()
                 }
             } catch (e : Exception) {
@@ -53,6 +59,10 @@ class AuthRepository {
                 }
             }
         }
+    }
+
+    fun signOut(){
+        auth.signOut()
     }
 
     fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
@@ -78,9 +88,19 @@ class AuthRepository {
         return storage.uploadProfileImage(imageUri)
     }
 
-    private suspend fun createFireBaseUser(email: String, password: String): String {
+    suspend fun createFireBaseUser(email: String, password: String, name: String, imageUrl: String): String {
+        val auth = Firebase.auth
         val authResult = auth.createUserWithEmailAndPassword(email, password).await()
-        return authResult.user?.uid ?: throw Exception("User creation failed.")
+        val user = authResult.user ?: throw Exception("User creation failed.")
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+            photoUri = Uri.parse(imageUrl)
+        }
+
+        user.updateProfile(profileUpdates).await()
+
+        return user.uid
     }
 
     private suspend fun saveUserToDatabase(email: String, username: String, uid: String, imageUrl: String, name: String, biography: String) {
@@ -99,5 +119,8 @@ class AuthRepository {
         return authResult.user ?: throw Exception("Failed to retrieve User...")
     }
 
+    fun getCurrentUser() : FirebaseUser? {
+        return auth.currentUser
+    }
 
 }
