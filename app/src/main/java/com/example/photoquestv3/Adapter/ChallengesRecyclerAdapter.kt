@@ -1,10 +1,12 @@
 package com.example.photoquestv3.Adapter
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.R
@@ -14,6 +16,7 @@ class ChallengesRecyclerAdapter (
     private val challenges: MutableList<Challenges>
 ) : RecyclerView.Adapter<ChallengesRecyclerAdapter.ViewHolder>() {
 
+    lateinit var cardView : CardView
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,12 +31,22 @@ class ChallengesRecyclerAdapter (
         holder.challengesTextView.text = challenge.challenge
         holder.dateTextView.text = challenge.date
 
+        cardView = holder.itemView.findViewById(R.id.cardViewListItem)
+
         // Changes the star to yellow if challenge is completed, else, an empty star is shown.
         if (challenge.completed == true) {
             holder.starImageView.setImageResource(R.drawable.baseline_star_24)
+
         } else {
             holder.starImageView.setImageResource(R.drawable.baseline_star_outline_24)
         }
+
+        if (position == challenges.size - 1){
+            cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+        }
+
+
+
     }
     override fun getItemCount(): Int {
         return challenges.size

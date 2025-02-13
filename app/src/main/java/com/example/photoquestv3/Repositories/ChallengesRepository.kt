@@ -9,6 +9,8 @@ import com.example.photoquestv3.Models.Challenges
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ChallengesRepository {
 
@@ -26,7 +28,13 @@ class ChallengesRepository {
 
         // val today = Calendar.getInstance().time
 
-        collection
+        val today = Calendar.getInstance().time
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate = dateFormat.format(today)
+
+
+        collection.whereLessThanOrEqualTo("date", formattedDate)
             .get()
             .addOnSuccessListener { documentSnapShot ->
 
