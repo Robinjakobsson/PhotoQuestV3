@@ -26,7 +26,7 @@ jobs:
         run: echo '$KEY' > app/google-services.json
 
       - name: Google-Service-json
-        run: echo '$secret.json' > app/google-services.json
+        run: echo 'SECRETV2' > app/google-services.json
 
       - name: Gradle permission
         run: chmod +x gradlew
