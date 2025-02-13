@@ -11,7 +11,7 @@ data class Post(
     val description: String = "",
     val userId: String = "",
     val likes: Int = 0,
-    val timestamp: Timestamp? = null
+    val timestamp: Timestamp? = null // Timestamp implemented
 ) {
     companion object {
 
