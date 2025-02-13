@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00FFFFFF">
+    app:cardBackgroundColor="@android:color/transparent">
 
 
     <androidx.cardview.widget.CardView
@@ -15,14 +15,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="272dp"
-        android:background="#00FFFFFF">
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp">
 
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00FFFFFF">
+            app:cardBackgroundColor="@android:color/transparent">
 
             <TextView
                 android:id="@+id/userNameTextView"
