@@ -13,7 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.Fragments.ChallengesFragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
@@ -54,6 +57,16 @@ class PostFragment : Fragment() {
 
 
 
+
+        binding.challengeCardView.setOnClickListener{
+            daily_challenge_popUp()
+        }
+
+
+
+
+
+
     }
 
     private fun uploadPost() {
@@ -70,6 +83,46 @@ class PostFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    private fun openDeviceGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        imagePicker.launch(intent)
+    }
+
+    private fun openGallerySetup() {
+        imagePicker = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val selectedImageUri: Uri? = result.data?.data
+                // Visa den valda bilden i ImageView
+                binding.selectedImage.setImageURI(selectedImageUri)
+                // Du kan även spara URI:t för att senare använda det vid skapande av ett inlägg
+            }
+        }
+    }
+
+    private fun daily_challenge_popUp(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("Dagens Utmaning")
+            .setMessage("Vill du se dagens utmaning?")
+            .setPositiveButton("Ja"){_,_->
+                replaceFragment(ChallengesFragment())
+
+            }
+
+            .setNegativeButton("Nej",null)
+            .show()
+
+    }
+
+
+    //  fun for replacing fragment.
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+
     }
 
 }

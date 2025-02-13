@@ -17,14 +17,17 @@ jobs:
       - name: setup JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'zulu'
           cache: gradle
 
 
+      - name: google-services.json
+        run: echo '{{$secretv2}}'
+        shell: bash
 
-      - name: Create google-services-json
-        uses: echo '${{KEY}}' > app/google-services.json
+      - name: API key for auth
+        run: echo '${{secrets.KEY}}' > app/google-services.json
 
       - name: Gradle permission
         run: chmod +x gradlew
