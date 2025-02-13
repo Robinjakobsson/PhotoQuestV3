@@ -1,9 +1,12 @@
 package com.example.photoquestv3.Repositories
 
 import android.util.Log
+import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,9 +35,9 @@ class FireStoreRepository {
         }
     }
 
+//    Updated with timestamp
      suspend fun savePostToDatabase(imageUrl: String,description : String) {
          val currentUser = auth.currentUser
-
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
             "postId" to postId,
@@ -43,16 +46,24 @@ class FireStoreRepository {
             "imageUrl" to imageUrl,
             "description" to description,
             "userid" to (currentUser?.uid ?: ""),
-            "likes" to 15
+            "likes" to 15,
+            "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
         )
          try {
-
-
              db.collection("posts").document(postId).set(post).await()
-                Log.d("FireStoreRepository","Successfully Created post!")
+                Log.d("FireStoreRepository","Successfully Created post $post!")
             }catch (e : Exception) {
                 Log.d("FireStoreRepository","Failed to save post to database...", e)
         }
-
     }
+
+//    Fetches all posts by time order
+    suspend fun fetchPostSortedByTime() : List<Post> {
+
+        return db.collection("posts")
+            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .get().await()
+            .toObjects(Post::class.java)
+    }
+
 }
