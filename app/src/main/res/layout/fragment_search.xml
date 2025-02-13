@@ -14,12 +14,12 @@
             <SearchView
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
-                android:queryHint="Search here..."
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="70dp"
                 android:background="@drawable/searchbar_style"
+                android:queryHint="Search here..."
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
