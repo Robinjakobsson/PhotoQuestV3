@@ -19,6 +19,12 @@ class ChallengesRepository {
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user?.uid
     val collection = uid?.let { db.collection("users").document(it) }
+<<<<<<< HEAD
+
+
+//    val listOfChallenges = mutableListOf<Challenges>()
+=======
+>>>>>>> origin/master
 
     val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
@@ -29,6 +35,10 @@ class ChallengesRepository {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedDate = dateFormat.format(today)
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
         collection?.collection("challenges")?.whereLessThanOrEqualTo("date", formattedDate)
             ?.get()
             ?.addOnSuccessListener { documentSnapShot ->
@@ -52,6 +62,58 @@ class ChallengesRepository {
             }
     }
 
+<<<<<<< HEAD
+
+    fun getLatestChallenge(onResult: (Challenges?) -> Unit) {
+        getChallengesFromDatabase()
+
+        _listOfChallenges.observeForever { challengesList ->
+            val latestChallenge = challengesList.lastOrNull()
+            onResult(latestChallenge)
+        }
+    }
+
+
+
+
+
+
+
+    //Does not work (tried in ChallengesFragment). GoogleServices?!?!?!
+//    fun doNotUse() {
+//
+//        val today = Calendar.getInstance().time
+//        collection.whereLessThanOrEqualTo("date", today)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//
+////                listOfChallenges.clear()
+//
+//                for (document in documents) {
+//                    val challenge = document.toObject(Challenges::class.java)
+////                    listOfChallenges.add(challenge)
+//
+//                    Log.d("!!!", "Success fetched challenges and added to list")
+//                }
+//            }.addOnFailureListener { exception ->
+//                Log.w("!!!", "Error getting documents: ", exception)
+//            }
+//    }
+
+//    Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
+//    fun addChallengesToDatabase() {
+//
+//        for (challenge in ChallengeObjects.ChallengeLists) {
+//            collection.add(challenge)
+//                .addOnSuccessListener {
+//                    Log.d("!!!", "challenge added Success")
+//                }.addOnFailureListener {
+//                    Log.d("!!!", "challenge added Failed.")
+//                }
+//        }
+//    }
+}
+=======
     //Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
     fun addChallengesToDatabase() {
 
@@ -88,3 +150,4 @@ class ChallengesRepository {
             }
     }
 }
+>>>>>>> origin/master
