@@ -20,7 +20,6 @@ class ChallengesRepository {
     val uid = user?.uid
     val collection = uid?.let { db.collection("users").document(it) }
 
-
     val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
 
@@ -29,7 +28,6 @@ class ChallengesRepository {
         val today = Calendar.getInstance().time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val formattedDate = dateFormat.format(today)
-
 
         collection?.collection("challenges")?.whereLessThanOrEqualTo("date", formattedDate)
             ?.get()
@@ -47,14 +45,12 @@ class ChallengesRepository {
                         Log.d("!!!", "Success $document")
                     }
                 }
-
                 _listOfChallenges.value = challengesList
 
             }?.addOnFailureListener { exception ->
                 Log.w("!!!", "Error getting documents: ", exception)
             }
     }
-
 
     //Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
     fun addChallengesToDatabase() {

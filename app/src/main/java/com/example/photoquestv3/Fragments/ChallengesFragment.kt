@@ -29,9 +29,6 @@ class ChallengesFragment : Fragment() {
     lateinit var adapter: ChallengesRecyclerAdapter
     lateinit var vmChallenges: ChallengesViewModel
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +36,6 @@ class ChallengesFragment : Fragment() {
 
         binding = FragmentChallengesBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
