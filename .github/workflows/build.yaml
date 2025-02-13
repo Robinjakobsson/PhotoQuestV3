@@ -2,15 +2,12 @@ name: Build Test
 on:
   push:
     branches: [master]
-
   pull_request:
-     branches: [master]
-
+    branches: [master]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -21,18 +18,20 @@ jobs:
           distribution: 'zulu'
           cache: gradle
 
-
-
       - name: Google-Service-json
-        run: echo "$SECRETV2" | base64 --decode > app/google-services.json
-        shell: bash
+        env:
+          SECRETV2: ${{ secrets.SECRETV2 }}
+        shell: powershell
+        run: |
+          [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($env:SECRETV2)) | Out-File -FilePath app/google-services.json -Encoding UTF8
 
       - name: Gradle permission
-        run: chmod +x gradlew
+        shell: powershell
+        run: |
+          ./gradlew
 
       - name: check dependencies
         run: ./gradlew dependencies
 
       - name: Build Gradle
         run: ./gradlew build
-
