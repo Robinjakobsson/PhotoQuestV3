@@ -23,7 +23,7 @@ jobs:
 
 
       - name: google-services.json
-        run: echo "$google_service_json"
+        run: echo '{{$secretv2}}'
         shell: bash
 
       - name: API key for auth
