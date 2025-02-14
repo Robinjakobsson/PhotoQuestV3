@@ -19,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
 
 
 
-        //  Handler that delay for splash screen for 2 sec.
+        //  Handler that delay for splash screen for 2 sec..
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
