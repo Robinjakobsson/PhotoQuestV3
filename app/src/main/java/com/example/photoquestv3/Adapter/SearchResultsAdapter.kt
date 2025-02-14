@@ -37,7 +37,7 @@ class SearchResultsAdapter(
 
         return ViewHolder(itemView)
     }
-
+    //Comment to test one thing with Yuel
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val chosenUser = matchingUsers[position]
         holder.userName.text = matchingUsers[position].username
