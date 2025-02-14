@@ -18,14 +18,24 @@ class AuthRepository {
     private val db = FireStoreRepository()
     private var currentUser = auth.currentUser
 
+    private val challenges = ChallengesRepository()
+
     fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val imageUrl = uploadPicture(imageUri) // Laddar upp en bild till vår databas
 
-                val uid = createFireBaseUser(email, password,name,imageUrl) // Funktion som returnar Uid
+                val uid =
+                    createFireBaseUser(email, password, name, imageUrl) // Funktion som returnar Uid
 
-                saveUserToDatabase(email, username, uid, imageUrl, name, biography) // Sparar användaren till våran databas
+                saveUserToDatabase(
+                    email,
+                    username,
+                    uid,
+                    imageUrl,
+                    name,
+                    biography
+                ) // Sparar användaren till våran databas
 
                 withContext(Dispatchers.Main) { // tillbaks till main tråden
                     onSuccess()
@@ -112,6 +122,7 @@ class AuthRepository {
             Log.e("AuthRepository", " Error saving user in Firestore: ${e.message}", e)
             throw e
         }
+
     }
 
     private suspend fun signInFirebaseUser(email: String,password: String) : FirebaseUser {
