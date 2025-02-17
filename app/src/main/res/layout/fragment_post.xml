@@ -73,7 +73,51 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/select_image"
         android:background="@drawable/background_gradient"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="20dp"/>
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/daily_challenge_cardView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      app:contentPadding="10dp"
+      app:cardBackgroundColor="@android:color/transparent"
+      app:cardCornerRadius="10dp"
+      app:cardElevation="2dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/select_image_button">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+      <TextView
+          android:id="@+id/daily_challenge_post_tv"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:maxLines="2"
+          android:text="@string/daily_challenge"
+          android:textSize="20sp"
+          android:layout_weight="1"
+          android:layout_gravity="top"
+          android:layout_marginStart="10dp"
+           />
+
+      <CheckBox
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/challenge_checkbox"
+          android:layout_gravity="top"
+
+          />
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

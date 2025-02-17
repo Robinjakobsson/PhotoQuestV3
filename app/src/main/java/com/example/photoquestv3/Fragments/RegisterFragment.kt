@@ -3,6 +3,8 @@ package com.example.photoquestv3.Fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
@@ -24,6 +27,8 @@ class RegisterFragment : Fragment() {
     private var binding : FragmentRegisterBinding? = null
     private lateinit var auth : AuthViewModel
     private var selectedImageUri : Uri? = null
+
+    private val challenges = ChallengesRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,9 +80,15 @@ class RegisterFragment : Fragment() {
             return
         }else {
             auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
-                Toast.makeText(requireContext(),"Welcome $username",Toast.LENGTH_SHORT).show()
-                binding?.progressBar?.visibility = View.GONE
-                startFeedActivity()
+
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    challenges.addChallengesToNewUser()
+
+                    Toast.makeText(requireContext(), "Welcome $username", Toast.LENGTH_SHORT).show()
+                    binding?.progressBar?.visibility = View.GONE
+                    startFeedActivity()
+                }, 1000)
 
             }, onFailure = {
                 binding?.progressBar?.visibility = View.GONE

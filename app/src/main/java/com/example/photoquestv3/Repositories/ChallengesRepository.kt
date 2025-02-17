@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.ChallengeObjects
 import com.example.photoquestv3.Models.Challenges
+import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,9 +20,6 @@ class ChallengesRepository {
     val user = FirebaseAuth.getInstance().currentUser
     val uid = user?.uid
     val collection = uid?.let { db.collection("users").document(it) }
-
-
-//    val listOfChallenges = mutableListOf<Challenges>()
 
     val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
@@ -67,74 +65,61 @@ class ChallengesRepository {
     }
 
 
-    //Does not work (tried in ChallengesFragment). GoogleServices?!?!?!
-//    fun doNotUse() {
-//
-//        val today = Calendar.getInstance().time
-//        collection.whereLessThanOrEqualTo("date", today)
-//            .get()
-//            .addOnSuccessListener { documents ->
-//
-////                listOfChallenges.clear()
-//
-//                for (document in documents) {
-//                    val challenge = document.toObject(Challenges::class.java)
-////                    listOfChallenges.add(challenge)
-//
-//                    Log.d("!!!", "Success fetched challenges and added to list")
-//                }
-//            }.addOnFailureListener { exception ->
-//                Log.w("!!!", "Error getting documents: ", exception)
-//            }
-//    }
+    //Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
+    fun addChallengesToDatabase() {
 
-//    Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
-//    fun addChallengesToDatabase() {
-//
-//        for (challenge in ChallengeObjects.ChallengeLists) {
-//            collection.add(challenge)
-//                .addOnSuccessListener {
-//                    Log.d("!!!", "challenge added Success")
-//                }.addOnFailureListener {
-//                    Log.d("!!!", "challenge added Failed.")
-//                }
-//        }
-//    }
-}
+        val db = FirebaseFirestore.getInstance()
+        // val user = FirebaseAuth.getInstance().currentUser
 
-//Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
-fun addChallengesToDatabase() {
+        val userIds = mutableListOf<String>()
 
-    val db = FirebaseFirestore.getInstance()
-    // val user = FirebaseAuth.getInstance().currentUser
-
-    val userIds = mutableListOf<String>()
-
-    db.collection("users")
-        .get()
-        .addOnSuccessListener { result ->
-            for (document in result) {
-                val uid = document.id
-                userIds.add(uid)
-            }
-            Log.d("!!!!", "All userIDs: $userIds")
-
-            // listOfChallenges.clear()
-
-            for (uid in userIds) {
-                val userDocRef = db.collection("users").document(uid)
-
-                for (challenge in ChallengeObjects.ChallengeLists) {
-                    userDocRef.collection("challenges").add(challenge)
-                        .addOnSuccessListener {
-                            Log.d("!!!", "challenge added Success")
-                        }.addOnFailureListener {
-                            Log.d("!!!", "challenge added Failed.")
-                        }
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val uid = document.id
+                    userIds.add(uid)
                 }
-            }
-        }.addOnFailureListener { exception ->
-            Log.d("!!!", "Error getting documents: $exception")
-        }
-}
+                Log.d("!!!!", "All userIDs: $userIds")
 
+                // listOfChallenges.clear()
+
+                for (uid in userIds) {
+                    val userDocRef = db.collection("users").document(uid)
+
+                    for (challenge in ChallengeObjects.ChallengeLists) {
+                        userDocRef.collection("challenges").add(challenge)
+                            .addOnSuccessListener {
+                                Log.d("!!!", "challenge added Success")
+                            }.addOnFailureListener {
+                                Log.d("!!!", "challenge added Failed.")
+                            }
+                    }
+                }
+            }.addOnFailureListener { exception ->
+                Log.d("!!!", "Error getting documents: $exception")
+            }
+    }
+
+    fun addChallengesToNewUser() {
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null) {
+            for (challenge in ChallengeObjects.ChallengeLists) {
+                db.collection("users")
+                    .document(user.uid)
+                    .collection("challenges")
+                    .add(challenge)
+                    .addOnSuccessListener {
+                        Log.d("!!!", "1. challenge added Success")
+                    }.addOnFailureListener {
+                        Log.d("!!!", "2. challenge added Failed.")
+                    }
+            }
+
+        } else {
+            Log.d("!!!", "user not found")
+        }
+    }
+}

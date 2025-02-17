@@ -33,7 +33,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         authUser = Firebase.auth
-    signOutButton = view.findViewById(R.id.button_logout)
+        signOutButton = view.findViewById(R.id.button_logout)
         signOutButton.setOnClickListener{
             authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
             returnHomeActivity()

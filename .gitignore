@@ -34,3 +34,4 @@ local.properties
 .idea/gradle.xml
 .idea/appInsightsSettings.xml
 .idea/.name
+google-services-encoded.txt

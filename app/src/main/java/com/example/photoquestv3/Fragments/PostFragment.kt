@@ -14,7 +14,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.R
+import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
 import com.example.photoquestv3.databinding.FragmentPostBinding
@@ -25,6 +27,7 @@ class PostFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var storageVm: StorageViewModel
     private var selectedImageUri : Uri? = null
+    private lateinit var challengesVm: ChallengesViewModel
 
 
     override fun onCreateView(
@@ -38,6 +41,7 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         storageVm = ViewModelProvider(this)[StorageViewModel::class.java]
+        challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
 
 
         val pickImageLauncher =
@@ -52,7 +56,7 @@ class PostFragment : Fragment() {
 
         binding.postButton.setOnClickListener { uploadPost() }
 
-
+        showDailyChallenge()
 
     }
 
@@ -79,5 +83,16 @@ class PostFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun showDailyChallenge() {
+        challengesVm.getDailyChallenge { latestChallenge ->
+            if (latestChallenge != null) {
+                binding.dailyChallengePostTv.text = latestChallenge.challenge
+            } else {
+                Log.d("HomeFragment","No challenges.")
+            }
+        }
+    }
+
 
 }
