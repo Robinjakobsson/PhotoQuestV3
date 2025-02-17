@@ -1,6 +1,8 @@
 package com.example.photoquestv3.Repositories
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
@@ -8,6 +10,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -66,4 +69,26 @@ class FireStoreRepository {
             .toObjects(Post::class.java)
     }
 
+    fun getUsers(query: String): LiveData<List<User>> {
+        val userList = MutableLiveData<List<User>>()
+        val usersQuery: Query
+
+        if (query.isEmpty()) {
+            usersQuery = db.collection("users")
+        } else {
+            usersQuery = db.collection("users")
+                .whereGreaterThanOrEqualTo("name", query)
+                .whereLessThanOrEqualTo("name", "$query\uf8ff")
+        }
+
+        usersQuery.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val users = task.result?.mapNotNull { document ->
+                    document.toObject(User::class.java)
+                } ?: emptyList()
+                userList.value = users
+            }
+        }
+        return userList
+    }
 }
