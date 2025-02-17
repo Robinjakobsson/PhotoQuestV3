@@ -1,6 +1,7 @@
 package com.example.photoquestv3.Models
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ServerTimestamp
 
 data class Comment(
     val commentId: String = "",
@@ -8,5 +9,5 @@ data class Comment(
     val userId: String = "",
     val username: String = "",
     val comment: String = "",
-    val timestamp: Timestamp? = null
+    @ServerTimestamp val timestamp: Timestamp? = null
 )
