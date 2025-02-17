@@ -1,11 +1,14 @@
 package com.example.photoquestv3.ViewModel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.FireStoreRepository
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -28,6 +31,10 @@ class FireStoreViewModel: ViewModel() {
                 Log.d("FireStoreViewModel", " [ERROR] Error fetching posts: ${e.message}")
             }
         }
+    }
+
+    fun getUsers(query: String): LiveData<List<User>> {
+        return fireStoreDb.getUsers(query)
     }
 
 

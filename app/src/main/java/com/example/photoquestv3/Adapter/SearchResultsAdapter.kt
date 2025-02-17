@@ -55,5 +55,11 @@ class SearchResultsAdapter(
         return matchingUsers.size
     }
 
+    fun updateData(newList : List<User>) {
+        matchingUsers.clear()
+        matchingUsers.addAll(newList)
+        notifyDataSetChanged()
+    }
+
 
 }
