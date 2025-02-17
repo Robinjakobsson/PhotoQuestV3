@@ -15,7 +15,13 @@ import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 
-class PostAdapter(private val postList: List<Post>, val postVm : PostViewModel) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+
+
+    fun updatePosts(newPosts: List<Post>) {
+        postList = newPosts
+        notifyDataSetChanged()
+    }
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName: TextView = itemView.findViewById(R.id.userName)
@@ -55,6 +61,8 @@ class PostAdapter(private val postList: List<Post>, val postVm : PostViewModel) 
                 moreOptionsFragment.show(it, moreOptionsFragment.tag)
             }
         }
+
+
 
 //        holder.profileImage.setImageResource(post.profilePic)
 
