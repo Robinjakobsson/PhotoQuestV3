@@ -14,6 +14,7 @@ import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
+import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
@@ -24,7 +25,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var challengesVm : ChallengesViewModel
     private lateinit var vmFireStore : FireStoreViewModel
-
+    private lateinit var postVm : PostViewModel
 
 
     override fun onCreateView(
@@ -39,16 +40,21 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
+        postVm = ViewModelProvider(requireActivity()).get(PostViewModel::class.java)
+        postVm.itemId.observe(viewLifecycleOwner) { itemId ->
+
+            Log.d("!!!", "my post id is: $itemId")
+        }
 
         fetchPosts()
         showDailyChallenge()
 
-
     }
     private fun fetchPosts() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
         vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
-            val adapter = PostAdapter(posts)
+            val adapter = PostAdapter(posts, postVm)
             binding.recyclerView.adapter = adapter
         }
         vmFireStore.fetchPosts()

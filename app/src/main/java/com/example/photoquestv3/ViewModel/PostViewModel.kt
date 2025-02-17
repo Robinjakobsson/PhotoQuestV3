@@ -16,5 +16,16 @@ class PostViewModel: ViewModel() {
 
     private val postRepository = PostRepository()
 
+    //Get id on post
+    private val _itemId = MutableLiveData<String>()
+    val itemId: LiveData<String> get() = _itemId
+
+    fun setItemId(id: String) {
+        _itemId.value = id
+    }
+
+
+
+
 
 }
