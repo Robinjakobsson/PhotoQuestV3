@@ -1,6 +1,8 @@
 package com.example.photoquestv3.ViewModel
 
 import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Repositories.AuthRepository
@@ -11,6 +13,9 @@ import kotlinx.coroutines.launch
 class AuthViewModel : ViewModel() {
 
     private val auth = AuthRepository()
+    private val _userName = MutableLiveData<String>()
+    val username: MutableLiveData<String> =_userName
+
 
 
      fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
@@ -29,6 +34,18 @@ class AuthViewModel : ViewModel() {
 
     fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         auth.forgotPassword(email,onSuccess,onFailure)
+    }
+
+    fun fetchUserName(){
+        viewModelScope.launch {
+            try {
+                val userName = auth.getUserName()
+                _userName.postValue(userName)
+
+            }catch (e: Exception){
+                Log.d("AuthViewModel", "Error")
+            }
+        }
     }
 
 }
