@@ -18,6 +18,8 @@ import com.example.photoquestv3.Views.Fragments.ProfileFragment
 class SearchResultsAdapter(
     val context: Context,
     val matchingUsers: MutableList<User>,
+    val onUserClicked : (User) -> Unit
+
 ) :
     RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
@@ -42,7 +44,7 @@ class SearchResultsAdapter(
         val chosenUser = matchingUsers[position]
         holder.userName.text = matchingUsers[position].username
         holder.itemView.setOnClickListener {
-            //TODO add something that will open a profile fragment
+            onUserClicked(chosenUser)
         }
         Glide.with(context)
             .load(matchingUsers[position].imageUrl)

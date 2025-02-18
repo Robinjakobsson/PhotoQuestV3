@@ -25,17 +25,9 @@ class AuthRepository {
             try {
                 val imageUrl = uploadPicture(imageUri) // Laddar upp en bild till vår databas
 
-                val uid =
-                    createFireBaseUser(email, password, name, imageUrl) // Funktion som returnar Uid
+                val uid = createFireBaseUser(email, password, name, imageUrl) // Funktion som returnar Uid
 
-                saveUserToDatabase(
-                    email,
-                    username,
-                    uid,
-                    imageUrl,
-                    name,
-                    biography
-                ) // Sparar användaren till våran databas
+                saveUserToDatabase(email, username, uid, imageUrl, name, biography) // Sparar användaren till våran databas
 
                 withContext(Dispatchers.Main) { // tillbaks till main tråden
                     onSuccess()
