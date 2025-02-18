@@ -28,5 +28,8 @@
     <string name="sign_out">Sign out</string>
     <string name="todays_challenge_is">Today\'s challenge is...</string>
     <string name="daily_challenge">Daily challenge</string>
+    <string name="leave_a_comment">Leave a comment...</string>
+    <string name="profile_picture">Profile_Picture</string>
+    <string name="a_comment_has_been_made">A comment has been made</string>
 </resources>
 
