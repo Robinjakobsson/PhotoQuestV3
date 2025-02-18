@@ -93,14 +93,16 @@ class PostAdapter(
         }
 
         holder.userName.setOnClickListener{
-            Log.d("###", "aaa")
+            Log.d("@@@", "navigate-name")
+//            val uid = matchingUsers[position].uid
             if (fragment is HomeFragment) {
                 fragment.navigateToProfile()
             }
         }
 
         holder.profileImage.setOnClickListener {
-            Log.d("###", "bbb")
+            Log.d("@@@", "navigate-photo")
+//            val uid = matchingUsers[position].uid
             if (fragment is HomeFragment) {
                 fragment.navigateToProfile()
             }
