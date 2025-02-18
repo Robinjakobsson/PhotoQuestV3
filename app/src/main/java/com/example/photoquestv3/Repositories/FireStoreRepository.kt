@@ -7,12 +7,10 @@ import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
@@ -91,4 +89,45 @@ class FireStoreRepository {
         }
         return userList
     }
+
+
+    fun dbCollectionUser(): CollectionReference {
+        return db.collection("users")
+    }
+
+
+    suspend fun fetchProfileImage(): String? {
+        val currentUser = auth.currentUser ?: return null
+        return try {
+            val documentSnapshot = db.collection("users")
+                .document(currentUser.uid)
+                .get()
+                .await()
+            documentSnapshot.getString("imageUrl")
+        } catch (e: Exception) {
+            Log.e("FireStoreRepository", "Error fetching profile image: ${e.message}", e)
+            null
+        }
+    }
+
+
+    suspend fun fetchUserQuote(): String? {
+        val currentUser = auth.currentUser ?: return null
+        return try {
+            auth.currentUser
+            val documentSnapshot = db.collection("users")
+                    .document(currentUser.uid)
+                    .get()
+                    .await()
+            documentSnapshot.getString("biography")
+
+        }catch (e: Exception){
+            Log.d("FireStoreRepository","error")
+
+            null
+        }
+
+
+    }
+
 }

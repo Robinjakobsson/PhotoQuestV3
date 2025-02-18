@@ -134,4 +134,9 @@ class AuthRepository {
         return auth.currentUser
     }
 
+    fun getUserName(): String{
+        val userName = getCurrentUser()?.displayName.toString()
+        return userName
+    }
+
 }

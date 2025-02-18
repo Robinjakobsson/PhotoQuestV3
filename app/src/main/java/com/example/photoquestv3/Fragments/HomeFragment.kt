@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.PostAdapter
@@ -14,24 +15,26 @@ import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
+import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
 
 class HomeFragment : Fragment() {
-    private var _binding : FragmentHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var challengesVm : ChallengesViewModel
-    private lateinit var vmFireStore : FireStoreViewModel
-
+    private lateinit var challengesVm: ChallengesViewModel
+    private lateinit var vmFireStore: FireStoreViewModel
+    private lateinit var postVm: PostViewModel
+    lateinit var adapter : PostAdapter
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,19 +42,33 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
+        postVm = ViewModelProvider(requireActivity()).get(PostViewModel::class.java)
 
+        postVm.itemId.observe(viewLifecycleOwner) { itemId ->
+
+            Log.d("!!!", "my post id is: $itemId")
+        }
         fetchPosts()
         showDailyChallenge()
 
+        postVm.dataChanged.observe(requireActivity(), Observer { dataChanged ->
+
+            if (dataChanged) {
+                adapter.notifyDataSetChanged()
+            }
+        })
 
     }
+
     private fun fetchPosts() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
-            val adapter = PostAdapter(posts)
+           adapter = PostAdapter(posts, postVm)
             binding.recyclerView.adapter = adapter
+            adapter.updatePosts(posts)
         }
         vmFireStore.fetchPosts()
+
     }
 
     private fun showDailyChallenge() {
@@ -59,7 +76,7 @@ class HomeFragment : Fragment() {
             if (latestChallenge != null) {
                 binding.dailyChallengeTv.text = latestChallenge.challenge
             } else {
-                Log.d("HomeFragment","No challenges.")
+                Log.d("HomeFragment", "No challenges.")
             }
         }
     }

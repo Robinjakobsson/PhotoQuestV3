@@ -5,18 +5,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
+import com.example.photoquestv3.ViewModel.ChallengesViewModel
+import com.example.photoquestv3.ViewModel.PostViewModel
 
-class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+
+
+    fun updatePosts(newPosts: List<Post>) {
+        postList = newPosts
+        notifyDataSetChanged()
+    }
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName: TextView = itemView.findViewById(R.id.userName)
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
+        val optionImage : ImageView = itemView.findViewById(R.id.moreOptions)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -33,6 +46,23 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
 
         holder.userName.text = post.username
         holder.description.text = post.description
+
+
+        holder.optionImage.setOnClickListener(){
+
+            val postId = post.postId
+
+            postVm.setItemId(postId)
+
+            val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
+
+            val activity = holder.itemView.context as? AppCompatActivity
+            activity?.supportFragmentManager?.let {
+                moreOptionsFragment.show(it, moreOptionsFragment.tag)
+            }
+        }
+
+
 
 //        holder.profileImage.setImageResource(post.profilePic)
 

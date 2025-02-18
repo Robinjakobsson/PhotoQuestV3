@@ -2,36 +2,70 @@ package com.example.photoquestv3.Views.Fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
-import com.example.photoquestv3.Views.FeedActivity
+import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.Views.HomeActivity
-import com.example.photoquestv3.databinding.FragmentLoginBinding
+import com.example.photoquestv3.databinding.FragmentProfileBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileFragment : Fragment() {
-
+    lateinit var binding: FragmentProfileBinding
     lateinit var signOutButton: Button
     private lateinit var auth: AuthViewModel
     lateinit var authUser: FirebaseAuth
+    lateinit var fireStoreVm: FireStoreViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        binding = FragmentProfileBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
+        auth = ViewModelProvider(this)[AuthViewModel::class.java]
+
+       // Viewmodel observer for user profile image.
+        fireStoreVm.profileImage.observe(viewLifecycleOwner){imageUrl ->
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.family)
+                .into(binding.profileImageImageView)
+        }
+
+        //  fun for getting user profile image from viewmodel.
+        fireStoreVm.fetchProfileImage()
+
+        auth.username.observe(viewLifecycleOwner){userName ->
+            binding.profileNameTextView.text = userName
+        }
+
+        auth.fetchUserName()
+
+        fireStoreVm.userQuote.observe(viewLifecycleOwner){userQuote ->
+            binding.userQuoteTextView.text = userQuote
+        }
+        fireStoreVm.fetchUserQuote()
+
+
+
+
+
         authUser = Firebase.auth
         signOutButton = view.findViewById(R.id.button_logout)
         signOutButton.setOnClickListener{
