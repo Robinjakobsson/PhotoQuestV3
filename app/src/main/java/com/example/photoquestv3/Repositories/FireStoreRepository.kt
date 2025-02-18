@@ -63,7 +63,7 @@ class FireStoreRepository {
     suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get().await()
             .toObjects(Post::class.java)
     }
