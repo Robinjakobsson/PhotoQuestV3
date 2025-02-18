@@ -30,6 +30,8 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage : ImageView = itemView.findViewById(R.id.moreOptions)
+        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
 
     }
 
@@ -47,6 +49,15 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
 
         holder.userName.text = post.username
         holder.description.text = post.description
+        holder.likeCounter.text = post.likes.toString()
+
+        holder.likeButton.setOnClickListener(){
+
+            val postId = post.postId
+
+            postVm.addLikesToPost(postId)
+
+        }
 
         holder.optionImage.setOnClickListener(){
 
