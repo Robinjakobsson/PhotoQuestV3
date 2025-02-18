@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,10 @@ class SearchFragment : Fragment() {
         binding?.searchResultsRecyclerView?.adapter = adapter
 
         adapter = SearchResultsAdapter(requireContext(), mutableListOf(), onUserClicked = { user ->
+            val bundle = Bundle()
+
+            bundle.putSerializable("user", user)
+
 
 
         })
