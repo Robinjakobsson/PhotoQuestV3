@@ -20,6 +20,8 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     private val binding get() = _binding!!
     private lateinit var vmComment: CommentViewModel
 
+    private lateinit var commentAdapter: CommentAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,17 +35,28 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         super.onViewCreated(view, savedInstanceState)
         vmComment = ViewModelProvider(this)[CommentViewModel::class.java]
         vmComment.startListeningToComments(postId)
+
+        commentAdapter = CommentAdapter(emptyList())
+        binding.commentSection.adapter = commentAdapter
+
         vmComment.comments.observe(viewLifecycleOwner) { comments ->
-            binding.commentSection.adapter = CommentAdapter(comments)
-            binding.commentSection.scrollToPosition(comments.size - 1)
-            binding.commentSection.adapter?.notifyDataSetChanged()
+
+            commentAdapter.updateComments(comments)
+
+            if (comments.isNotEmpty()) {
+                binding.commentSection.scrollToPosition(comments.size - 1)
+            }
+
         }
 
-        binding.editTextComment.setOnClickListener {
+        binding.editTextComment.setOnEditorActionListener { _, _, _ ->
 
             addComment()
+            true
 
         }
+
+
 
     }
 
