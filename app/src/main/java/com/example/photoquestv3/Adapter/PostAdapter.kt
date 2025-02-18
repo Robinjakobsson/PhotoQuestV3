@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.example.photoquestv3.Fragments.CommentFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
@@ -47,7 +48,6 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
         holder.userName.text = post.username
         holder.description.text = post.description
 
-
         holder.optionImage.setOnClickListener(){
 
             val postId = post.postId
@@ -63,9 +63,6 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
         }
 
 
-
-//        holder.profileImage.setImageResource(post.profilePic)
-
         Glide.with(holder.itemView.context)
             .load(post.profilePic)
             .placeholder(R.drawable.ic_person)
@@ -74,6 +71,14 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
         Glide.with(holder.itemView.context)
             .load(post.imageUrl)
             .into(holder.imagePost)
+
+        holder.itemView.findViewById<ImageView>(R.id.addComment).setOnClickListener {
+
+            val bottomSheet = CommentFragment(post.postId)
+            (holder.itemView.context as AppCompatActivity).supportFragmentManager.let { fm ->
+                bottomSheet.show(fm, "CommentBottomSheet")
+            }
+        }
 
     }
 
