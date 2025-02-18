@@ -53,6 +53,14 @@ class ProfileFragment : Fragment() {
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
 
+        binding.followButton.setOnClickListener {
+            auth.getCurrentUser()?.let { it1 ->
+                fireStoreVm.followUser(it1.uid, targetUserId = {
+                    user.uid
+                }.toString())
+            }
+        }
+
 
 
         authUser = Firebase.auth

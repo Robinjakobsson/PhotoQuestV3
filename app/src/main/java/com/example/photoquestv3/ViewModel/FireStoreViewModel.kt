@@ -48,6 +48,10 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.fetchUserData(uid)
     }
 
+    fun followUser(currentUserId : String, targetUserId : String) {
+        fireStoreDb.followUser(currentUserId,targetUserId)
+    }
+
     fun fetchProfileImage(){
         viewModelScope.launch {
           try {

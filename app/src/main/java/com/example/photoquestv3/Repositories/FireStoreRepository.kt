@@ -134,6 +134,14 @@ class FireStoreRepository {
 
             null
         }
+    }
+    fun followUser(currentUserId : String, targetUserId : String) {
+        val currentuserRef = db.collection("users").document(currentUserId)
+        val targetUserRef = db.collection("users").document(targetUserId)
+
+        currentuserRef.collection("following").document(targetUserId).set(mapOf("userId" to targetUserId))
+
+        targetUserRef.collection("followers").document(currentUserId).set(mapOf("userId" to currentUserId))
 
 
     }
