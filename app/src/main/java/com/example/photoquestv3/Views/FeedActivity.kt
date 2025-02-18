@@ -45,7 +45,7 @@ class FeedActivity : AppCompatActivity() {
                 R.id.star -> replaceFragment(ChallengesFragment())
                 R.id.post -> replaceFragment(PostFragment())
                 R.id.search -> replaceFragment(SearchFragment())
-                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.profile -> {navigateToProfile()}
                 else -> return@setOnItemSelectedListener false
             }
             true
@@ -58,5 +58,18 @@ class FeedActivity : AppCompatActivity() {
         }
     private fun startHomeFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout,HomeFragment()).commit()
+    }
+    private fun navigateToProfile(){
+        val bundle = Bundle()
+
+        val currentUserUid = auth.getCurrentUser()?.uid
+
+        bundle.putString("uid",currentUserUid)
+
+        val profile = ProfileFragment()
+
+        profile.arguments = bundle
+
+        replaceFragment(profile)
     }
     }
