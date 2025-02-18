@@ -43,16 +43,11 @@ class SearchFragment : Fragment() {
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
 
         binding?.searchResultsRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding?.searchResultsRecyclerView?.adapter = adapter
 
         adapter = SearchResultsAdapter(requireContext(), mutableListOf(), onUserClicked = { user ->
-            val bundle = Bundle()
-
-            bundle.putSerializable("user", user)
-
-
-
+            navigateToProfile(user)
         })
+        binding?.searchResultsRecyclerView?.adapter = adapter
 
 
 
@@ -76,6 +71,19 @@ class SearchFragment : Fragment() {
                 return true
             }
         })
+    }
+    fun navigateToProfile(user : User) {
+        val bundle = Bundle()
+
+        bundle.putSerializable("user",user)
+
+        val profileFragment = ProfileFragment()
+        profileFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, profileFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
 
