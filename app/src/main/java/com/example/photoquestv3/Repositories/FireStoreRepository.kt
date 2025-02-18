@@ -110,6 +110,14 @@ class FireStoreRepository {
         }
     }
 
+    suspend fun fetchUserData(uid : String) : User? {
+        val user = db.collection("users").document(uid)
+            .get()
+            .await()
+
+        return user.toObject(User::class.java)
+    }
+
 
     suspend fun fetchUserQuote(): String? {
         val currentUser = auth.currentUser ?: return null

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
@@ -20,6 +21,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
@@ -34,12 +36,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+        fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
+        arguments?.getString("uid")?.let { uid ->
+            lifecycleScope.launch {
+                user = fireStoreVm.fetchUserData(uid) ?: return@launch
+                updateData()
+            }
 
-        arguments?.getSerializable("user")?.let {
-            user = it as User
-            Log.d("###", "user : ${user.name}")
         }
-
             binding = FragmentProfileBinding.inflate(inflater, container, false)
             return binding.root
     }
@@ -48,17 +52,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
-
-
-        binding.profileNameTextView.text = user.name
-        binding.userQuoteTextView.text = user.biography
-
-
-        Glide.with(requireContext())
-            .load(user.imageUrl)
-            .placeholder(R.drawable.photo)
-            .into(binding.profileImageImageView)
-
 
 
 
@@ -76,6 +69,16 @@ class ProfileFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    fun updateData() {
+        binding.profileNameTextView.text = user.name
+        binding.userQuoteTextView.text = user.biography
+
+        Glide.with(requireContext())
+            .load(user.imageUrl)
+            .placeholder(R.drawable.photo)
+            .into(binding.profileImageImageView)
     }
 
 }

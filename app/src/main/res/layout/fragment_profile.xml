@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/profile_Name_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

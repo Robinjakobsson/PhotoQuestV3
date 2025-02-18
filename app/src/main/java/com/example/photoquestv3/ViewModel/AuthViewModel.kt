@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.Repositories.StorageRepository
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -34,6 +35,10 @@ class AuthViewModel : ViewModel() {
 
     fun forgotPassword(email: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         auth.forgotPassword(email,onSuccess,onFailure)
+    }
+
+    fun getCurrentUser() : FirebaseUser? {
+        return auth.getCurrentUser()
     }
 
     fun fetchUserName(){

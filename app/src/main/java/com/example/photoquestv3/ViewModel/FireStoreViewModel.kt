@@ -44,6 +44,10 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.getUsers(query)
     }
 
+    suspend fun fetchUserData(uid : String) : User? {
+        return fireStoreDb.fetchUserData(uid)
+    }
+
     fun fetchProfileImage(){
         viewModelScope.launch {
           try {

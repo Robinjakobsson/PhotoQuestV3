@@ -23,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SearchFragment : Fragment() {
     private var binding: FragmentSearchBinding? = null
-    val db = FirebaseFirestore.getInstance()
     private lateinit var fireStoreVm : FireStoreViewModel
     private lateinit var adapter : SearchResultsAdapter
 
@@ -45,7 +44,7 @@ class SearchFragment : Fragment() {
         binding?.searchResultsRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 3)
 
         adapter = SearchResultsAdapter(requireContext(), mutableListOf(), onUserClicked = { user ->
-            navigateToProfile(user)
+            navigateToProfile(user.uid)
         })
         binding?.searchResultsRecyclerView?.adapter = adapter
 
@@ -72,10 +71,10 @@ class SearchFragment : Fragment() {
             }
         })
     }
-    fun navigateToProfile(user : User) {
+    fun navigateToProfile(uid : String) {
         val bundle = Bundle()
 
-        bundle.putSerializable("user",user)
+        bundle.putString("uid",uid)
 
         val profileFragment = ProfileFragment()
         profileFragment.arguments = bundle
