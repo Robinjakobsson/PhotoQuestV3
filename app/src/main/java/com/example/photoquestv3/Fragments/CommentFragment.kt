@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.Adapter.CommentAdapter
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.CommentViewModel
 import com.example.photoquestv3.databinding.FragmentCommentBinding
@@ -31,6 +32,12 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vmComment = ViewModelProvider(this)[CommentViewModel::class.java]
+        vmComment.startListeningToComments(postId)
+        vmComment.comments.observe(viewLifecycleOwner) { comments ->
+            binding.commentSection.adapter = CommentAdapter(comments)
+            binding.commentSection.scrollToPosition(comments.size - 1)
+            binding.commentSection.adapter?.notifyDataSetChanged()
+        }
 
         binding.editTextComment.setOnClickListener {
 
@@ -50,11 +57,12 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         if (input.isEmpty()) {
             Toast.makeText(requireContext(), "Please enter a comment", Toast.LENGTH_SHORT).show()
         } else {
-            vmComment.addComment(postId, input, onSuccess = {
-                dismiss()
-            }, onFailure = { exception ->
-                Toast.makeText(requireContext(), "Could not add comment: ${exception.message}", Toast.LENGTH_SHORT).show()
-            })
+           vmComment.addComment(postId, input, onSuccess = {
+               binding.editTextComment.text.clear()
+           }, onFailure = {
+               Toast.makeText(requireContext(), "Failed to add comment", Toast.LENGTH_SHORT).show()
+           })
+
 
         }
     }
