@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.firestore.Query
+import com.google.firebase.Timestamp
 
 const val TAG = "CommentRepository"
 
@@ -39,7 +40,8 @@ class CommentRepository {
             postId = postId,
             userId = user.uid,
             username = user.displayName ?: "No user here",
-            comment = commentText
+            comment = commentText,
+            timestamp = Timestamp.now()
         )
 
         Log.d(TAG, "[CREATE] Creating comment for post $postId, by user ${user.uid}")
@@ -56,7 +58,11 @@ class CommentRepository {
 
     fun startListeningToComments(postId: String) {
 
-        if (commentsListener != null) return
+        if (commentsListener != null) {
+            Log.d(TAG, "[LISTEN] Already listening to comments for postId $postId")
+            return
+
+        }
 
         commentsListener = db.collection("comments")
             .whereEqualTo("postId", postId)
@@ -70,7 +76,7 @@ class CommentRepository {
                 val commentsList = mutableListOf<Comment>()
 
                 if (snapshot != null) {
-
+                    Log.d(TAG, "[LISTEN] Received snapshot with ${snapshot.size()} documents")
                     for (document in snapshot.documents) {
 
                         val comment = document.toObject(Comment::class.java)
@@ -79,6 +85,7 @@ class CommentRepository {
                         }
                     }
                 }
+                Log.d(TAG, "[LISTEN] Posting ${commentsList.size} comments to LiveData")
                 _comments.postValue(commentsList)
             }
     }
@@ -86,10 +93,11 @@ class CommentRepository {
     fun stopListeningToComments() {
         commentsListener?.remove()
         commentsListener = null
-        Log.d(TAG, "[LISTEN] Stopped listening to comments")
+        Log.d(TAG, "[LISTEN] Successfully stopped listening to comments")
     }
 
     fun restartListeningToComments(postId: String) {
+        Log.d(TAG, "[LISTEN] Restarting listening to comments for postId $postId")
         stopListeningToComments()
         startListeningToComments(postId)
     }

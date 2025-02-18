@@ -1,11 +1,11 @@
 package com.example.photoquestv3.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.R
@@ -38,6 +38,7 @@ class CommentAdapter(private var commentList: List<Comment>) : RecyclerView.Adap
         holder.comment.text = comments.comment
         holder.heart.setImageResource(R.drawable.ic_heart)
         holder.imageProfile.setImageResource(R.drawable.ic_person)
+
     }
 
     fun updateComments(newComments: List<Comment>) {
