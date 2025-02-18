@@ -1,6 +1,7 @@
 package com.example.photoquestv3.Repositories
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.Comment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -12,6 +13,9 @@ class CommentRepository {
 
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+
+    private val _comments = MutableLiveData<List<Comment>>()
+    val comments: MutableLiveData<List<Comment>> = _comments
 
     fun addComment(postId: String,
                    commentText: String,
