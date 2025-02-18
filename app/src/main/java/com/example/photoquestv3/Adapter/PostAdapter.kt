@@ -47,9 +47,8 @@ class PostAdapter(private val postList: List<Post>) : RecyclerView.Adapter<PostA
             .into(holder.imagePost)
 
         holder.itemView.findViewById<ImageView>(R.id.addComment).setOnClickListener {
-            // Antag att "post" har ett fält postId
+
             val bottomSheet = CommentFragment(post.postId)
-            // Se till att context är en AppCompatActivity för att kunna hämta supportFragmentManager
             (holder.itemView.context as AppCompatActivity).supportFragmentManager.let { fm ->
                 bottomSheet.show(fm, "CommentBottomSheet")
             }
