@@ -31,7 +31,7 @@ jobs:
           ./gradlew
 
       - name: check dependencies
-        run: ./gradlew dependencies
+        run: ./gradlew :app:androidDependencies
 
       - name: Build Gradle
         run: ./gradlew build
