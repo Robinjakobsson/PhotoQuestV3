@@ -111,12 +111,13 @@ class FireStoreRepository {
     }
 
     suspend fun fetchUserData(uid : String) : User? {
-        val user = db.collection("users").document(uid)
+        val userRef = db.collection("users").document(uid)
             .get()
             .await()
 
-        return user.toObject(User::class.java)
+        return userRef.toObject(User::class.java)
     }
+
 
 
     suspend fun fetchUserQuote(): String? {
@@ -136,13 +137,12 @@ class FireStoreRepository {
         }
     }
     fun followUser(currentUserId : String, targetUserId : String) {
-        val currentuserRef = db.collection("users").document(currentUserId)
+        val currentUserRef = db.collection("users").document(currentUserId)
         val targetUserRef = db.collection("users").document(targetUserId)
 
-        currentuserRef.collection("following").document(targetUserId).set(mapOf("userId" to targetUserId))
+        currentUserRef.update("following", FieldValue.arrayUnion(targetUserId))
 
-        targetUserRef.collection("followers").document(currentUserId).set(mapOf("userId" to currentUserId))
-
+        targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId))
 
     }
 
