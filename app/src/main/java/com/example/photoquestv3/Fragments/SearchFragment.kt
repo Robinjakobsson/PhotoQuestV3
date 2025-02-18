@@ -42,8 +42,13 @@ class SearchFragment : Fragment() {
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
 
         binding?.searchResultsRecyclerView?.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = SearchResultsAdapter(requireContext(), mutableListOf())
         binding?.searchResultsRecyclerView?.adapter = adapter
+
+        adapter = SearchResultsAdapter(requireContext(), mutableListOf(), onUserClicked = { user ->
+
+
+        })
+
 
 
         fireStoreVm.getUsers("").observe(viewLifecycleOwner, {users ->
@@ -54,8 +59,6 @@ class SearchFragment : Fragment() {
         binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                //showSearchResults()
-                Log.d("!!!", "Användaren söker efter: $query")
                 return false
             }
 
