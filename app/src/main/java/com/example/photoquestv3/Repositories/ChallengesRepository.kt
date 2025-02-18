@@ -21,7 +21,7 @@ class ChallengesRepository {
     val uid = user?.uid
     val collection = uid?.let { db.collection("users").document(it) }
 
-    val _listOfChallenges = MutableLiveData<List<Challenges>>()
+    private val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
 
     fun getChallengesFromDatabase() {
