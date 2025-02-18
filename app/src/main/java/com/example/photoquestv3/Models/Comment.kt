@@ -8,5 +8,6 @@ data class Comment(
     val userId: String = "",
     val username: String = "",
     val comment: String = "",
-    val timestamp: Timestamp? = null
+    val timestamp: Timestamp? = null,
+    val profilePicture: String = ""
 )

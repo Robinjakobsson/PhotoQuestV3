@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,9 +26,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     private lateinit var vmComment: CommentViewModel
     private lateinit var commentAdapter: CommentAdapter
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,44 +34,27 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         return binding.root
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        dialog?.let { d ->
-//            // Hitta bottenarket (bottom sheet) och expandera det
-//            val bottomSheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-//            bottomSheet?.let {
-//                val behavior = BottomSheetBehavior.from(it)
-//                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//            }
-//        }
-//    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
-
         vmComment = ViewModelProvider(this)[CommentViewModel::class.java]
         vmComment.startListeningToComments(postId)
 
-        commentAdapter = CommentAdapter(emptyList())
-        binding.commentSection.adapter = commentAdapter
+        recycleViewSetup()
 
         vmComment.comments.observe(viewLifecycleOwner) { comments ->
-            Log.d("CommentFragment", "Received ${comments.size} comments")
             commentAdapter.updateComments(comments)
 
             if (comments.isNotEmpty()) {
                 binding.commentSection.scrollToPosition(comments.size - 1)
             }
-
         }
 
-        binding.editTextComment.setOnEditorActionListener { _, _, _ ->
-
-
-            addComment()
-            true
+        binding.editTextComment.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addComment()
+                true
+            } else { false }
         }
 
     }
@@ -87,14 +69,19 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         if (input.isEmpty()) {
             Toast.makeText(requireContext(), "Please enter a comment", Toast.LENGTH_SHORT).show()
         } else {
-           vmComment.addComment(postId, input, onSuccess = {
-               binding.editTextComment.text.clear()
-           }, onFailure = {
-               Toast.makeText(requireContext(), "Failed to add comment", Toast.LENGTH_SHORT).show()
-           })
+            vmComment.addComment(postId, input, onSuccess = {
+                binding.editTextComment.text.clear()
+            }, onFailure = {
+                Toast.makeText(requireContext(), "Failed to add comment", Toast.LENGTH_SHORT).show()
+            })
 
 
         }
+    }
+    private fun recycleViewSetup() {
+        binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
+        commentAdapter = CommentAdapter(emptyList())
+        binding.commentSection.adapter = commentAdapter
     }
 
 }

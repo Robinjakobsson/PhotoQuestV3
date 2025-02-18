@@ -41,7 +41,8 @@ class CommentRepository {
             userId = user.uid,
             username = user.displayName ?: "No user here",
             comment = commentText,
-            timestamp = Timestamp.now()
+            timestamp = Timestamp.now(),
+            profilePicture = user.photoUrl.toString()
         )
 
         Log.d(TAG, "[CREATE] Creating comment for post $postId, by user ${user.uid}")
@@ -56,13 +57,9 @@ class CommentRepository {
             }
     }
 
-    fun startListeningToComments(postId: String) {
+    private fun startListeningToComments(postId: String) {
 
-        if (commentsListener != null) {
-            Log.d(TAG, "[LISTEN] Already listening to comments for postId $postId")
-            return
-
-        }
+        if (commentsListener != null) { return }
 
         commentsListener = db.collection("comments")
             .whereEqualTo("postId", postId)
@@ -72,11 +69,9 @@ class CommentRepository {
                     Log.e(TAG, "[LISTEN] Error listening to comments", error)
                     return@addSnapshotListener
                 }
-
                 val commentsList = mutableListOf<Comment>()
 
                 if (snapshot != null) {
-                    Log.d(TAG, "[LISTEN] Received snapshot with ${snapshot.size()} documents")
                     for (document in snapshot.documents) {
 
                         val comment = document.toObject(Comment::class.java)
@@ -85,7 +80,6 @@ class CommentRepository {
                         }
                     }
                 }
-                Log.d(TAG, "[LISTEN] Posting ${commentsList.size} comments to LiveData")
                 _comments.postValue(commentsList)
             }
     }

@@ -7,22 +7,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.R
 
 class CommentAdapter(private var commentList: List<Comment>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val username: TextView = itemView.findViewById(R.id.textUserName)
         val comment: TextView = itemView.findViewById(R.id.textComment)
         val heart: ImageView = itemView.findViewById(R.id.icon_heart)
         val imageProfile: ImageView = itemView.findViewById(R.id.imageProfile)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
         return CommentViewHolder(view)
     }
@@ -37,8 +35,11 @@ class CommentAdapter(private var commentList: List<Comment>) : RecyclerView.Adap
         holder.username.text = comments.username
         holder.comment.text = comments.comment
         holder.heart.setImageResource(R.drawable.ic_heart)
-        holder.imageProfile.setImageResource(R.drawable.ic_person)
 
+        Glide.with(holder.itemView.context)
+            .load(comments.profilePicture)
+            .placeholder(R.drawable.ic_person)
+            .into(holder.imageProfile)
     }
 
     fun updateComments(newComments: List<Comment>) {
