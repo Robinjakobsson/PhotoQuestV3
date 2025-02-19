@@ -1,5 +1,7 @@
 [versions]
 agp = "8.7.1"
+facebookFacebookLogin = "latest.release"
+facebookLoginVersion = "[version]"
 glide = "4.14.2"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
@@ -22,11 +24,15 @@ lifecycleLivedataKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
 fragmentKtx = "1.5.6"
 materialVersion = "1.11.0"
-
+facebookLogin = "17.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleLivedataKtx" }
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookLoginVersion" }
+facebook-login-vlatestrelease = { module = "com.facebook.android:facebook-login", version.ref = "facebookFacebookLogin" }
+facebook-login-vversion = { module = "com.facebook.android:facebook-login", version.ref = "facebookLoginVersion" }
+facebook-share = { module = "com.facebook.android:facebook-share", version.ref = "facebookLoginVersion" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -47,6 +53,7 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+facebook-login = {module = "com.facebook.android:facebook-login", version.ref = "junitVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

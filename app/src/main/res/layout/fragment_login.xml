@@ -104,4 +104,41 @@
         android:text="@string/forgotpassword"
         android:textAlignment="center" />
 
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/fbLoginButton"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp" />
+
+        <ImageButton
+
+            android:id="@+id/googleSignInButton"
+            android:layout_margin="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+           android:background="@drawable/google" />
+        <ImageButton
+            android:id="@+id/facebookSignInButton"
+            android:layout_margin="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+        android:background="@drawable/facebook" />
+        <ImageButton
+            android:id="@+id/AppleSignInButton"
+            android:layout_margin="15dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+          android:background="@drawable/apple" />
+    </LinearLayout>
+
 </LinearLayout>

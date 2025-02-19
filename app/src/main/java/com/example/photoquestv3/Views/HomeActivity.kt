@@ -16,12 +16,14 @@ import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.example.photoquestv3.databinding.ActivityHomeBinding
+
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class HomeActivity : AppCompatActivity() {
     lateinit var binding: ActivityHomeBinding
+
     lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
