@@ -89,7 +89,7 @@ lateinit var firebaseAuth : FirebaseAuth
                 override fun onSuccess(result: LoginResult) {
                     handleFacebookAccessToken(result!!.accessToken)
                     getDataFromFb()
-                    //  auth.createAccount()
+                   startFeedActivity()
                 }
 
             })
