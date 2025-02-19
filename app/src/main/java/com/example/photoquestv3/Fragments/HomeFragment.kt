@@ -72,16 +72,13 @@ class HomeFragment : Fragment() {
 
     private fun fetchPosts() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
-           adapter = PostAdapter(posts, postVm)
-        vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
-           adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
-               navigateToProfile(post.userid)})
-            binding.recyclerView.adapter = adapter
-            adapter.updatePosts(posts)
-        }
-        vmFireStore.fetchPosts()
+        adapter = PostAdapter(mutableListOf(), postVm, onPostClicked = { post ->
+            navigateToProfile(post.userid)
+        })
+        binding.recyclerView.adapter = adapter
 
+        vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
+            adapter.updatePosts(posts)
         }
     }
 
