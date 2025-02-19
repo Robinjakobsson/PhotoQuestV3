@@ -3,6 +3,7 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
@@ -20,7 +21,6 @@ class FireStoreRepository {
 
     private val db = Firebase.firestore
     private val auth = Firebase.auth
-
 
     suspend fun addUser(
         email: String,
@@ -175,10 +175,10 @@ class FireStoreRepository {
 
             if (document.exists()) {
 
-                docRef.update("friendsLiked", FieldValue.arrayUnion(currentUser)).await()
+                docRef.update("likedBy", FieldValue.arrayUnion(currentUser)).await()
                 val likeCounter = document.getLong("likes") ?: 0
 
-                val friendsLiked = document.get("friendsLiked") as? List<String>
+                val friendsLiked = document.get("likedBy") as? List<String>
 
                 if (friendsLiked?.contains(currentUser) == false) {
                     val newLikeCounter = likeCounter + 1
@@ -190,7 +190,7 @@ class FireStoreRepository {
 
                     val newLikeCounter = likeCounter - 1
                     docRef.update("likes", newLikeCounter).await()
-                    docRef.update("friendsLiked", FieldValue.arrayRemove(currentUser)).await()
+                    docRef.update("likedBy", FieldValue.arrayRemove(currentUser)).await()
                     Log.d("!!!", "Likes -")
                     return false
                 }
@@ -205,4 +205,24 @@ class FireStoreRepository {
         }
     }
 
+    suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
+
+        Log.d("!!!", "fetchFriendsList from repo körs")
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val document = docRef.get().await()
+
+            if (document.exists()) {
+                val friendsLiked = document.get("likedBy") as? List<String>
+
+                if (friendsLiked != null) {
+                    callback(friendsLiked)
+
+                    Log.d("!!!", "Friends fetched. ${friendsLiked}")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("!!!", "Error fetching friends", e)
+        }
+    }
 }
