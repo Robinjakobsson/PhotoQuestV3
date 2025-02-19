@@ -126,7 +126,8 @@
 
         </androidx.cardview.widget.CardView>
 
-        <GridView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRecycler"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginBottom="10dp"

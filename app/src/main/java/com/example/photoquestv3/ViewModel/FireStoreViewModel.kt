@@ -27,8 +27,23 @@ class FireStoreViewModel: ViewModel() {
     private val _userQuote = MutableLiveData<String?>()
     val userQuote: MutableLiveData<String?> = _userQuote
 
+    private val _userImages = MutableLiveData<List<String>>()
+    val userImages: LiveData<List<String>> = _userImages
 
-//    Call in Fragment or Activity.
+
+
+
+   fun loadUserImages(){
+       viewModelScope.launch {
+           val images = fireStoreDb.fetchUserImages()
+           _userImages.value = images
+       }
+   }
+
+
+
+
+    //    Call in Fragment or Activity.
     fun fetchPosts() {
         viewModelScope.launch {
             try {
