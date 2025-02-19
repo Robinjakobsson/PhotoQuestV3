@@ -1,22 +1,32 @@
 package com.example.photoquestv3.Adapter
 
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 
-class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(
+    private var postList: List<Post>,
+    val postVm : PostViewModel,
+    val onPostClicked: (Post) -> Unit
+) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
     fun updatePosts(newPosts: List<Post>) {
@@ -29,7 +39,10 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
-        val optionImage : ImageView = itemView.findViewById(R.id.moreOptions)
+        val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
+        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
+
 
     }
 
@@ -39,7 +52,7 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
     }
 
     override fun getItemCount(): Int {
-       return  postList.size
+        return postList.size
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -47,8 +60,17 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
 
         holder.userName.text = post.username
         holder.description.text = post.description
+        holder.likeCounter.text = post.likes.toString()
 
-        holder.optionImage.setOnClickListener(){
+        holder.likeButton.setOnClickListener(){
+
+            val postId = post.postId
+
+            postVm.addLikesToPost(postId)
+
+        }
+
+        holder.optionImage.setOnClickListener() {
 
             val postId = post.postId
 
@@ -80,6 +102,12 @@ class PostAdapter(private var postList: List<Post>, val postVm : PostViewModel) 
             }
         }
 
-    }
+        holder.userName.setOnClickListener{
+            onPostClicked(post)
+            }
+        holder.profileImage.setOnClickListener{
+            onPostClicked(post)
+            }
+        }
 
-}
+    }

@@ -9,11 +9,19 @@ class CommentViewModel: ViewModel()  {
     val comments = commentRepository.comments
 
     fun startListeningToComments(postId: String) {
-        commentRepository.startListeningToComments(postId)
+        commentRepository.restartListeningToComments(postId)
     }
 
     fun addComment(postId: String, commentText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         commentRepository.addComment(postId, commentText, onSuccess, onFailure)
+    }
+
+    fun updateComment(commentId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        commentRepository.updateComment(commentId, newText, onSuccess, onFailure)
+    }
+
+    fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        commentRepository.deleteComment(commentId, onSuccess, onFailure)
     }
 
     override fun onCleared() {
