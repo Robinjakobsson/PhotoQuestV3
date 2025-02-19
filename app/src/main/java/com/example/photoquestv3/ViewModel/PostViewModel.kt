@@ -33,6 +33,7 @@ class PostViewModel : ViewModel() {
         _itemId.value = id
     }
 
+
     private val _toastMessage = MutableLiveData<String?>()
     val toastMessage: LiveData<String?> get() = _toastMessage
 
@@ -41,6 +42,8 @@ class PostViewModel : ViewModel() {
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
     val postId = itemId.value
+
+    val likes: LiveData<Int> get() = fireStoreRepo.likes
 
     fun updatePostAdapter() {
         _dataChanged.value = true
@@ -63,113 +66,28 @@ class PostViewModel : ViewModel() {
     fun addLikesToPost(postId: String?) {
         viewModelScope.launch {
             if (postId != null) {
+                setItemId(postId)
+                startListeningToLikes(postId)
                 val success = fireStoreRepo.addLikesToPost(postId)
                 if (success) {
-                    _toastMessage.value = "Successfully added a like!"
-                } else {
-                    _toastMessage.value = "Failed to add a like"
-                }
-                _toastMessage.value = null
-            }
-        }
-    }
-
-
-   /* fun deletePost(postId: String?) {
-
-        if (postId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val docRef = db.collection("posts").document(postId)
-
-            docRef.addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.d("!!!", "Listener failed", e)
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("!!!", "Current data: ${snapshot.data}")
-
                     _dataChanged.value = true
-                    firestoreVm.fetchPosts()
-
                 } else {
-                    Log.d("!!!", "Current data: null")
-                    firestoreVm.fetchPosts()
-                }
-            }
-
-            docRef
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val userId = document.getString("userid")
-                        Log.d("!!!", "document is fetched")
-                        if (userId == currentUserId) {
-                            Log.d("!!!", "currentuser is correct")
-                            docRef.delete().addOnSuccessListener {
-                                _toastMessage.value = "Successfully deleted post"
-                                _toastMessage.value = null
-
-                                _dataChanged.value = true
-                                firestoreVm.fetchPosts()
-
-                            }.addOnFailureListener() {
-                                _toastMessage.value = "Failed to delete post"
-                                _toastMessage.value = null
-                            }
-                        } else {
-                            _toastMessage.value = "You cannot delete someone else's post!"
-                            _toastMessage.value = null
-                        }
-                    } else {
-                        Log.d("!!!", "Document is null")
-                    }
-                }.addOnFailureListener() { exception ->
-                    Log.d("!!!", "Document not fetched")
-                }
-
+                    _toastMessage.value = "Failed to like post"
+                    _toastMessage.value = null
+                }                }
         }
+
     }
 
-    fun addLikesToPost(postId: String?) {
 
-        if (postId != null) {
-            val db = FirebaseFirestore.getInstance()
-            val docRef = db.collection("posts").document(postId)
+    fun startListeningToLikes(postId: String) {
+    fireStoreRepo.restartListeningToLikes(postId)
+    }
 
-            docRef.addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.d("!!!", "Listener failed", e)
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("!!!", "Current data: ${snapshot.data}")
+    override fun onCleared() {
+    super.onCleared()
+    fireStoreRepo.stopListeningToLikes()
+    }
 
-                } else {
-                    Log.d("!!!", "Current data: null")
-                }
 
-            }
-
-            docRef
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-
-                        var likeCounter = document.getField<Int>("likes")
-
-                        var newLikeCounter = likeCounter.toString().toInt()
-
-                        newLikeCounter++
-                        docRef.update("likes", newLikeCounter).addOnSuccessListener {
-
-                            Log.d("!!!", "Updated likes ++")
-
-                        }.addOnFailureListener() {
-                            Log.d("!!!", "Failed to update likes")
-                        }
-                    }
-                }
-        }
-    }*/
 }

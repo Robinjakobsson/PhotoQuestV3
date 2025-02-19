@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +26,8 @@ import com.example.photoquestv3.Views.Fragments.ProfileFragment
 class PostAdapter(
     private var postList: List<Post>,
     val postVm : PostViewModel,
-    val onPostClicked: (Post) -> Unit
+    val onPostClicked: (Post) -> Unit,
+    val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
@@ -57,17 +59,22 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
-
         holder.userName.text = post.username
         holder.description.text = post.description
+
+
+//        Likes
         holder.likeCounter.text = post.likes.toString()
+        postVm.likes.observe(lifecycleOwner) { newLikes ->
+            if (post.postId == postVm.itemId.value) {
+                holder.likeCounter.text = newLikes.toString()
+            }
+
+        }
 
         holder.likeButton.setOnClickListener(){
-
             val postId = post.postId
-
             postVm.addLikesToPost(postId)
-
         }
 
         holder.optionImage.setOnClickListener() {
@@ -104,10 +111,10 @@ class PostAdapter(
 
         holder.userName.setOnClickListener{
             onPostClicked(post)
-            }
+        }
         holder.profileImage.setOnClickListener{
             onPostClicked(post)
-            }
         }
-
     }
+
+}

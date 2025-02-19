@@ -10,6 +10,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
@@ -19,6 +20,12 @@ class FireStoreRepository {
 
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+
+
+    private val _likes = MutableLiveData<Int>()
+    val likes: MutableLiveData<Int> = _likes
+
+    private var likesListener: ListenerRegistration? = null
 
 
     suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
@@ -37,9 +44,9 @@ class FireStoreRepository {
         }
     }
 
-//    Updated with timestamp
-     suspend fun savePostToDatabase(imageUrl: String,description : String) {
-         val currentUser = auth.currentUser
+    //    Updated with timestamp
+    suspend fun savePostToDatabase(imageUrl: String,description : String) {
+        val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
             "postId" to postId,
@@ -51,15 +58,15 @@ class FireStoreRepository {
             "likes" to 0,
             "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
         )
-         try {
-             db.collection("posts").document(postId).set(post).await()
-                Log.d("FireStoreRepository","Successfully Created post $post!")
-            }catch (e : Exception) {
-                Log.d("FireStoreRepository","Failed to save post to database...", e)
+        try {
+            db.collection("posts").document(postId).set(post).await()
+            Log.d("FireStoreRepository","Successfully Created post $post!")
+        }catch (e : Exception) {
+            Log.d("FireStoreRepository","Failed to save post to database...", e)
         }
     }
 
-//    Fetches all posts by time order
+    //    Fetches all posts by time order
     suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
@@ -125,9 +132,9 @@ class FireStoreRepository {
         return try {
             auth.currentUser
             val documentSnapshot = db.collection("users")
-                    .document(currentUser.uid)
-                    .get()
-                    .await()
+                .document(currentUser.uid)
+                .get()
+                .await()
             documentSnapshot.getString("biography")
 
         }catch (e: Exception){
@@ -156,6 +163,43 @@ class FireStoreRepository {
             return "Failed to delete post"
         }
     }
+
+    fun stopListeningToLikes() {
+        likesListener?.remove()
+        likesListener = null
+        Log.d("PostRepository", "Successfully stopped listening to likes")
+    }
+
+    fun restartListeningToLikes(postId: String) {
+        Log.d("PostRepository", "Restarting listening to likes for postId $postId")
+        stopListeningToLikes()
+        listenForLikes(postId)
+    }
+
+    private fun listenForLikes(postId: String) {
+
+        if (likesListener != null) {
+            return
+        }
+
+        likesListener = db.collection("posts")
+            .document(postId)
+            .addSnapshotListener { snapshot, error ->
+
+                if (error != null) {
+                    Log.e("PostRepository", "Error listening to likes", error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val likes = snapshot.getLong("likes")?.toInt() ?: 0
+                    _likes.postValue(likes)
+                } else { Log.d("PostRepository", "No likes found for postId $postId")}
+            }
+    }
+
+
+
 
     suspend fun addLikesToPost(postId: String): Boolean {
         try {
