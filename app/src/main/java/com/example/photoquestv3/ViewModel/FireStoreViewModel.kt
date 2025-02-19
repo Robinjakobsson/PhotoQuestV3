@@ -65,17 +65,7 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.fetchUserData(uid)
     }
 
-    fun fetchProfileImage(){
-        viewModelScope.launch {
-          try {
-              val imageUrl = fireStoreDb.fetchProfileImage()
-              _profileImage.postValue(imageUrl)
-
-          }catch (e: Exception){
-              Log.d("FireStoreViewModel","Error")
-          }
-        }
-    }
+    
 
 
 
