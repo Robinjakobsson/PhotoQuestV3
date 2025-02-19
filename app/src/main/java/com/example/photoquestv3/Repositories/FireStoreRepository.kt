@@ -9,6 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
@@ -47,7 +48,7 @@ class FireStoreRepository {
             "imageUrl" to imageUrl,
             "description" to description,
             "userid" to (currentUser?.uid ?: ""),
-            "likes" to 15,
+            "likes" to 0,
             "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
         )
          try {
@@ -62,7 +63,7 @@ class FireStoreRepository {
     suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get().await()
             .toObjects(Post::class.java)
     }
