@@ -143,11 +143,11 @@ class FireStoreRepository {
     suspend fun fetchUserImages(): List<String> {
         val currentUser = auth.currentUser ?: return emptyList()
         val snapshot = db.collection("posts")
-                .whereEqualTo("userid", currentUser.uid)
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .get()
-                .await()
-            snapshot.documents.mapNotNull { it.getString("imageUrl") }
+            .whereEqualTo("userid", currentUser.uid)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .await()
+        snapshot.documents.mapNotNull { it.getString("imageUrl") }
         return snapshot.documents.mapNotNull { it.getString("imageUrl") }
 
         }

@@ -77,16 +77,6 @@ class FireStoreViewModel: ViewModel() {
         }
     }
 
-    fun fetchUserQuote(){
-        viewModelScope.launch {
-            try {
-                val userQuote = fireStoreDb.fetchUserQuote()
-                _userQuote.postValue(userQuote)
 
-            }catch (e: Exception){
-                Log.d("FireStoreViewModel", "error")
-            }
-        }
-    }
 
 }
