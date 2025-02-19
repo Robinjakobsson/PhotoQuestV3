@@ -139,4 +139,36 @@ class FireStoreRepository {
 
     }
 
+    suspend fun deletePost(postId: String, currentUserId: String?): String {
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val document = docRef.get().await()
+
+            val userId = document.getString("userid")
+            if (userId == currentUserId) {
+                docRef.delete().await()
+                return "Successfully deleted post"
+            } else {
+                return "You cannot delete someone else's post!"
+            }
+        } catch (e: Exception) {
+            Log.e("PostRepository", "Error deleting post", e)
+            return "Failed to delete post"
+        }
+    }
+
+    suspend fun addLikesToPost(postId: String): Boolean {
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val document = docRef.get().await()
+            val likeCounter = document.getLong("likes") ?: 0
+            val newLikeCounter = likeCounter + 1
+            docRef.update("likes", newLikeCounter).await()
+            return true
+        } catch (e: Exception) {
+            Log.e("PostRepository", "Error updating likes", e)
+            return false
+        }
+    }
+
 }
