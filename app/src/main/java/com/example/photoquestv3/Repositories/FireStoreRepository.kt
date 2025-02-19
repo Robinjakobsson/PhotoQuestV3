@@ -146,5 +146,38 @@ class FireStoreRepository {
         targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId))
 
     }
+    fun getFollowerPosts(currentUserId: String) : LiveData<List<Post>> {
+        val liveData =  MutableLiveData<List<Post>>()
+
+        val currentUserRef = db.collection("users").document(currentUserId)
+
+        currentUserRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+
+                val following = documentSnapshot.get("following") as List<String>
+
+                val postsRef = db.collection("posts")
+                postsRef.whereIn("userid", following)
+                    .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .addSnapshotListener {snapshot, exception ->
+                        if (exception != null) {
+                            Log.d("FireStore","Error getting posts")
+                            return@addSnapshotListener
+                        }
+
+                        val postslist = mutableListOf<Post>()
+                        snapshot?.documents?.forEach {documents ->
+                            val post = documents.toObject(Post::class.java)
+                            if (post != null) {
+                                postslist.add(post)
+                            }
+                        }
+
+                        liveData.value = postslist
+                    }
+            }
+        }
+        return liveData
+    }
 
 }
