@@ -61,7 +61,7 @@ class FireStoreRepository {
         try {
             db.collection("posts").document(postId).set(post).await()
             Log.d("FireStoreRepository","Successfully Created post $post!")
-        }catch (e : Exception) {
+        } catch (e : Exception) {
             Log.d("FireStoreRepository","Failed to save post to database...", e)
         }
     }
@@ -137,13 +137,10 @@ class FireStoreRepository {
                 .await()
             documentSnapshot.getString("biography")
 
-        }catch (e: Exception){
+        } catch (e: Exception){
             Log.d("FireStoreRepository","error")
-
             null
         }
-
-
     }
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
@@ -178,9 +175,7 @@ class FireStoreRepository {
 
     private fun listenForLikes(postId: String) {
 
-        if (likesListener != null) {
-            return
-        }
+        if (likesListener != null) { return }
 
         likesListener = db.collection("posts")
             .document(postId)
@@ -197,9 +192,6 @@ class FireStoreRepository {
                 } else { Log.d("PostRepository", "No likes found for postId $postId")}
             }
     }
-
-
-
 
     suspend fun addLikesToPost(postId: String): Boolean {
         try {

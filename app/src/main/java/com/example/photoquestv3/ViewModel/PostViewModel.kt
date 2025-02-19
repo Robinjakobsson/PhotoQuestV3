@@ -74,19 +74,18 @@ class PostViewModel : ViewModel() {
                 } else {
                     _toastMessage.value = "Failed to like post"
                     _toastMessage.value = null
-                }                }
+                }
+            }
         }
-
     }
 
-
-    fun startListeningToLikes(postId: String) {
-    fireStoreRepo.restartListeningToLikes(postId)
+    private fun startListeningToLikes(postId: String) {
+        fireStoreRepo.restartListeningToLikes(postId)
     }
 
     override fun onCleared() {
-    super.onCleared()
-    fireStoreRepo.stopListeningToLikes()
+        super.onCleared()
+        fireStoreRepo.stopListeningToLikes()
     }
 
 
