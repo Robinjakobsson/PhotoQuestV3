@@ -12,11 +12,13 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.CommentAdapter
+import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.CommentViewModel
 import com.example.photoquestv3.databinding.FragmentCommentBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.appcompat.app.AlertDialog
 
 
 class CommentFragment(private val postId: String) : BottomSheetDialogFragment() {
@@ -54,7 +56,9 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 addComment()
                 true
-            } else { false }
+            } else {
+                false
+            }
         }
 
     }
@@ -78,10 +82,44 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
 
         }
     }
+
+    private fun editCommentDialog(comment: Comment) {
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Edit Comment")
+
+        val input = EditText(requireContext())
+        input.setText(comment.comment)
+        builder.setView(input)
+
+        builder.setPositiveButton("Update") { dialog, _ ->
+
+            val newText = input.text.toString().trim()
+            if (newText.isNotEmpty()) {
+                vmComment.updateComment(comment.commentId, newText, onSuccess = {
+                    Toast.makeText(requireContext(), "Comment updated", Toast.LENGTH_SHORT).show()
+                }, onFailure = {
+                    Toast.makeText(requireContext(), "Failed to update comment", Toast.LENGTH_SHORT).show()
+                })
+            } else {
+                Toast.makeText(requireContext(), "Please enter a comment", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+
     private fun recycleViewSetup() {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
-        commentAdapter = CommentAdapter(emptyList())
+        commentAdapter = CommentAdapter(emptyList()) { comment -> editCommentDialog(comment) }
         binding.commentSection.adapter = commentAdapter
     }
 
 }
+
