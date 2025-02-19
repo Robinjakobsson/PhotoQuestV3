@@ -68,7 +68,6 @@ class CommentRepository {
                 Log.e(TAG, "[UPDATE] Error updating comment")
                 onFailure(Exception("Error updating comment"))
             }
-
     }
 
     fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
@@ -81,8 +80,18 @@ class CommentRepository {
                 Log.e(TAG, "[DELETE] Error deleting comment")
                 onFailure(Exception("Error deleting comment"))
             }
+    }
 
+    fun stopListeningToComments() {
+        commentsListener?.remove()
+        commentsListener = null
+        Log.d(TAG, "[LISTEN] Successfully stopped listening to comments")
+    }
 
+    fun restartListeningToComments(postId: String) {
+        Log.d(TAG, "[LISTEN] Restarting listening to comments for postId $postId")
+        stopListeningToComments()
+        startListeningToComments(postId)
     }
 
     private fun startListeningToComments(postId: String) {
@@ -111,17 +120,4 @@ class CommentRepository {
                 _comments.postValue(commentsList)
             }
     }
-
-    fun stopListeningToComments() {
-        commentsListener?.remove()
-        commentsListener = null
-        Log.d(TAG, "[LISTEN] Successfully stopped listening to comments")
-    }
-
-    fun restartListeningToComments(postId: String) {
-        Log.d(TAG, "[LISTEN] Restarting listening to comments for postId $postId")
-        stopListeningToComments()
-        startListeningToComments(postId)
-    }
-
 }

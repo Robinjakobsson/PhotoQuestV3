@@ -40,7 +40,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vmComment = ViewModelProvider(this)[CommentViewModel::class.java]
@@ -65,7 +64,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
                 false
             }
         }
-
     }
 
     override fun onDestroyView() {
@@ -83,8 +81,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
             }, onFailure = {
                 Toast.makeText(requireContext(), "Failed to add comment", Toast.LENGTH_SHORT).show()
             })
-
-
         }
     }
 
@@ -115,7 +111,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
-
         builder.show()
     }
     private fun recycleViewSetup()  {
@@ -155,7 +150,6 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.commentSection)
-
     }
 
 }
