@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -63,21 +64,43 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/likeIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_thumb_up_trans"
-                android:contentDescription="@string/trash_image"
-                android:layout_marginEnd="16dp"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/addComment"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@string/comment_section"
-                android:src="@drawable/ic_add_comment"
-                android:layout_marginEnd="16dp"/>
+
+                <ImageView
+                    android:id="@+id/likeIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/trash_image"
+                    android:src="@drawable/ic_thumb_up_trans"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/addComment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="24dp"
+                    android:contentDescription="@string/comment_section"
+                    android:src="@drawable/ic_add_comment"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/likeCounter"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/likeCounter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/likeIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <TextView
