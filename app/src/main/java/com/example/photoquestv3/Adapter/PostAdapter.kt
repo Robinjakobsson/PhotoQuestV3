@@ -65,7 +65,6 @@ class PostAdapter(
         holder.likeButton.setOnClickListener(){
 
             val postId = post.postId
-
             postVm.addLikesToPost(postId)
 
         }
