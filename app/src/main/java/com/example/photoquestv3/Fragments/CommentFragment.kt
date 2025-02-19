@@ -19,6 +19,10 @@ import com.example.photoquestv3.databinding.FragmentCommentBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class CommentFragment(private val postId: String) : BottomSheetDialogFragment() {
@@ -43,6 +47,7 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         vmComment.startListeningToComments(postId)
 
         recycleViewSetup()
+        swipeToDeleteComment()
 
         vmComment.comments.observe(viewLifecycleOwner) { comments ->
             commentAdapter.updateComments(comments)
@@ -113,12 +118,44 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
 
         builder.show()
     }
-
-
-    private fun recycleViewSetup() {
+    private fun recycleViewSetup()  {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
         commentAdapter = CommentAdapter(emptyList()) { comment -> editCommentDialog(comment) }
         binding.commentSection.adapter = commentAdapter
+    }
+    private fun swipeToDeleteComment() {
+
+        val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                val position = viewHolder.adapterPosition
+
+                val commentToDelete = commentAdapter.getCommentAt(position)
+                val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
+
+                if (commentToDelete.userId == currentUser) {
+                    vmComment.deleteComment(commentToDelete.commentId, onSuccess = {
+                        Toast.makeText(requireContext(), "Comment deleted", Toast.LENGTH_SHORT).show()
+                    },onFailure = {
+                        Toast.makeText(requireContext(), "Failed to delete comment", Toast.LENGTH_SHORT).show()
+                    })
+                } else {
+                    Toast.makeText(requireContext(), "You can only delete your own comments", Toast.LENGTH_SHORT).show()
+                    commentAdapter.notifyItemChanged(position)
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
+        itemTouchHelper.attachToRecyclerView(binding.commentSection)
+
     }
 
 }

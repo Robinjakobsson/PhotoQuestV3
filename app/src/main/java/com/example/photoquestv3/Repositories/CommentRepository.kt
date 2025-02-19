@@ -71,6 +71,20 @@ class CommentRepository {
 
     }
 
+    fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("comments").document(commentId)
+            .delete()
+            .addOnFailureListener {
+                Log.d(TAG, "[DELETE] Comment successfully deleted")
+                onSuccess()
+            }.addOnFailureListener {
+                Log.e(TAG, "[DELETE] Error deleting comment")
+                onFailure(Exception("Error deleting comment"))
+            }
+
+
+    }
+
     private fun startListeningToComments(postId: String) {
 
         if (commentsListener != null) { return }

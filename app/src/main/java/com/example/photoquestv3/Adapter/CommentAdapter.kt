@@ -53,6 +53,10 @@ class CommentAdapter(
         }
     }
 
+    fun getCommentAt(position: Int): Comment {
+        return commentList[position]
+    }
+
     fun updateComments(newComments: List<Comment>) {
         commentList = newComments
         notifyDataSetChanged()
