@@ -23,11 +23,9 @@ import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 
 class PostAdapter(
-    private val fragment: Fragment,
     private var postList: List<Post>,
     val postVm : PostViewModel,
-    val matchingUsers: MutableList<User>,
-    val onUserClicked: (User) -> Unit
+    val onPostClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
@@ -93,21 +91,11 @@ class PostAdapter(
         }
 
         holder.userName.setOnClickListener{
-            Log.d("@@@", "navigate-name")
-            val uid = matchingUsers[position].uid
-            if (fragment is HomeFragment) {
-                fragment.navigateToProfile("uid")
+            onPostClicked(post)
             }
-        }
-
-        holder.profileImage.setOnClickListener {
-            Log.d("@@@", "navigate-photo")
-            val uid = matchingUsers[position].uid
-            if (fragment is HomeFragment) {
-                fragment.navigateToProfile("uid")
+        holder.profileImage.setOnClickListener{
+            onPostClicked(post)
             }
-
         }
 
     }
-}

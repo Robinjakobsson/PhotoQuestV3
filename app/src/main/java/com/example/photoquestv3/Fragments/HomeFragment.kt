@@ -66,8 +66,8 @@ class HomeFragment : Fragment() {
     private fun fetchPosts() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
-           adapter = PostAdapter(this, posts, postVm, mutableListOf(), onUserClicked = { user ->
-               navigateToProfile()})
+           adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
+               navigateToProfile(post.userid)})
             binding.recyclerView.adapter = adapter
             adapter.updatePosts(posts)
         }
@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun navigateToProfile() {
+    fun navigateToProfile(uid : String) {
         val bundle = Bundle()
 
         bundle.putString("uid",uid)
