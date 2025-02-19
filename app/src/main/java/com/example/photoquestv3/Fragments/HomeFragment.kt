@@ -86,12 +86,12 @@ class HomeFragment : Fragment() {
     }
 
     fun navigateToProfile() {
-//        val bundle = Bundle()
-//
-//        bundle.putString("uid",uid)
+        val bundle = Bundle()
+
+        bundle.putString("uid",uid)
 
         val profileFragment = ProfileFragment()
-//        profileFragment.arguments = bundle
+        profileFragment.arguments = bundle
 
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, profileFragment)
