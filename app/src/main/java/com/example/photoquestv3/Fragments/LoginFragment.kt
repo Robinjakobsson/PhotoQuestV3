@@ -27,7 +27,9 @@ import com.facebook.FacebookException
 import com.facebook.GraphRequest
 import com.facebook.appevents.UserDataStore.EMAIL
 import com.facebook.login.LoginResult
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.auth
 
 
 class LoginFragment : Fragment() {
@@ -51,7 +53,7 @@ lateinit var firebaseAuth : FirebaseAuth
         super.onViewCreated(view, savedInstanceState)
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
         callbackManager = CallbackManager.Factory.create();
-
+        firebaseAuth = Firebase.auth
         binding.fbLoginButton.setPermissions("email")
         binding.fbLoginButton.setOnClickListener {
             signInWithFb()
@@ -87,7 +89,7 @@ lateinit var firebaseAuth : FirebaseAuth
                 override fun onSuccess(result: LoginResult) {
                     handleFacebookAccessToken(result!!.accessToken)
                     getDataFromFb()
-                   auth.createAccount()
+                    //  auth.createAccount()
                 }
 
             })
@@ -103,13 +105,13 @@ lateinit var firebaseAuth : FirebaseAuth
 
                 // Här kan du lägga till ytterligare logik för att hämta eller generera andra nödvändiga fält
                 val username = `object`!!.getString("name") // Exempel på hur man kan generera ett användarnamn
-                val imageUri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpctidningen.se%2Finternet%2Ffacebook%2Fsnabbstadning-pa-facebook&psig=AOvVaw0iM7864gvcCc_xMLdahXVE&ust=1740057600508000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJDNl-vpz4sDFQAAAAAdAAAAABAE"
+               //val imageUri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpctidningen.se%2Finternet%2Ffacebook%2Fsnabbstadning-pa-facebook&psig=AOvVaw0iM7864gvcCc_xMLdahXVE&ust=1740057600508000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCJDNl-vpz4sDFQAAAAAdAAAAABAE"
                 val biography = "Bio från Facebook-användare"
-
+                val imageUri = Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.facebook}")
                 auth.createAccount(email, "why do we have it?", name, username, imageUri, biography, {
-                    println("Kontot skapades framgångsrikt!")
+                    Log.d("!!!","Kontot skapades framgångsrikt!")
                 }, { exception ->
-                    println("Det gick inte att skapa kontot: ${exception.message}")
+                    Log.d("!!!","Det gick inte att skapa kontot: ${exception.message}")
                 })
 
             } catch (e: Exception) {
