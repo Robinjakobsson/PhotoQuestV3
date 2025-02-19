@@ -21,15 +21,8 @@ class FireStoreViewModel: ViewModel() {
     private val _posts = MutableLiveData<List<Post>>()
     val posts: MutableLiveData<List<Post>> = _posts //Don't delete, is needed for observing data
 
-    private val _profileImage = MutableLiveData<String?>()
-    val profileImage: MutableLiveData<String?> = _profileImage
-
-    private val _userQuote = MutableLiveData<String?>()
-    val userQuote: MutableLiveData<String?> = _userQuote
-
     private val _userImages = MutableLiveData<List<String>>()
     val userImages: LiveData<List<String>> = _userImages
-
 
 
 
@@ -65,7 +58,7 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.fetchUserData(uid)
     }
 
-    
+
 
 
 

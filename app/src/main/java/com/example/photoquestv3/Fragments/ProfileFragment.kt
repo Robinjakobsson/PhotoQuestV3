@@ -44,7 +44,7 @@ class ProfileFragment : Fragment() {
 
         profileAdapter = ProfileAdapter(emptyList())
         binding.profileRecycler.apply {
-            layoutManager = GridLayoutManager(context,3)
+            layoutManager = GridLayoutManager(context,4)
             adapter = profileAdapter
         }
         fireStoreVm.loadUserImages()
@@ -52,9 +52,6 @@ class ProfileFragment : Fragment() {
         fireStoreVm.userImages.observe(viewLifecycleOwner){images ->
             profileAdapter.updateData(images)
         }
-
-
-
 
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
