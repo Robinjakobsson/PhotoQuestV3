@@ -177,10 +177,24 @@ class FireStoreRepository {
 
                 docRef.update("friendsLiked", FieldValue.arrayUnion(currentUser)).await()
                 val likeCounter = document.getLong("likes") ?: 0
-                val newLikeCounter = likeCounter +1
-                docRef.update("likes", newLikeCounter).await()
 
-                return true
+                val friendsLiked = document.get("friendsLiked") as? List<String>
+
+                if (friendsLiked?.contains(currentUser) == false) {
+                    val newLikeCounter = likeCounter + 1
+                    docRef.update("likes", newLikeCounter).await()
+                    Log.d("!!!", "Likes +")
+                    return true
+
+                } else {
+
+                    val newLikeCounter = likeCounter - 1
+                    docRef.update("likes", newLikeCounter).await()
+                    docRef.update("friendsLiked", FieldValue.arrayRemove(currentUser)).await()
+                    Log.d("!!!", "Likes -")
+                    return false
+                }
+
             } else {
                 Log.d("!!!", "Post doesnt exist.")
                 return false
@@ -190,7 +204,5 @@ class FireStoreRepository {
             return false
         }
     }
-
-
 
 }
