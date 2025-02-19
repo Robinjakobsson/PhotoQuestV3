@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
@@ -72,11 +74,15 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
            adapter = PostAdapter(posts, postVm)
+        vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
+           adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
+               navigateToProfile(post.userid)})
             binding.recyclerView.adapter = adapter
             adapter.updatePosts(posts)
         }
         vmFireStore.fetchPosts()
 
+        }
     }
 
     private fun showDailyChallenge() {
@@ -89,8 +95,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun navigateToProfile(uid : String) {
+        val bundle = Bundle()
+
+        bundle.putString("uid",uid)
+
+        val profileFragment = ProfileFragment()
+        profileFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, profileFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

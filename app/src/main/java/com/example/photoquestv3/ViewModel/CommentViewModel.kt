@@ -16,6 +16,14 @@ class CommentViewModel: ViewModel()  {
         commentRepository.addComment(postId, commentText, onSuccess, onFailure)
     }
 
+    fun updateComment(commentId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        commentRepository.updateComment(commentId, newText, onSuccess, onFailure)
+    }
+
+    fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        commentRepository.deleteComment(commentId, onSuccess, onFailure)
+    }
+
     override fun onCleared() {
         super.onCleared()
         commentRepository.stopListeningToComments()

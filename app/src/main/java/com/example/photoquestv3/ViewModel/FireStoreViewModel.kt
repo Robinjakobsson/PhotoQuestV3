@@ -34,6 +34,8 @@ class FireStoreViewModel: ViewModel() {
             try {
                 val fetchedPosts = fireStoreDb.fetchPostSortedByTime()
                 _posts.postValue(fetchedPosts)
+                Log.d("!!!", "Fetching post correct")
+
             } catch (e: Exception) {
                 Log.d("FireStoreViewModel", " [ERROR] Error fetching posts: ${e.message}")
             }
