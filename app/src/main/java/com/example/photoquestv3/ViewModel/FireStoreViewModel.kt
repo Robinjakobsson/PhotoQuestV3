@@ -12,6 +12,7 @@ import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.Query
 
 class FireStoreViewModel: ViewModel() {
 
@@ -21,6 +22,9 @@ class FireStoreViewModel: ViewModel() {
     private val _posts = MutableLiveData<List<Post>>()
     val posts: MutableLiveData<List<Post>> = _posts //Don't delete, is needed for observing data
 
+    //    test
+    val posts123 = MutableLiveData<List<Post>>()
+
     private val _profileImage = MutableLiveData<String?>()
     val profileImage: MutableLiveData<String?> = _profileImage
 
@@ -28,7 +32,7 @@ class FireStoreViewModel: ViewModel() {
     val userQuote: MutableLiveData<String?> = _userQuote
 
 
-//    Call in Fragment or Activity.
+    //    Call in Fragment or Activity.
     fun fetchPosts() {
         viewModelScope.launch {
             try {
@@ -52,13 +56,13 @@ class FireStoreViewModel: ViewModel() {
 
     fun fetchProfileImage(){
         viewModelScope.launch {
-          try {
-              val imageUrl = fireStoreDb.fetchProfileImage()
-              _profileImage.postValue(imageUrl)
+            try {
+                val imageUrl = fireStoreDb.fetchProfileImage()
+                _profileImage.postValue(imageUrl)
 
-          }catch (e: Exception){
-              Log.d("FireStoreViewModel","Error")
-          }
+            }catch (e: Exception){
+                Log.d("FireStoreViewModel","Error")
+            }
         }
     }
 
@@ -72,6 +76,20 @@ class FireStoreViewModel: ViewModel() {
                 Log.d("FireStoreViewModel", "error")
             }
         }
+    }
+
+    fun fetchPosts123() {
+        fireStoreDb.db.collection("posts")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreViewModel", "Error listening to posts: ${error.message}")
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    posts123.postValue(snapshot.toObjects(Post::class.java))
+                }
+            }
     }
 
 }

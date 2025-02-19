@@ -26,8 +26,7 @@ import com.example.photoquestv3.Views.Fragments.ProfileFragment
 class PostAdapter(
     private var postList: List<Post>,
     val postVm : PostViewModel,
-    val onPostClicked: (Post) -> Unit,
-    val lifecycleOwner: LifecycleOwner
+    val onPostClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
@@ -65,32 +64,20 @@ class PostAdapter(
 
 //        Likes
         holder.likeCounter.text = post.likes.toString()
-        postVm.likes.observe(lifecycleOwner) { newLikes ->
-            if (post.postId == postVm.itemId.value) {
-                holder.likeCounter.text = newLikes.toString()
-            }
 
-        }
-
-        holder.likeButton.setOnClickListener(){
-            val postId = post.postId
-            postVm.addLikesToPost(postId)
+        holder.likeButton.setOnClickListener {
+            postVm.addLikesToPost123(post.postId)
         }
 
         holder.optionImage.setOnClickListener() {
-
-            val postId = post.postId
-
-            postVm.setItemId(postId)
+            postVm.setItemId(post.postId)
 
             val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
-
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
                 moreOptionsFragment.show(it, moreOptionsFragment.tag)
             }
         }
-
 
         Glide.with(holder.itemView.context)
             .load(post.profilePic)

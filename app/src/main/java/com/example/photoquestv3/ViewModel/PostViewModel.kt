@@ -79,6 +79,23 @@ class PostViewModel : ViewModel() {
         }
     }
 
+    fun addLikesToPost123(postId: String?) {
+        viewModelScope.launch {
+            if (postId != null) {
+                setItemId(postId)
+
+                val success = fireStoreRepo.addLikesToPost123(postId)
+                if (success) {
+                    _toastMessage.value = "Successfully added a like!"
+                } else {
+                    _toastMessage.value = "Already liked"
+                }
+                _dataChanged.value = true
+                _toastMessage.value = null
+            }
+        }
+    }
+
     private fun startListeningToLikes(postId: String) {
         fireStoreRepo.restartListeningToLikes(postId)
     }

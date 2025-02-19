@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
@@ -18,7 +19,7 @@ import java.util.UUID
 
 class FireStoreRepository {
 
-    private val db = Firebase.firestore
+    val db = Firebase.firestore
     private val auth = Firebase.auth
 
 
@@ -37,9 +38,9 @@ class FireStoreRepository {
                 .set(user)
                 .await()
 
-            Log.d("FireStoreRepo","User: $userName Successfully added!")
+            Log.d("FireStoreRepository","User: $userName Successfully added!")
         }catch (e : Exception) {
-            Log.d("FireStoreRepo","User: $userName not added... ${e.message}")
+            Log.d("FireStoreRepository","User: $userName not added... ${e.message}")
             throw e
         }
     }
@@ -56,6 +57,7 @@ class FireStoreRepository {
             "description" to description,
             "userid" to (currentUser?.uid ?: ""),
             "likes" to 0,
+            "likedBy" to emptyList<String>(),
             "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
         )
         try {
@@ -206,5 +208,31 @@ class FireStoreRepository {
             return false
         }
     }
+
+    suspend fun addLikesToPost123(postId: String): Boolean {
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val currentUserId = auth.currentUser?.uid ?: return false
+
+            val result = db.runTransaction { transaction ->
+                val snapshot = transaction.get(docRef)
+                val likedBy = snapshot.get("likedBy") as? List<String> ?: emptyList()
+                if (likedBy.contains(currentUserId)) {
+                    false
+                } else {
+                    transaction.update(docRef, "likes", FieldValue.increment(1))
+                    transaction.update(docRef, "likedBy", FieldValue.arrayUnion(currentUserId))
+                    true
+                }
+
+            }.await()
+            return result
+        } catch (e: Exception) {
+            Log.e("PostRepository", "Error updating likes: ${e.message}", e)
+            return false
+        }
+    }
+
+
 
 }

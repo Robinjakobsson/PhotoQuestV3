@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,26 +40,36 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
-        postVm = ViewModelProvider(requireActivity()).get(PostViewModel::class.java)
+        postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
+
+        postVm.toastMessage.observe(viewLifecycleOwner) { messages ->
+            messages?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+
+
+        }
 
         postVm.itemId.observe(viewLifecycleOwner) { itemId ->
             Log.d("HomeFragment", "Selected post id is: $itemId")
         }
 
-        vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
+        vmFireStore.posts123.observe(viewLifecycleOwner) { posts ->
             adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
                 navigateToProfile(post.userid)
-            }, lifecycleOwner = viewLifecycleOwner)
+            })
             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
             binding.recyclerView.adapter = adapter
             adapter.updatePosts(posts)
         }
 
-        postVm.dataChanged.observe(viewLifecycleOwner, Observer { dataChanged ->
+        vmFireStore.fetchPosts123()
+
+        postVm.dataChanged.observe(viewLifecycleOwner) { dataChanged ->
             if (dataChanged) {
                 adapter.notifyDataSetChanged()
             }
-        })
+        }
 
         fetchPosts()
         showDailyChallenge()
@@ -66,7 +77,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchPosts() {
-        vmFireStore.fetchPosts()
+        vmFireStore.fetchPosts123()
     }
 
     private fun showDailyChallenge() {
