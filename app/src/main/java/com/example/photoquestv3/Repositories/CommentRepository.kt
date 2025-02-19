@@ -57,6 +57,20 @@ class CommentRepository {
             }
     }
 
+    fun updateComment(commentId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        Log.d(TAG, "[UPDATE] Updating comments for post $commentId")
+        db.collection("comments").document(commentId)
+            .update("comment", newText)
+            .addOnFailureListener {
+                Log.d(TAG, "[UPDATE] Comment successfully updated")
+                onSuccess()
+            }.addOnFailureListener {
+                Log.e(TAG, "[UPDATE] Error updating comment")
+                onFailure(Exception("Error updating comment"))
+            }
+
+    }
+
     private fun startListeningToComments(postId: String) {
 
         if (commentsListener != null) { return }
@@ -74,7 +88,7 @@ class CommentRepository {
                 if (snapshot != null) {
                     for (document in snapshot.documents) {
 
-                        val comment = document.toObject(Comment::class.java)
+                        val comment = document.toObject(Comment::class.java)?.copy(commentId = document.id)
                         if (comment != null) {
                             commentsList.add(comment)
                         }
