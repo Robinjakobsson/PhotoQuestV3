@@ -9,7 +9,7 @@ class CommentViewModel: ViewModel()  {
     val comments = commentRepository.comments
 
     fun startListeningToComments(postId: String) {
-        commentRepository.startListeningToComments(postId)
+        commentRepository.restartListeningToComments(postId)
     }
 
     fun addComment(postId: String, commentText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
