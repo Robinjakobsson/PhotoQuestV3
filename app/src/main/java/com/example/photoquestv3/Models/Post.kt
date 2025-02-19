@@ -9,7 +9,7 @@ data class Post(
     val profilePic: String = "",
     val imageUrl: String = "",
     val description: String = "",
-    val userId: String = "",
+    val userid: String = "",
     val likes: Int = 0,
     val timestamp: Timestamp? = null // Timestamp implemented
 ) {
