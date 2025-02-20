@@ -12,6 +12,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
@@ -138,12 +141,18 @@ class FireStoreRepository {
         }
     }
     fun followUser(currentUserId : String, targetUserId : String) {
+        CoroutineScope(Dispatchers.IO).launch {
         val currentUserRef = db.collection("users").document(currentUserId)
         val targetUserRef = db.collection("users").document(targetUserId)
+            try {
+                currentUserRef.update("following", FieldValue.arrayUnion(targetUserId)).await()
+                targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId)).await()
 
-        currentUserRef.update("following", FieldValue.arrayUnion(targetUserId))
+            }catch (e : Exception) {
+                Log.d("FireStore","Error following user...")
+            }
 
-        targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId))
+        }
 
     }
     fun getFollowerPosts(currentUserId: String) : LiveData<List<Post>> {
@@ -210,6 +219,20 @@ class FireStoreRepository {
             Log.e("PostRepository", "Error updating likes", e)
             return false
         }
+    }
+     fun unfollowFollower(currentUserId: String,targetUserId: String) {
+         CoroutineScope(Dispatchers.IO).launch {
+        val currentUserRef = db.collection("users").document(currentUserId)
+        val targetUserRef = db.collection("users").document(targetUserId)
+            try {
+                currentUserRef.update("following",FieldValue.arrayRemove(targetUserId)).await()
+                targetUserRef.update("followers",FieldValue.arrayRemove(currentUserId)).await()
+
+            }catch (e : Exception) {
+                Log.d("FireStore","Error during unfollow operation..")
+            }
+         }
+
     }
 
 }
