@@ -188,19 +188,6 @@ class FireStoreRepository {
         return liveData
     }
 
-
-    suspend fun fetchUserImages(): List<String> {
-        val currentUser = auth.currentUser ?: return emptyList()
-        val snapshot = db.collection("posts")
-            .whereEqualTo("userid", currentUser.uid)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .await()
-        snapshot.documents.mapNotNull { it.getString("imageUrl") }
-        return snapshot.documents.mapNotNull { it.getString("imageUrl") }
-
-        }
-
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
             val docRef = db.collection("posts").document(postId)
@@ -259,7 +246,6 @@ class FireStoreRepository {
         }
     }
 
-
     suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
 
         Log.d("!!!", "fetchFriendsList from repo körs")
@@ -280,8 +266,8 @@ class FireStoreRepository {
             Log.e("!!!", "Error fetching friends", e)
         }
     }
+
 }
 
 
-}
 
