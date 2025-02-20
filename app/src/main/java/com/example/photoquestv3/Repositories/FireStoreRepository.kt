@@ -119,13 +119,14 @@ class FireStoreRepository {
         }
     }
 
-    suspend fun fetchUserData(uid: String): User? {
-        val user = db.collection("users").document(uid)
+    suspend fun fetchUserData(uid : String) : User? {
+        val userRef = db.collection("users").document(uid)
             .get()
             .await()
 
-        return user.toObject(User::class.java)
+        return userRef.toObject(User::class.java)
     }
+
 
 
     suspend fun fetchUserQuote(): String? {
@@ -143,9 +144,62 @@ class FireStoreRepository {
 
             null
         }
+    }
+    fun followUser(currentUserId : String, targetUserId : String) {
+        val currentUserRef = db.collection("users").document(currentUserId)
+        val targetUserRef = db.collection("users").document(targetUserId)
 
+        currentUserRef.update("following", FieldValue.arrayUnion(targetUserId))
+
+        targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId))
 
     }
+    fun getFollowerPosts(currentUserId: String) : LiveData<List<Post>> {
+        val liveData =  MutableLiveData<List<Post>>()
+
+        val currentUserRef = db.collection("users").document(currentUserId)
+
+        currentUserRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+
+                val following = documentSnapshot.get("following") as List<String>
+
+                val postsRef = db.collection("posts")
+                postsRef.whereIn("userid", following)
+                    .orderBy("timestamp",Query.Direction.DESCENDING)
+                    .addSnapshotListener {snapshot, exception ->
+                        if (exception != null) {
+                            Log.d("FireStore","Error getting posts")
+                            return@addSnapshotListener
+                        }
+
+                        val postslist = mutableListOf<Post>()
+                        snapshot?.documents?.forEach {documents ->
+                            val post = documents.toObject(Post::class.java)
+                            if (post != null) {
+                                postslist.add(post)
+                            }
+                        }
+
+                        liveData.value = postslist
+                    }
+            }
+        }
+        return liveData
+    }
+
+
+    suspend fun fetchUserImages(): List<String> {
+        val currentUser = auth.currentUser ?: return emptyList()
+        val snapshot = db.collection("posts")
+            .whereEqualTo("userid", currentUser.uid)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .await()
+        snapshot.documents.mapNotNull { it.getString("imageUrl") }
+        return snapshot.documents.mapNotNull { it.getString("imageUrl") }
+
+        }
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
@@ -205,6 +259,7 @@ class FireStoreRepository {
         }
     }
 
+
     suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
 
         Log.d("!!!", "fetchFriendsList from repo körs")
@@ -226,3 +281,7 @@ class FireStoreRepository {
         }
     }
 }
+
+
+}
+
