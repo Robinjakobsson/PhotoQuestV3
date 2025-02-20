@@ -10,7 +10,9 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.example.photoquestv3.Adapter.ProfileAdapter
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
@@ -30,6 +32,7 @@ class ProfileFragment : Fragment() {
     lateinit var authUser: FirebaseAuth
     lateinit var fireStoreVm: FireStoreViewModel
     private lateinit var user: User
+    private lateinit var profileAdapter: ProfileAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +48,24 @@ class ProfileFragment : Fragment() {
 
         }
             binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+
+
+         profileAdapter = ProfileAdapter(emptyList())
+        binding.profileRecycler.apply {
+            layoutManager = GridLayoutManager(context,4)
+            adapter = profileAdapter
+        }
+        fireStoreVm.loadUserImages()
+
+        fireStoreVm.userImages.observe(viewLifecycleOwner){images ->
+            profileAdapter.updateData(images)
+        }
+
             return binding.root
+
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
