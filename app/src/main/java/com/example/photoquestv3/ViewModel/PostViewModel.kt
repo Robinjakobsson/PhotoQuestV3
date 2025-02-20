@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.Repositories.PostRepository
@@ -25,6 +26,9 @@ class PostViewModel : ViewModel() {
 
     private val _itemId = MutableLiveData<String>()
     val itemId: LiveData<String> get() = _itemId
+
+    private val _listOfFriends = MutableLiveData<List<User>>()
+    val listOfFriends: MutableLiveData<List<User>> get() = _listOfFriends
 
     private val _dataChanged = MutableLiveData<Boolean>()
     val dataChanged: LiveData<Boolean> get() = _dataChanged
@@ -104,6 +108,21 @@ class PostViewModel : ViewModel() {
         super.onCleared()
         fireStoreRepo.stopListeningToLikes()
     }
-
-
+    
+        fun fetchFriendsLiked(postId: String) {
+        viewModelScope.launch {
+            fireStoreRepo.fetchFriendList(postId) { friendsLiked ->
+                Log.d("!!!", "fetchfriendsLikes körs")
+                val friends = friendsLiked.map { friendName ->
+                    User(username = friendName)
+                }
+                _listOfFriends.value = friends
+            }
+        }
+    }
 }
+
+
+    
+    
+

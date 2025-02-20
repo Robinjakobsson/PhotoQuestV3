@@ -8,16 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
+import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
+
+import com.example.photoquestv3.databinding.FragmentRegisterBinding
+
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -26,7 +31,10 @@ class HomeFragment : Fragment() {
     private lateinit var challengesVm: ChallengesViewModel
     private lateinit var vmFireStore: FireStoreViewModel
     private lateinit var postVm: PostViewModel
-    lateinit var adapter: PostAdapter
+    private lateinit var authVm : AuthViewModel
+    lateinit var adapter : PostAdapter
+    private lateinit var currentUserId : String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +54,6 @@ class HomeFragment : Fragment() {
             messages?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-
 
         }
 
@@ -71,12 +78,12 @@ class HomeFragment : Fragment() {
             }
         }
 
-        fetchPosts()
+        fetchPosts123()
         showDailyChallenge()
 
     }
 
-    private fun fetchPosts() {
+    private fun fetchPosts123() {
         vmFireStore.fetchPosts123()
     }
 
