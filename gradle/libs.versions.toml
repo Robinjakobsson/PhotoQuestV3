@@ -25,6 +25,8 @@ lifecycleViewmodelKtx = "2.8.7"
 fragmentKtx = "1.5.6"
 materialVersion = "1.11.0"
 facebookLogin = "17.0.0"
+playServicesAuth = "21.3.0"
+spotsDialog = "1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +56,8 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 material-v1110 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 facebook-login = {module = "com.facebook.android:facebook-login", version.ref = "junitVersion"}
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+spots-dialog = { module = "com.github.d-max:spots-dialog", version.ref = "spotsDialog" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
