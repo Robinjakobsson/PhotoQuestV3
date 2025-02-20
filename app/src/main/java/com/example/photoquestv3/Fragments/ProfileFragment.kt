@@ -40,6 +40,12 @@ class ProfileFragment : Fragment() {
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
 
+        binding.followButton.setOnClickListener {
+            auth.getCurrentUser()?.let { currentUser ->
+                fireStoreVm.followUser(currentUser.uid, targetUserId = user.uid)
+            }
+        }
+
 
 
         profileAdapter = ProfileAdapter(emptyList())
@@ -90,6 +96,8 @@ class ProfileFragment : Fragment() {
     private fun updateData() {
         binding.profileNameTextView.text = user.name
         binding.userQuoteTextView.text = user.biography
+        binding.profileFollowerTextView.text = user.followers.size.toString()
+
 
         Glide.with(requireContext())
             .load(user.imageUrl)
