@@ -153,6 +153,7 @@ class FireStoreRepository {
             }
 
         }
+        //
 
     }
     fun getFollowerPosts(currentUserId: String) : LiveData<List<Post>> {
