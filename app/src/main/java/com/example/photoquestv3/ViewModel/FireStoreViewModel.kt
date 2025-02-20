@@ -73,9 +73,9 @@ class FireStoreViewModel: ViewModel() {
             }
     }
 
-    fun loadUserImages(){
+    fun loadUserImages(userId: String){
         viewModelScope.launch {
-            val images = fireStoreDb.fetchUserImages()
+            val images = fireStoreDb.fetchUserImages(userId)
             _userImages.value = images
         }
     }

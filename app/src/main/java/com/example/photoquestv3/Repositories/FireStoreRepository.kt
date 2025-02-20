@@ -354,10 +354,9 @@ class FireStoreRepository {
     }
 
 
-    suspend fun fetchUserImages(): List<String> {
-        val currentUser = auth.currentUser ?: return emptyList()
+    suspend fun fetchUserImages(userId: String): List<String> {
         val snapshot = db.collection("posts")
-            .whereEqualTo("userid", currentUser.uid)
+            .whereEqualTo("userid",userId)
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .await()
