@@ -48,6 +48,8 @@ class SettingsFragment : Fragment() {
             .setMessage("Do you want to delete account?")
             .setPositiveButton("Yes") { dialog, which ->
                 deleteAccountFromFirestore()
+                deleteComments()
+                deletePosts()
                 deleteAccount()
                 auth.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
                 returnHomeActivity()
@@ -71,49 +73,56 @@ class SettingsFragment : Fragment() {
             }
     }
 
+    private fun deleteComments() {
+        val userId = auth.currentUser!!.uid
+        val db = FirebaseFirestore.getInstance()
+        db.collection("comments")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val documentUserId = document.get("userId")
+                    if (documentUserId == userId) {
+                        db.collection("comments").document(document.id).delete()
+                        Log.d("!!!!", "comments deleted from collection")
+                    } else {
+//else
+                    }
+                }
+            }
+    }
 
     private fun deleteAccountFromFirestore() {
         val userId = auth.currentUser!!.uid
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(userId).delete()
-            .addOnSuccessListener {
-                //  if (task.isSuccessful) {
-                db.collection("comments")
-                    .get()
-                    .addOnSuccessListener { result ->
-                        for (document in result) {
-                            if (document.id.contains(userId)) {
-                                db.collection("comments").document(document.id).delete()
-                                Log.d("!!!!", "User deleted from collection")
-                            } else {
-//else
-                            }
-                        }
-                    }
-                db.collection("posts")
-                    .get()
-                    .addOnSuccessListener { result ->
-                        for (document in result) {
-                            if (document.id.contains(userId)) {
-                                db.collection("posts").document(document.id)
-                                    .delete()
-                                Log.d("!!!!", "Users posts deleted from collection")
-                            } else {
-                            }
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        Log.d("!!!", "User NOT deleted from collection")
-                    }
-
 
             }
+
+
+    private fun deletePosts() {
+        val userId = auth.currentUser!!.uid
+        val db = FirebaseFirestore.getInstance()
+        db.collection("posts")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val documentUserId = document.get("userId")
+                    if (documentUserId == userId) {
+                        db.collection("posts").document(document.id).delete()
+                        Log.d("!!!!", "comments deleted from collection")
+                    }else {
+//else
+                    }
+                }
+            }
     }
-    private fun returnHomeActivity() {
-        val intent = Intent(requireContext(), HomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-        requireActivity().finish()
-    }
+
+
+private fun returnHomeActivity() {
+    val intent = Intent(requireContext(), HomeActivity::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+    startActivity(intent)
+    requireActivity().finish()
+}
 
 }
