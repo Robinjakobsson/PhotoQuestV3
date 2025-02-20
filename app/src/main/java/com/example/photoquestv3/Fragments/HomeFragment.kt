@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -70,17 +71,17 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun fetchPosts() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PostAdapter(mutableListOf(), postVm, onPostClicked = { post ->
+private fun fetchPosts() {
+    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
+        adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
             navigateToProfile(post.userid)
         })
         binding.recyclerView.adapter = adapter
-
-        vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
-            adapter.updatePosts(posts)
-        }
+        adapter.updatePosts(posts)
     }
+    vmFireStore.fetchPosts()
+}
 
     private fun showDailyChallenge() {
         challengesVm.getDailyChallenge { latestChallenge ->
