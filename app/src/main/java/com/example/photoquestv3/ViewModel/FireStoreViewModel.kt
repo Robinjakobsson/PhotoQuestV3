@@ -21,14 +21,22 @@ class FireStoreViewModel: ViewModel() {
     private val _posts = MutableLiveData<List<Post>>()
     val posts: MutableLiveData<List<Post>> = _posts //Don't delete, is needed for observing data
 
-    private val _profileImage = MutableLiveData<String?>()
-    val profileImage: MutableLiveData<String?> = _profileImage
-
-    private val _userQuote = MutableLiveData<String?>()
-    val userQuote: MutableLiveData<String?> = _userQuote
+    private val _userImages = MutableLiveData<List<String>>()
+    val userImages: LiveData<List<String>> = _userImages
 
 
-//    Call in Fragment or Activity.
+
+   fun loadUserImages(){
+       viewModelScope.launch {
+           val images = fireStoreDb.fetchUserImages()
+           _userImages.value = images
+       }
+   }
+
+
+
+
+    //    Call in Fragment or Activity.
     fun fetchPosts() {
         viewModelScope.launch {
             try {
@@ -50,6 +58,7 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.fetchUserData(uid)
     }
 
+
     fun followUser(currentUserId : String, targetUserId : String) {
         fireStoreDb.followUser(currentUserId,targetUserId)
     }
@@ -64,22 +73,5 @@ class FireStoreViewModel: ViewModel() {
               val imageUrl = fireStoreDb.fetchProfileImage()
               _profileImage.postValue(imageUrl)
 
-          }catch (e: Exception){
-              Log.d("FireStoreViewModel","Error")
-          }
-        }
-    }
-
-    fun fetchUserQuote(){
-        viewModelScope.launch {
-            try {
-                val userQuote = fireStoreDb.fetchUserQuote()
-                _userQuote.postValue(userQuote)
-
-            }catch (e: Exception){
-                Log.d("FireStoreViewModel", "error")
-            }
-        }
-    }
 
 }
