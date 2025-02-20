@@ -1,12 +1,7 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-deploymentTargetSelector.xml
-gradle.xml
-compiler.xml
-kotlinc.xml
-material_theme_project_new.xml
-migrations.xml
+appInsightsSettings.xml
 misc.xml
 runConfigurations.xml
 vcs.xml
@@ -14,4 +9,3 @@ PhotoQuestV3.iml
 appInsightsSettings.xml
 .name
 modules.xml
-

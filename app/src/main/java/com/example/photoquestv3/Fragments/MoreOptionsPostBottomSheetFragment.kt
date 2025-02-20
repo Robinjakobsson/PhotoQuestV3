@@ -46,7 +46,6 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val listView = binding?.listView
         val options = listOf("Edit post", "Delete post", " ")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, options)

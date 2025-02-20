@@ -12,6 +12,7 @@ import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.Query
 
 class FireStoreViewModel: ViewModel() {
 
@@ -21,19 +22,14 @@ class FireStoreViewModel: ViewModel() {
     private val _posts = MutableLiveData<List<Post>>()
     val posts: MutableLiveData<List<Post>> = _posts //Don't delete, is needed for observing data
 
-    private val _userImages = MutableLiveData<List<String>>()
-    val userImages: LiveData<List<String>> = _userImages
+    //    test
+    val posts123 = MutableLiveData<List<Post>>()
 
+    private val _profileImage = MutableLiveData<String?>()
+    val profileImage: MutableLiveData<String?> = _profileImage
 
-
-   fun loadUserImages(){
-       viewModelScope.launch {
-           val images = fireStoreDb.fetchUserImages()
-           _userImages.value = images
-       }
-   }
-
-
+    private val _userQuote = MutableLiveData<String?>()
+    val userQuote: MutableLiveData<String?> = _userQuote
 
 
     //    Call in Fragment or Activity.
@@ -58,7 +54,6 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.fetchUserData(uid)
     }
 
-
     fun followUser(currentUserId : String, targetUserId : String) {
         fireStoreDb.followUser(currentUserId,targetUserId)
     }
@@ -69,9 +64,40 @@ class FireStoreViewModel: ViewModel() {
 
     fun fetchProfileImage(){
         viewModelScope.launch {
-          try {
-              val imageUrl = fireStoreDb.fetchProfileImage()
-              _profileImage.postValue(imageUrl)
+            try {
+                val imageUrl = fireStoreDb.fetchProfileImage()
+                _profileImage.postValue(imageUrl)
 
+            }catch (e: Exception){
+                Log.d("FireStoreViewModel","Error")
+            }
+        }
+    }
+
+    fun fetchUserQuote(){
+        viewModelScope.launch {
+            try {
+                val userQuote = fireStoreDb.fetchUserQuote()
+                _userQuote.postValue(userQuote)
+
+            }catch (e: Exception){
+                Log.d("FireStoreViewModel", "error")
+            }
+        }
+    }
+
+    fun fetchPosts123() {
+        fireStoreDb.db.collection("posts")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreViewModel", "Error listening to posts: ${error.message}")
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    posts123.postValue(snapshot.toObjects(Post::class.java))
+                }
+            }
+    }
 
 }
