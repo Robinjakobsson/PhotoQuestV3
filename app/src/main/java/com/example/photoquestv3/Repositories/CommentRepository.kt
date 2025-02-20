@@ -57,6 +57,43 @@ class CommentRepository {
             }
     }
 
+    fun updateComment(commentId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        Log.d(TAG, "[UPDATE] Updating comments for post $commentId")
+        db.collection("comments").document(commentId)
+            .update("comment", newText)
+            .addOnFailureListener {
+                Log.d(TAG, "[UPDATE] Comment successfully updated")
+                onSuccess()
+            }.addOnFailureListener {
+                Log.e(TAG, "[UPDATE] Error updating comment")
+                onFailure(Exception("Error updating comment"))
+            }
+    }
+
+    fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection("comments").document(commentId)
+            .delete()
+            .addOnFailureListener {
+                Log.d(TAG, "[DELETE] Comment successfully deleted")
+                onSuccess()
+            }.addOnFailureListener {
+                Log.e(TAG, "[DELETE] Error deleting comment")
+                onFailure(Exception("Error deleting comment"))
+            }
+    }
+
+    fun stopListeningToComments() {
+        commentsListener?.remove()
+        commentsListener = null
+        Log.d(TAG, "[LISTEN] Successfully stopped listening to comments")
+    }
+
+    fun restartListeningToComments(postId: String) {
+        Log.d(TAG, "[LISTEN] Restarting listening to comments for postId $postId")
+        stopListeningToComments()
+        startListeningToComments(postId)
+    }
+
     private fun startListeningToComments(postId: String) {
 
         if (commentsListener != null) { return }
@@ -74,7 +111,7 @@ class CommentRepository {
                 if (snapshot != null) {
                     for (document in snapshot.documents) {
 
-                        val comment = document.toObject(Comment::class.java)
+                        val comment = document.toObject(Comment::class.java)?.copy(commentId = document.id)
                         if (comment != null) {
                             commentsList.add(comment)
                         }
@@ -83,17 +120,4 @@ class CommentRepository {
                 _comments.postValue(commentsList)
             }
     }
-
-    fun stopListeningToComments() {
-        commentsListener?.remove()
-        commentsListener = null
-        Log.d(TAG, "[LISTEN] Successfully stopped listening to comments")
-    }
-
-    fun restartListeningToComments(postId: String) {
-        Log.d(TAG, "[LISTEN] Restarting listening to comments for postId $postId")
-        stopListeningToComments()
-        startListeningToComments(postId)
-    }
-
 }
