@@ -47,9 +47,9 @@ class SettingsFragment : Fragment() {
         builder!!.setTitle("Yo!")
             .setMessage("Do you want to delete account?")
             .setPositiveButton("Yes") { dialog, which ->
-                deleteAccountFromFirestore()
                 deleteComments()
                 deletePosts()
+                deleteAccountFromFirestore()
                 deleteAccount()
                 auth.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
                 returnHomeActivity()
@@ -91,14 +91,6 @@ class SettingsFragment : Fragment() {
             }
     }
 
-    private fun deleteAccountFromFirestore() {
-        val userId = auth.currentUser!!.uid
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users").document(userId).delete()
-
-            }
-
-
     private fun deletePosts() {
         val userId = auth.currentUser!!.uid
         val db = FirebaseFirestore.getInstance()
@@ -106,17 +98,22 @@ class SettingsFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val documentUserId = document.get("userId")
+                    val documentUserId = document.get("userid")
                     if (documentUserId == userId) {
                         db.collection("posts").document(document.id).delete()
-                        Log.d("!!!!", "comments deleted from collection")
+                        Log.d("!!!!", "Posts deleted from collection")
                     }else {
 //else
                     }
                 }
             }
     }
+    private fun deleteAccountFromFirestore() {
+        val userId = auth.currentUser!!.uid
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users").document(userId).delete()
 
+    }
 
 private fun returnHomeActivity() {
     val intent = Intent(requireContext(), HomeActivity::class.java)
