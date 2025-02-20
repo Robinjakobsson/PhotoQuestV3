@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.PostAdapter
@@ -15,6 +16,7 @@ import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
+import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
@@ -30,7 +32,9 @@ class HomeFragment : Fragment() {
     private lateinit var challengesVm: ChallengesViewModel
     private lateinit var vmFireStore: FireStoreViewModel
     private lateinit var postVm: PostViewModel
+    private lateinit var authVm : AuthViewModel
     lateinit var adapter : PostAdapter
+    private lateinit var currentUserId : String
 
 
     override fun onCreateView(
@@ -46,6 +50,10 @@ class HomeFragment : Fragment() {
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
         postVm = ViewModelProvider(requireActivity()).get(PostViewModel::class.java)
+        authVm = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
+
+
+        currentUserId = authVm.getCurrentUser()?.uid.toString()
 
         postVm.itemId.observe(viewLifecycleOwner) { itemId ->
 
@@ -63,17 +71,17 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun fetchPosts() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        vmFireStore.posts.observe(viewLifecycleOwner) { posts ->
-           adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
-               navigateToProfile(post.userid)})
-            binding.recyclerView.adapter = adapter
-            adapter.updatePosts(posts)
-        }
-        vmFireStore.fetchPosts()
-
+private fun fetchPosts() {
+    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
+        adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
+            navigateToProfile(post.userid)
+        })
+        binding.recyclerView.adapter = adapter
+        adapter.updatePosts(posts)
     }
+    vmFireStore.fetchPosts()
+}
 
     private fun showDailyChallenge() {
         challengesVm.getDailyChallenge { latestChallenge ->
