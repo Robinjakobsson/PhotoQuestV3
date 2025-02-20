@@ -31,6 +31,9 @@ class FireStoreViewModel: ViewModel() {
     private val _userQuote = MutableLiveData<String?>()
     val userQuote: MutableLiveData<String?> = _userQuote
 
+    private val _followingStatus = MutableLiveData<Boolean>()
+    val followingStatus: LiveData<Boolean> = _followingStatus
+
 
     //    Call in Fragment or Activity.
     fun fetchPosts() {
@@ -100,4 +103,11 @@ class FireStoreViewModel: ViewModel() {
             }
     }
 
+    fun checkFollowingStatus(currentUserId: String,targetUserId: String) : LiveData<Boolean> {
+        return fireStoreDb.checkFollowingStatus(currentUserId,targetUserId)
+    }
+
+    fun unfollowUser(currentUserId: String,targetUserId: String) {
+        fireStoreDb.unfollowFollower(currentUserId,targetUserId)
+    }
 }

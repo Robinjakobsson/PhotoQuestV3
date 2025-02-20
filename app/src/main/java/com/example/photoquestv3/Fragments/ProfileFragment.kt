@@ -41,6 +41,7 @@ class ProfileFragment : Fragment() {
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
                 updateData()
+                checkFollowingStatus()
             }
 
         }
@@ -53,13 +54,19 @@ class ProfileFragment : Fragment() {
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
 
+
         binding.followButton.setOnClickListener {
             auth.getCurrentUser()?.let { currentUser ->
-                fireStoreVm.followUser(currentUser.uid, targetUserId = user.uid)
+                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
+                    if (isFollowing) {
+                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                    } else {
+                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                    }
+                    checkFollowingStatus()
+                }
             }
         }
-
-
 
         authUser = Firebase.auth
         signOutButton = view.findViewById(R.id.button_logout)
@@ -88,5 +95,15 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.photo)
             .into(binding.profileImageImageView)
     }
-
+    private fun checkFollowingStatus() {
+        auth.getCurrentUser()?.let { currentUser ->
+            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
+                if (isFollowing) {
+                    binding.followButton.text = "Unfollow"
+                } else {
+                    binding.followButton.text = "Follow"
+                }
+            }
+        }
+    }
 }

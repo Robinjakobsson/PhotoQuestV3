@@ -46,31 +46,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
-        vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
-        postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
+        initializeViewModels() // initierar ViewModels i denna
+        currentUserId = authVm.getCurrentUser()?.uid.toString()
 
         postVm.toastMessage.observe(viewLifecycleOwner) { messages ->
             messages?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-
         }
 
         postVm.itemId.observe(viewLifecycleOwner) { itemId ->
             Log.d("HomeFragment", "Selected post id is: $itemId")
         }
 
-        vmFireStore.posts123.observe(viewLifecycleOwner) { posts ->
-            adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
-                navigateToProfile(post.userid)
-            })
-            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-            binding.recyclerView.adapter = adapter
-            adapter.updatePosts(posts)
-        }
-
-        vmFireStore.fetchPosts123()
+        observeAndDisplayPosts() // Gjorde en funktion av allt kladd
 
         postVm.dataChanged.observe(viewLifecycleOwner) { dataChanged ->
             if (dataChanged) {
@@ -78,7 +67,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        fetchPosts123()
         showDailyChallenge()
 
     }
@@ -113,5 +101,21 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    fun observeAndDisplayPosts() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
+            adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
+                navigateToProfile(post.userid)
+            })
+            binding.recyclerView.adapter = adapter
+            adapter.updatePosts(posts)
+        }
+    }
+    fun initializeViewModels() {
+        challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
+        vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
+        postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
+        authVm = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
     }
 }
