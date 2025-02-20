@@ -37,6 +37,7 @@ class PostViewModel : ViewModel() {
         _itemId.value = id
     }
 
+
     private val _toastMessage = MutableLiveData<String?>()
     val toastMessage: LiveData<String?> get() = _toastMessage
 
@@ -45,6 +46,8 @@ class PostViewModel : ViewModel() {
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
     val postId = itemId.value
+
+    val likes: LiveData<Int> get() = fireStoreRepo.likes
 
     fun updatePostAdapter() {
         _dataChanged.value = true
@@ -67,18 +70,46 @@ class PostViewModel : ViewModel() {
     fun addLikesToPost(postId: String?) {
         viewModelScope.launch {
             if (postId != null) {
+                setItemId(postId)
+                startListeningToLikes(postId)
                 val success = fireStoreRepo.addLikesToPost(postId)
+                if (success) {
+                    _dataChanged.value = true
+                } else {
+                    _toastMessage.value = "Failed to like post"
+                    _toastMessage.value = null
+                }
+            }
+        }
+    }
+
+    fun addLikesToPost123(postId: String?) {
+        viewModelScope.launch {
+            if (postId != null) {
+                setItemId(postId)
+
+                val success = fireStoreRepo.addLikesToPost123(postId)
                 if (success) {
                     _toastMessage.value = "Successfully added a like!"
                 } else {
-                    _toastMessage.value = "Failed to add a like"
+                    _toastMessage.value = "Already liked"
                 }
+                _dataChanged.value = true
                 _toastMessage.value = null
             }
         }
     }
 
-    fun fetchFriendsLiked(postId: String) {
+    private fun startListeningToLikes(postId: String) {
+        fireStoreRepo.restartListeningToLikes(postId)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        fireStoreRepo.stopListeningToLikes()
+    }
+    
+        fun fetchFriendsLiked(postId: String) {
         viewModelScope.launch {
             fireStoreRepo.fetchFriendList(postId) { friendsLiked ->
                 Log.d("!!!", "fetchfriendsLikes körs")
@@ -90,3 +121,8 @@ class PostViewModel : ViewModel() {
         }
     }
 }
+
+
+    
+    
+
