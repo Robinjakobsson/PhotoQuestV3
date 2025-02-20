@@ -59,7 +59,19 @@ class FireStoreViewModel: ViewModel() {
     }
 
 
+    fun followUser(currentUserId : String, targetUserId : String) {
+        fireStoreDb.followUser(currentUserId,targetUserId)
+    }
 
+    fun getPostsFromFollowing(currentUserId: String) : LiveData<List<Post>> {
+        return fireStoreDb.getFollowerPosts(currentUserId)
+    }
+
+    fun fetchProfileImage(){
+        viewModelScope.launch {
+          try {
+              val imageUrl = fireStoreDb.fetchProfileImage()
+              _profileImage.postValue(imageUrl)
 
 
 }

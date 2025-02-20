@@ -25,6 +25,7 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_Image_ImageView">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -181,6 +182,15 @@
             app:layout_constraintStart_toEndOf="@+id/profile_Image_ImageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/profile_Setting_Button"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="10dp"
+            android:text="Follow"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
