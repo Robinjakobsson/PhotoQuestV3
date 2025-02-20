@@ -95,7 +95,7 @@ class ProfileFragment : Fragment() {
 
     private fun layoutManager(){
         binding.profileRecycler.apply{
-            layoutManager = GridLayoutManager(context,4)
+            layoutManager = GridLayoutManager(context,2)
             adapter = profileAdapter
         }
     }
