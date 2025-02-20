@@ -22,7 +22,7 @@ import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
-
+//commit
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
