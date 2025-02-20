@@ -3,9 +3,11 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
@@ -20,9 +22,15 @@ class FireStoreRepository {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
-
-    suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
-        val user = User(email,name,userName,uid,imageUrl,biography)
+    suspend fun addUser(
+        email: String,
+        name: String,
+        userName: String,
+        uid: String,
+        imageUrl: String,
+        biography: String
+    ) {
+        val user = User(email, name, userName, uid, imageUrl, biography)
 
         try {
             db.collection("users")
@@ -30,16 +38,16 @@ class FireStoreRepository {
                 .set(user)
                 .await()
 
-            Log.d("FireStoreRepo","User: $userName Successfully added!")
-        }catch (e : Exception) {
-            Log.d("FireStoreRepo","User: $userName not added... ${e.message}")
+            Log.d("FireStoreRepo", "User: $userName Successfully added!")
+        } catch (e: Exception) {
+            Log.d("FireStoreRepo", "User: $userName not added... ${e.message}")
             throw e
         }
     }
 
-//    Updated with timestamp
-     suspend fun savePostToDatabase(imageUrl: String,description : String) {
-         val currentUser = auth.currentUser
+    //    Updated with timestamp
+    suspend fun savePostToDatabase(imageUrl: String, description: String) {
+        val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
             "postId" to postId,
@@ -51,16 +59,16 @@ class FireStoreRepository {
             "likes" to 0,
             "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
         )
-         try {
-             db.collection("posts").document(postId).set(post).await()
-                Log.d("FireStoreRepository","Successfully Created post $post!")
-            }catch (e : Exception) {
-                Log.d("FireStoreRepository","Failed to save post to database...", e)
+        try {
+            db.collection("posts").document(postId).set(post).await()
+            Log.d("FireStoreRepository", "Successfully Created post $post!")
+        } catch (e: Exception) {
+            Log.d("FireStoreRepository", "Failed to save post to database...", e)
         }
     }
 
-//    Fetches all posts by time order
-    suspend fun fetchPostSortedByTime() : List<Post> {
+    //    Fetches all posts by time order
+    suspend fun fetchPostSortedByTime(): List<Post> {
 
         return db.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -126,13 +134,13 @@ class FireStoreRepository {
         return try {
             auth.currentUser
             val documentSnapshot = db.collection("users")
-                    .document(currentUser.uid)
-                    .get()
-                    .await()
+                .document(currentUser.uid)
+                .get()
+                .await()
             documentSnapshot.getString("biography")
 
-        }catch (e: Exception){
-            Log.d("FireStoreRepository","error")
+        } catch (e: Exception) {
+            Log.d("FireStoreRepository", "error")
 
             null
         }
@@ -212,13 +220,39 @@ class FireStoreRepository {
     }
 
     suspend fun addLikesToPost(postId: String): Boolean {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+
         try {
             val docRef = db.collection("posts").document(postId)
             val document = docRef.get().await()
-            val likeCounter = document.getLong("likes") ?: 0
-            val newLikeCounter = likeCounter + 1
-            docRef.update("likes", newLikeCounter).await()
-            return true
+
+            if (document.exists()) {
+
+                docRef.update("likedBy", FieldValue.arrayUnion(currentUser)).await()
+                val likeCounter = document.getLong("likes") ?: 0
+
+                val friendsLiked = document.get("likedBy") as? List<String>
+
+                if (friendsLiked?.contains(currentUser) == false) {
+                    val newLikeCounter = likeCounter + 1
+                    docRef.update("likes", newLikeCounter).await()
+                    Log.d("!!!", "Likes +")
+                    return true
+
+                } else {
+
+                    val newLikeCounter = likeCounter - 1
+                    docRef.update("likes", newLikeCounter).await()
+                    docRef.update("likedBy", FieldValue.arrayRemove(currentUser)).await()
+                    Log.d("!!!", "Likes -")
+                    return false
+                }
+
+            } else {
+                Log.d("!!!", "Post doesnt exist.")
+                return false
+            }
         } catch (e: Exception) {
             Log.e("PostRepository", "Error updating likes", e)
             return false
@@ -226,4 +260,28 @@ class FireStoreRepository {
     }
 
 
+    suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
+
+        Log.d("!!!", "fetchFriendsList from repo körs")
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val document = docRef.get().await()
+
+            if (document.exists()) {
+                val friendsLiked = document.get("likedBy") as? List<String>
+
+                if (friendsLiked != null) {
+                    callback(friendsLiked)
+
+                    Log.d("!!!", "Friends fetched. ${friendsLiked}")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("!!!", "Error fetching friends", e)
+        }
+    }
 }
+
+
+}
+

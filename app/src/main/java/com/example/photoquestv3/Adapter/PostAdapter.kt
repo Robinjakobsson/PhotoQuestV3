@@ -14,6 +14,7 @@ import com.example.photoquestv3.Fragments.CommentFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Fragments.HomeFragment
+import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
@@ -62,15 +63,25 @@ class PostAdapter(
         holder.description.text = post.description
         holder.likeCounter.text = post.likes.toString()
 
-        holder.likeButton.setOnClickListener(){
+        holder.likeCounter.setOnClickListener{
 
             val postId = post.postId
+            val likesFragment = LikesFragment(postId)
 
-            postVm.addLikesToPost(postId)
+            val activity = holder.itemView.context as? AppCompatActivity
+            activity?.supportFragmentManager?.let {
+                likesFragment.show(it, likesFragment.tag)
+            }
 
         }
 
-        holder.optionImage.setOnClickListener() {
+        holder.likeButton.setOnClickListener{
+
+            val postId = post.postId
+            postVm.addLikesToPost(postId)
+        }
+
+        holder.optionImage.setOnClickListener {
 
             val postId = post.postId
 
