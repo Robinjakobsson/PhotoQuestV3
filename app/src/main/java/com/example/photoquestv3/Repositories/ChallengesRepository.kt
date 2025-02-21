@@ -138,17 +138,17 @@ class ChallengesRepository {
                         val document = documents.documents[0]
                         document.reference.update("completed", true)
                             .addOnSuccessListener {
-                                Log.d("!!!!", "Challenge on $formattedDate marked as completed!")
+                                Log.d("ChallengesRepository", "$formattedDate challenge completed!")
                             }
                             .addOnFailureListener { e ->
-                                Log.w("!!!!", "Error updating challenge", e)
+                                Log.w("ChallengesRepository", "Error updating challenge", e)
                             }
                     } else {
-                        Log.w("!!!!", "No challenge found for the date $formattedDate")
+                        Log.w("ChallengesRepository", "No challenge found $formattedDate")
                     }
                 }
                 ?.addOnFailureListener { e ->
-                    Log.w("!!!!", "Error finding challenge by date", e)
+                    Log.w("ChallengesRepository", "Can't find challenge", e)
                 }
         }
 
@@ -165,17 +165,17 @@ class ChallengesRepository {
                     val document = documents.documents[0]
                     document.reference.update("completed", false)
                         .addOnSuccessListener {
-                            Log.d("!!!!", "Challenge on $formattedDate marked as not completed!")
+                            Log.d("!!!!", "$formattedDate challenge not completed")
                         }
                         .addOnFailureListener { e ->
                             Log.w("!!!!", "Error updating challenge", e)
                         }
                 } else {
-                    Log.w("!!!!", "No challenge found for the date $formattedDate")
+                    Log.w("!!!!", "No challenge found $formattedDate")
                 }
             }
             ?.addOnFailureListener { e ->
-                Log.w("!!!!", "Error finding challenge by date", e)
+                Log.w("!!!!", "Can't find challenge", e)
             }
     }
 

@@ -98,11 +98,6 @@ class PostFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun showDailyChallenge() {
         challengesVm.getDailyChallenge { latestChallenge ->
             if (latestChallenge != null) {
@@ -120,6 +115,13 @@ class PostFragment : Fragment() {
     private fun markChallengeNotDone() {
         challengesVm.markChallengeNotDone()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 
 
 }
