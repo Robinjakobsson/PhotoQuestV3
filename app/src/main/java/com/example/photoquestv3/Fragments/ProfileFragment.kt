@@ -47,7 +47,7 @@ class ProfileFragment : Fragment() {
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
-                updateData()
+                updateUserData()
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
@@ -55,7 +55,7 @@ class ProfileFragment : Fragment() {
 
 
             }
-        }
+
 
 
 
@@ -136,5 +136,4 @@ class ProfileFragment : Fragment() {
             adapter = profileAdapter
         }
     }
-
 }
