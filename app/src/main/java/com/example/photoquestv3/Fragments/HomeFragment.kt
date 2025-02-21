@@ -82,6 +82,9 @@ class HomeFragment : Fragment() {
             } else {
                 Log.d("HomeFragment", "No challenges available.")
             }
+            if (latestChallenge?.completed == true) {
+                binding.starImageView.setImageResource(R.drawable.baseline_star_24)
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -122,4 +123,60 @@ class ChallengesRepository {
             Log.d("!!!", "user not found")
         }
     }
+
+
+    fun markChallengeDone() {
+
+        val today = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate = dateFormat.format(today)
+
+        collection?.collection("challenges")?.whereEqualTo("date", formattedDate)
+            ?.get()
+                ?.addOnSuccessListener { documents ->
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.documents[0]
+                        document.reference.update("completed", true)
+                            .addOnSuccessListener {
+                                Log.d("ChallengesRepository", "$formattedDate challenge completed!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("ChallengesRepository", "Error updating challenge", e)
+                            }
+                    } else {
+                        Log.w("ChallengesRepository", "No challenge found $formattedDate")
+                    }
+                }
+                ?.addOnFailureListener { e ->
+                    Log.w("ChallengesRepository", "Can't find challenge", e)
+                }
+        }
+
+    fun markChallengeNotDone() {
+
+        val today = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate = dateFormat.format(today)
+
+        collection?.collection("challenges")?.whereEqualTo("date", formattedDate)
+            ?.get()
+            ?.addOnSuccessListener { documents ->
+                if (documents != null && !documents.isEmpty) {
+                    val document = documents.documents[0]
+                    document.reference.update("completed", false)
+                        .addOnSuccessListener {
+                            Log.d("!!!!", "$formattedDate challenge not completed")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("!!!!", "Error updating challenge", e)
+                        }
+                } else {
+                    Log.w("!!!!", "No challenge found $formattedDate")
+                }
+            }
+            ?.addOnFailureListener { e ->
+                Log.w("!!!!", "Can't find challenge", e)
+            }
+    }
+
 }

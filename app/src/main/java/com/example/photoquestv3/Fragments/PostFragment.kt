@@ -42,6 +42,8 @@ class PostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         storageVm = ViewModelProvider(this)[StorageViewModel::class.java]
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
+        challengesVm.isChecked.observe(viewLifecycleOwner) { isChecked ->
+            binding.challengeCheckbox.isChecked = isChecked }
 
 
         val pickImageLauncher =
@@ -56,7 +58,23 @@ class PostFragment : Fragment() {
 
         binding.postButton.setOnClickListener { uploadPost() }
 
+
+        binding.challengeCheckbox.setOnClickListener {
+
+            val isChecked = binding.challengeCheckbox.isChecked
+            challengesVm.setChallengeCheckedState(isChecked)
+
+            if (isChecked) {
+                markChallengeDone()
+            } else {
+                markChallengeNotDone()
+            }
+
+        }
+
         showDailyChallenge()
+
+
 
     }
 
@@ -79,11 +97,6 @@ class PostFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun showDailyChallenge() {
         challengesVm.getDailyChallenge { latestChallenge ->
             if (latestChallenge != null) {
@@ -93,6 +106,21 @@ class PostFragment : Fragment() {
             }
         }
     }
+
+    private fun markChallengeDone() {
+        challengesVm.markChallengeDone()
+    }
+
+    private fun markChallengeNotDone() {
+        challengesVm.markChallengeNotDone()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 
 
 }
