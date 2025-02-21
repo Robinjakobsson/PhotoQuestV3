@@ -192,7 +192,7 @@ class FireStoreRepository {
         currentUserRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
                 val following = documentSnapshot.get("following") as List<String>
-
+//
                 if (following.isNotEmpty()) {
                     val postsRef = db.collection("posts")
                     postsRef.whereIn("userid", following)
