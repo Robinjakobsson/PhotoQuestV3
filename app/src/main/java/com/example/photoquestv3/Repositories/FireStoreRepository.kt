@@ -327,24 +327,6 @@ class FireStoreRepository {
 
     }
 
-    /**
-     * Method to unfollow
-     */
-    fun unfollowFollower(currentUserId: String,targetUserId: String) {
-         CoroutineScope(Dispatchers.IO).launch {
-        val currentUserRef = db.collection("users").document(currentUserId)
-        val targetUserRef = db.collection("users").document(targetUserId)
-            try {
-                currentUserRef.update("following",FieldValue.arrayRemove(targetUserId)).await()
-                targetUserRef.update("followers",FieldValue.arrayRemove(currentUserId)).await()
-
-            }catch (e : Exception) {
-                Log.d("FireStore","Error during unfollow operation..")
-            }
-         }
-
-    }
-
 //
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
