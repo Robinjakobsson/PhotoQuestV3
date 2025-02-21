@@ -25,6 +25,7 @@ class FireStoreViewModel: ViewModel() {
     //    test
     val posts123 = MutableLiveData<List<Post>>()
 
+
     private val _profileImage = MutableLiveData<String?>()
     val profileImage: MutableLiveData<String?> = _profileImage
 
@@ -33,6 +34,10 @@ class FireStoreViewModel: ViewModel() {
 
     private val _followingStatus = MutableLiveData<Boolean>()
     val followingStatus: LiveData<Boolean> = _followingStatus
+
+
+    private val _userImages = MutableLiveData<List<String>>()
+    val userImages: LiveData<List<String>> = _userImages
 
 
     //    Call in Fragment or Activity.
@@ -65,29 +70,6 @@ class FireStoreViewModel: ViewModel() {
         return fireStoreDb.getFollowerPosts(currentUserId)
     }
 
-    fun fetchProfileImage(){
-        viewModelScope.launch {
-            try {
-                val imageUrl = fireStoreDb.fetchProfileImage()
-                _profileImage.postValue(imageUrl)
-
-            }catch (e: Exception){
-                Log.d("FireStoreViewModel","Error")
-            }
-        }
-    }
-
-    fun fetchUserQuote(){
-        viewModelScope.launch {
-            try {
-                val userQuote = fireStoreDb.fetchUserQuote()
-                _userQuote.postValue(userQuote)
-
-            }catch (e: Exception){
-                Log.d("FireStoreViewModel", "error")
-            }
-        }
-    }
 
     fun fetchPosts123() {
         fireStoreDb.db.collection("posts")
@@ -103,6 +85,7 @@ class FireStoreViewModel: ViewModel() {
             }
     }
 
+
     fun checkFollowingStatus(currentUserId: String,targetUserId: String) : LiveData<Boolean> {
         return fireStoreDb.checkFollowingStatus(currentUserId,targetUserId)
     }
@@ -110,4 +93,12 @@ class FireStoreViewModel: ViewModel() {
     fun unfollowUser(currentUserId: String,targetUserId: String) {
         fireStoreDb.unfollowFollower(currentUserId,targetUserId)
     }
+    
+    fun loadUserImages(userId: String){
+        viewModelScope.launch {
+            val images = fireStoreDb.fetchUserImages(userId)
+            _userImages.value = images
+        }
+    }
+
 }

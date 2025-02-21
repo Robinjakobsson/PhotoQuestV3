@@ -172,8 +172,13 @@ class FireStoreRepository {
             }catch (e : Exception) {
                 Log.d("FireStore","Error following user...")
             }
+
         }
-    }
+
+
+     }
+
+    
 
     /**
      * Method to get followers posts
@@ -307,6 +312,20 @@ class FireStoreRepository {
             return false
         }
     }
+     fun unfollowFollower(currentUserId: String,targetUserId: String) {
+         CoroutineScope(Dispatchers.IO).launch {
+        val currentUserRef = db.collection("users").document(currentUserId)
+        val targetUserRef = db.collection("users").document(targetUserId)
+            try {
+                currentUserRef.update("following",FieldValue.arrayRemove(targetUserId)).await()
+                targetUserRef.update("followers",FieldValue.arrayRemove(currentUserId)).await()
+
+            }catch (e : Exception) {
+                Log.d("FireStore","Error during unfollow operation..")
+            }
+         }
+
+    }
 
     /**
      * Method to unfollow
@@ -389,6 +408,19 @@ class FireStoreRepository {
             Log.e("!!!", "Error fetching friends", e)
         }
     }
+
+
+    suspend fun fetchUserImages(userId: String): List<String> {
+        val snapshot = db.collection("posts")
+            .whereEqualTo("userid",userId)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .await()
+        snapshot.documents.mapNotNull { it.getString("imageUrl") }
+        return snapshot.documents.mapNotNull { it.getString("imageUrl") }
+
+    }
+
 }
 
 
