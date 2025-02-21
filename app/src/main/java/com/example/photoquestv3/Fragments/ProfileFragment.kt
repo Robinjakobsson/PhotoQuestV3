@@ -25,7 +25,11 @@ import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
-    lateinit var binding: FragmentProfileBinding
+
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
+
     private lateinit var auth: AuthViewModel
     lateinit var authUser: FirebaseAuth
     lateinit var fireStoreVm: FireStoreViewModel
@@ -35,9 +39,9 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         fireStoreVm.userImages.observe(viewLifecycleOwner){images -> profileAdapter.updateData(images) }
 
@@ -53,14 +57,11 @@ class ProfileFragment : Fragment() {
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
+                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner){ count ->
+                    binding.profileFollowerTextView.text = count.toString()
+                }
             }
-
-
         }
-
-
-
-
         return binding.root
     }
 
@@ -93,6 +94,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     private fun setupFollowButton() {
         val currentUser = auth.getCurrentUser()
@@ -100,23 +106,21 @@ class ProfileFragment : Fragment() {
             binding.followButton.visibility = View.GONE
         } else {
             binding.followButton.visibility = View.VISIBLE
+
             binding.followButton.setOnClickListener {
 
-                if (currentUser != null && currentUser.uid != user.uid) {
-                    fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
-                        .observe(viewLifecycleOwner) { isFollowing ->
-                            if (isFollowing) {
-
-                                fireStoreVm.unfollowUser(currentUser.uid, user.uid)
-                            } else {
-
-                                fireStoreVm.followUser(currentUser.uid, user.uid)
-                            }
-                            checkFollowingStatus()
-                        }
+                if (binding.followButton.text.toString() == "Follow") {
+                    binding.followButton.text = getString(R.string.unfollow)
+                    if (currentUser != null) {
+                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                    }
                 } else {
-                    Toast.makeText(requireContext(), "You cannot follow yourself", Toast.LENGTH_SHORT).show()
+                    binding.followButton.text = getString(R.string.follow)
+                    if (currentUser != null) {
+                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                    }
                 }
+
             }
         }
     }

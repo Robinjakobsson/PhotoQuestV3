@@ -392,6 +392,23 @@ class FireStoreRepository {
 
     }
 
+    // FireStoreRepository.kt
+    fun listenForFollowerCount(userId: String): LiveData<Int> {
+        val followerCount = MutableLiveData<Int>()
+        db.collection("users").document(userId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreRepository", "Error listening to follower count: ${error.message}")
+                    return@addSnapshotListener
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    val followers = snapshot.get("followers") as? List<String> ?: emptyList()
+                    followerCount.value = followers.size
+                }
+            }
+        return followerCount
+    }
+
 }
 
 
