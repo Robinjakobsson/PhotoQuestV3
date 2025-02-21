@@ -38,7 +38,7 @@ class FireStoreRepository {
     /**
      * Function to add a User to the database
      */
- suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
+    suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
         val user = User(email,name,userName,uid,imageUrl,biography)
 
         try {
@@ -81,7 +81,7 @@ class FireStoreRepository {
     }
 
     //    Fetches all posts by time order
-   suspend fun fetchPostSortedByTime() : List<Post> {
+    suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -142,7 +142,7 @@ class FireStoreRepository {
 
 
 
- suspend fun fetchUserQuote(): String? {
+    suspend fun fetchUserQuote(): String? {
         val currentUser = auth.currentUser ?: return null
         return try {
             auth.currentUser
@@ -198,31 +198,34 @@ class FireStoreRepository {
         currentUserRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
                 val following = documentSnapshot.get("following") as List<String>
-                if (following.isNotEmpty()) {
+                val userId = if (!following.contains(currentUserId)) {
+                    following + currentUserId
+                } else {
+                    following
+                }
+                if (userId.isNotEmpty()) {
                     val postsRef = db.collection("posts")
-                    postsRef.whereIn("userid", following)
+                    postsRef.whereIn("userid", userId)
                         .orderBy("timestamp", Query.Direction.DESCENDING)
-                        .addSnapshotListener { snapshot, exception ->
-                            if (exception != null) {
-                                Log.d("FireStore", "Error getting posts: ${exception.message}")
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                Log.d("FireStore", "Error getting posts: ${error.message}")
                                 return@addSnapshotListener
+
                             }
-                            val postsList = mutableListOf<Post>()
+                            val postList = mutableListOf<Post>()
                             snapshot?.documents?.forEach { document ->
                                 val post = document.toObject(Post::class.java)
-                                if (post != null) {
-                                    postsList.add(post)
-                                }
+                                if (post != null) { postList.add(post) }
                             }
-                            liveData.value = postsList
+                            liveData.value = postList
                         }
-                } else {
-                    liveData.value = emptyList()
-                }
+                } else { liveData.value = emptyList() }
             }
         }
         return liveData
     }
+
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
