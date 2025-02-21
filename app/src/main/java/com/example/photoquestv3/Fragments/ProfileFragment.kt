@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -48,13 +49,14 @@ class ProfileFragment : Fragment() {
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
                 updateUserData()
+                setupFollowButton()
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
             }
 
 
-            }
+        }
 
 
 
@@ -80,7 +82,7 @@ class ProfileFragment : Fragment() {
         }
 
 
-        
+
 
         binding.buttonLogout.setOnClickListener{
             authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
@@ -90,6 +92,37 @@ class ProfileFragment : Fragment() {
             startSettingsFragment()
         }
     }
+
+
+    private fun setupFollowButton() {
+        val currentUser = auth.getCurrentUser()
+        if (currentUser?.uid == user.uid) {
+            binding.followButton.visibility = View.GONE
+        } else {
+            binding.followButton.visibility = View.VISIBLE
+            binding.followButton.setOnClickListener {
+
+                if (currentUser != null && currentUser.uid != user.uid) {
+                    fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
+                        .observe(viewLifecycleOwner) { isFollowing ->
+                            if (isFollowing) {
+
+                                fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                            } else {
+
+                                fireStoreVm.followUser(currentUser.uid, user.uid)
+                            }
+                            checkFollowingStatus()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "You cannot follow yourself", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
 
     private fun startSettingsFragment() {
         val settingsFragment = SettingsFragment()
@@ -117,16 +150,17 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.photo)
             .into(binding.profileImageImageView)
     }
-    
+
     private fun checkFollowingStatus() {
         auth.getCurrentUser()?.let { currentUser ->
-            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
-                if (isFollowing) {
-                    binding.followButton.text = "Unfollow"
-                } else {
-                    binding.followButton.text = "Follow"
+            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
+                .observe(viewLifecycleOwner) { isFollowing ->
+                    if (isFollowing) {
+                        binding.followButton.text = "Unfollow"
+                    } else {
+                        binding.followButton.text = "Follow"
+                    }
                 }
-            }
         }
     }
 
