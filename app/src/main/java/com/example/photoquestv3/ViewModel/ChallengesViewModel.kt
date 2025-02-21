@@ -13,7 +13,7 @@ class ChallengesViewModel : ViewModel() {
 
     val challenges: LiveData<List<Challenges>> = challengesRepository.listOfChallenges
 
-    private val _isChecked = MutableLiveData<Boolean>().apply { value = false }
+    private val _isChecked = MutableLiveData<Boolean>()
     val isChecked: LiveData<Boolean> get() = _isChecked
 
     fun setChallengeCheckedState(state: Boolean) {

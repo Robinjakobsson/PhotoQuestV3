@@ -58,23 +58,22 @@ class PostFragment : Fragment() {
 
         binding.postButton.setOnClickListener { uploadPost() }
 
-        showDailyChallenge()
-
-
 
         binding.challengeCheckbox.setOnClickListener {
 
             val isChecked = binding.challengeCheckbox.isChecked
-
             challengesVm.setChallengeCheckedState(isChecked)
 
-            if (binding.challengeCheckbox.isChecked) {
+            if (isChecked) {
                 markChallengeDone()
             } else {
                 markChallengeNotDone()
             }
 
         }
+
+        showDailyChallenge()
+
 
 
     }
