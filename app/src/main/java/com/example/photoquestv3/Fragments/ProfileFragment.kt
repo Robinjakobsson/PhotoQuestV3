@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Adapter.ProfileAdapter
+import com.example.photoquestv3.Fragments.SettingsFragment
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
@@ -88,6 +89,16 @@ class ProfileFragment : Fragment() {
             returnHomeActivity()
 
         }
+        binding.profileSettingButton.setOnClickListener {
+            startSettingsFragment()
+        }
+    }
+
+    private fun startSettingsFragment() {
+        val settingsFragment = SettingsFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, settingsFragment, "settingsFragment")
+            .commit()
     }
 
     private fun returnHomeActivity() {
