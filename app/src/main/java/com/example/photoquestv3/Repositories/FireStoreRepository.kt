@@ -326,7 +326,7 @@ class FireStoreRepository {
 
     }
 
-
+//
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
