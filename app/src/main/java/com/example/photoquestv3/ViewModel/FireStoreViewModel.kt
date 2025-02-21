@@ -39,6 +39,9 @@ class FireStoreViewModel: ViewModel() {
     private val _userImages = MutableLiveData<List<String>>()
     val userImages: LiveData<List<String>> = _userImages
 
+    private val _userPostCount = MutableLiveData<Int>()
+    val userPostCount: LiveData<Int> = _userPostCount
+
 
     //    Call in Fragment or Activity.
     fun fetchPosts() {
@@ -104,6 +107,18 @@ class FireStoreViewModel: ViewModel() {
             val images = fireStoreDb.fetchUserImages(userId)
             _userImages.value = images
         }
+    }
+
+    fun fetchUserPostCount(userid: String): LiveData<Int>{
+        viewModelScope.launch {
+            val snapshot = fireStoreDb.db.collection("posts")
+                .whereEqualTo("userid",userid)
+                .get()
+                .await()
+            _userPostCount.value = snapshot.size()
+        }
+
+        return userPostCount
     }
 
 }
