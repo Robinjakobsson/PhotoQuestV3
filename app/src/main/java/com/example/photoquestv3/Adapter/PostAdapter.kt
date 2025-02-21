@@ -64,6 +64,18 @@ class PostAdapter(
       
 //        Likes
         holder.likeCounter.text = post.likes.toString()
+
+        holder.likeCounter.setOnClickListener{
+
+            val postId = post.postId
+            val likesFragment = LikesFragment(postId)
+
+            val activity = holder.itemView.context as? AppCompatActivity
+            activity?.supportFragmentManager?.let {
+                likesFragment.show(it, likesFragment.tag)
+            }
+
+        }
         
         holder.likeButton.setOnClickListener {
             postVm.addLikesToPost123(post.postId)
