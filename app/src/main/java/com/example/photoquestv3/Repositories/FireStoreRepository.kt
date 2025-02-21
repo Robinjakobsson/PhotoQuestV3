@@ -141,23 +141,6 @@ class FireStoreRepository {
     }
 
 
-
-    suspend fun fetchUserQuote(): String? {
-        val currentUser = auth.currentUser ?: return null
-        return try {
-            auth.currentUser
-            val documentSnapshot = db.collection("users")
-                .document(currentUser.uid)
-                .get()
-                .await()
-            documentSnapshot.getString("biography")
-
-        } catch (e: Exception){
-            Log.d("FireStoreRepository","error")
-            null
-        }
-    }
-
     /**
      * Method to Follow a person
      */
