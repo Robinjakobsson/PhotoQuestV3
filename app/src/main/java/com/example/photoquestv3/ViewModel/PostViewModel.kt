@@ -33,8 +33,6 @@ class PostViewModel : ViewModel() {
     private val _dataChanged = MutableLiveData<Boolean>()
     val dataChanged: LiveData<Boolean> get() = _dataChanged
 
-
-
     fun setItemId(id: String) {
         _itemId.value = id
     }
