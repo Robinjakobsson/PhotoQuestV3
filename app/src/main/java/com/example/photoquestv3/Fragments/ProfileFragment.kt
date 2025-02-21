@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +25,11 @@ import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
-    lateinit var binding: FragmentProfileBinding
+
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
+
     private lateinit var auth: AuthViewModel
     lateinit var authUser: FirebaseAuth
     lateinit var fireStoreVm: FireStoreViewModel
@@ -34,9 +39,9 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         fireStoreVm.userImages.observe(viewLifecycleOwner){images -> profileAdapter.updateData(images) }
 
@@ -48,17 +53,15 @@ class ProfileFragment : Fragment() {
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
                 updateUserData()
+                setupFollowButton()
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
+                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner){ count ->
+                    binding.profileFollowerTextView.text = count.toString()
+                }
             }
-
-
-            }
-
-
-
-
+        }
         return binding.root
     }
 
@@ -80,7 +83,7 @@ class ProfileFragment : Fragment() {
         }
 
 
-        
+
 
         binding.buttonLogout.setOnClickListener{
             authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
@@ -90,6 +93,40 @@ class ProfileFragment : Fragment() {
             startSettingsFragment()
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+    private fun setupFollowButton() {
+        val currentUser = auth.getCurrentUser()
+        if (currentUser?.uid == user.uid) {
+            binding.followButton.visibility = View.GONE
+        } else {
+            binding.followButton.visibility = View.VISIBLE
+
+            binding.followButton.setOnClickListener {
+
+                if (binding.followButton.text.toString() == "Follow") {
+                    binding.followButton.text = getString(R.string.unfollow)
+                    if (currentUser != null) {
+                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                    }
+                } else {
+                    binding.followButton.text = getString(R.string.follow)
+                    if (currentUser != null) {
+                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                    }
+                }
+
+            }
+        }
+    }
+
+
+
 
     private fun startSettingsFragment() {
         val settingsFragment = SettingsFragment()
@@ -117,16 +154,17 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.photo)
             .into(binding.profileImageImageView)
     }
-    
+
     private fun checkFollowingStatus() {
         auth.getCurrentUser()?.let { currentUser ->
-            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
-                if (isFollowing) {
-                    binding.followButton.text = "Unfollow"
-                } else {
-                    binding.followButton.text = "Follow"
+            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
+                .observe(viewLifecycleOwner) { isFollowing ->
+                    if (isFollowing) {
+                        binding.followButton.text = "Unfollow"
+                    } else {
+                        binding.followButton.text = "Follow"
+                    }
                 }
-            }
         }
     }
 

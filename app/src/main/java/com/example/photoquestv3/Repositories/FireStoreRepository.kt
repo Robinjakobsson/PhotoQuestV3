@@ -38,7 +38,7 @@ class FireStoreRepository {
     /**
      * Function to add a User to the database
      */
- suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
+    suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
         val user = User(email,name,userName,uid,imageUrl,biography)
 
         try {
@@ -81,7 +81,7 @@ class FireStoreRepository {
     }
 
     //    Fetches all posts by time order
-   suspend fun fetchPostSortedByTime() : List<Post> {
+    suspend fun fetchPostSortedByTime() : List<Post> {
 
         return db.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -142,7 +142,7 @@ class FireStoreRepository {
 
 
 
- suspend fun fetchUserQuote(): String? {
+    suspend fun fetchUserQuote(): String? {
         val currentUser = auth.currentUser ?: return null
         return try {
             auth.currentUser
@@ -161,24 +161,31 @@ class FireStoreRepository {
     /**
      * Method to Follow a person
      */
-    fun followUser(currentUserId : String, targetUserId : String) {
+    fun followUser(currentUserId: String, targetUserId: String) {
         CoroutineScope(Dispatchers.IO).launch {
-        val currentUserRef = db.collection("users").document(currentUserId)
-        val targetUserRef = db.collection("users").document(targetUserId)
+            val currentUserRef = db.collection("users").document(currentUserId)
+            val targetUserRef = db.collection("users").document(targetUserId)
             try {
                 currentUserRef.update("following", FieldValue.arrayUnion(targetUserId)).await()
                 targetUserRef.update("followers", FieldValue.arrayUnion(currentUserId)).await()
-
-            }catch (e : Exception) {
-                Log.d("FireStore","Error following user...")
+            } catch (e: Exception) {
+                Log.d("FireStore", "Error following user: ${e.message}")
             }
-
         }
+    }
 
-
-     }
-
-    
+    fun unfollowFollower(currentUserId: String, targetUserId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val currentUserRef = db.collection("users").document(currentUserId)
+            val targetUserRef = db.collection("users").document(targetUserId)
+            try {
+                currentUserRef.update("following", FieldValue.arrayRemove(targetUserId)).await()
+                targetUserRef.update("followers", FieldValue.arrayRemove(currentUserId)).await()
+            } catch (e: Exception) {
+                Log.d("FireStore", "Error during unfollow operation: ${e.message}")
+            }
+        }
+    }
 
     /**
      * Method to get followers posts
@@ -186,42 +193,39 @@ class FireStoreRepository {
      */
     fun getFollowerPosts(currentUserId: String): LiveData<List<Post>> {
         val liveData = MutableLiveData<List<Post>>()
-
         val currentUserRef = db.collection("users").document(currentUserId)
 
         currentUserRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
                 val following = documentSnapshot.get("following") as List<String>
-//
-                if (following.isNotEmpty()) {
+                val userId = if (!following.contains(currentUserId)) {
+                    following + currentUserId
+                } else {
+                    following
+                }
+                if (userId.isNotEmpty()) {
                     val postsRef = db.collection("posts")
-                    postsRef.whereIn("userid", following)
+                    postsRef.whereIn("userid", userId)
                         .orderBy("timestamp", Query.Direction.DESCENDING)
-                        .addSnapshotListener { snapshot, exception ->
-                            if (exception != null) {
-                                Log.d("FireStore", "Error getting posts")
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                Log.d("FireStore", "Error getting posts: ${error.message}")
                                 return@addSnapshotListener
-                            }
 
-                            val postsList = mutableListOf<Post>()
+                            }
+                            val postList = mutableListOf<Post>()
                             snapshot?.documents?.forEach { document ->
                                 val post = document.toObject(Post::class.java)
-                                if (post != null) {
-                                    postsList.add(post)
-                                }
+                                if (post != null) { postList.add(post) }
                             }
-
-
-                            liveData.value = postsList
+                            liveData.value = postList
                         }
-                } else {
-                    liveData.value = emptyList()
-                }
+                } else { liveData.value = emptyList() }
             }
         }
-
         return liveData
     }
+
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
@@ -312,22 +316,7 @@ class FireStoreRepository {
             return false
         }
     }
-     fun unfollowFollower(currentUserId: String,targetUserId: String) {
-         CoroutineScope(Dispatchers.IO).launch {
-        val currentUserRef = db.collection("users").document(currentUserId)
-        val targetUserRef = db.collection("users").document(targetUserId)
-            try {
-                currentUserRef.update("following",FieldValue.arrayRemove(targetUserId)).await()
-                targetUserRef.update("followers",FieldValue.arrayRemove(currentUserId)).await()
 
-            }catch (e : Exception) {
-                Log.d("FireStore","Error during unfollow operation..")
-            }
-         }
-
-    }
-
-//
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
@@ -401,6 +390,23 @@ class FireStoreRepository {
         snapshot.documents.mapNotNull { it.getString("imageUrl") }
         return snapshot.documents.mapNotNull { it.getString("imageUrl") }
 
+    }
+
+    // FireStoreRepository.kt
+    fun listenForFollowerCount(userId: String): LiveData<Int> {
+        val followerCount = MutableLiveData<Int>()
+        db.collection("users").document(userId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreRepository", "Error listening to follower count: ${error.message}")
+                    return@addSnapshotListener
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    val followers = snapshot.get("followers") as? List<String> ?: emptyList()
+                    followerCount.value = followers.size
+                }
+            }
+        return followerCount
     }
 
 }

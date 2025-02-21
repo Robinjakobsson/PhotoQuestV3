@@ -54,6 +54,11 @@ class FireStoreViewModel: ViewModel() {
         }
     }
 
+    // FireStoreViewModel.kt
+    fun getFollowerCount(userId: String): LiveData<Int> {
+        return fireStoreDb.listenForFollowerCount(userId)
+    }
+
     fun getUsers(query: String): LiveData<List<User>> {
         return fireStoreDb.getUsers(query)
     }

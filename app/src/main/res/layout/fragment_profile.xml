@@ -191,7 +191,7 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_Setting_Button"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_margin="10dp"
-            android:text="Follow"/>
+            android:text="@string/follow"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

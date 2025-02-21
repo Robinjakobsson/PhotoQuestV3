@@ -36,5 +36,7 @@
     <string name="leave_a_comment">Leave a comment...</string>
     <string name="profile_picture">Profile_Picture</string>
     <string name="a_comment_has_been_made">A comment has been made</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
 </resources>
 
