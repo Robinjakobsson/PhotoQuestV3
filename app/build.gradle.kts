@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonPointer.compile
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -40,9 +42,10 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation (libs.glide)
+    implementation(libs.glide)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -54,14 +57,22 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
-   // implementation (libs.material.v1110)
+    implementation(libs.play.services.auth)
+
+    //no idea what this is, found in some video about google auth
+//    implementation(libs.spots.dialog)
+  //  implementation ("com.github.d-max:spots-dialog:1.1@aar")
+
+    // implementation (libs.material.v1110)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+
+    implementation(libs.facebook.login.vlatestrelease)
+
     //  Lottie splash screen
     implementation(libs.lottie)
-
 
 
 }
