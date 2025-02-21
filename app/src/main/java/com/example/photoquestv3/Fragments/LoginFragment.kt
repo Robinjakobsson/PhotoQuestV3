@@ -3,6 +3,8 @@ package com.example.photoquestv3.Views.Fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -252,15 +254,19 @@ class LoginFragment : Fragment() {
                         if (document.exists()) {
                             return@addOnSuccessListener
                         } else {
+                            val email = currentUser.email!!
+                            val name = currentUser.displayName!!
+                            val username = currentUser.displayName!!.lowercase()
+
                             auth.createAccount(
-                                currentUser.email ?: "",
+                                email,
                                 "why do we have it?",
-                                currentUser.displayName ?: "",
-                                currentUser.displayName ?: "",
+                                name,
+                                username,
                                 Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.google}"),
-                                "biography",
-                                { Log.d("!!!", "Kontot skapades framgångsrikt!") },
-                                { exception -> Log.d("!!!", "Det gick inte att skapa kontot: ${exception.message}") }
+                                "",
+                                { Log.d("GoogleDebug", "Account created successfully!") },
+                                { exception -> Log.d("GoogleDebug", "The account could not be created: ${exception.message}") }
                             )
                         }
                     }

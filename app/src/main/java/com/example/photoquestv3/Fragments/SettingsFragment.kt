@@ -102,24 +102,41 @@ class SettingsFragment : Fragment() {
                     if (documentUserId == userId) {
                         db.collection("posts").document(document.id).delete()
                         Log.d("!!!!", "Posts deleted from collection")
-                    }else {
+                    } else {
 //else
                     }
                 }
             }
     }
-    private fun deleteAccountFromFirestore() {
-        val userId = auth.currentUser!!.uid
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users").document(userId).delete()
 
+    private fun deleteAccountFromFirestore() {
+        val userId = auth.currentUser?.uid
+        val db = FirebaseFirestore.getInstance()
+        val usersRef = db.collection("users")
+        usersRef.whereEqualTo("uid", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    usersRef.document(document.id).delete()
+                        .addOnSuccessListener {
+                            Log.d("!!!!", "Användare raderad från kollektionen")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("!!!!", "Misslyckades med att radera användaren", e)
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("!!!!", "Misslyckades med att hämta användardokument", exception)
+            }
     }
 
-private fun returnHomeActivity() {
-    val intent = Intent(requireContext(), HomeActivity::class.java)
-    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-    startActivity(intent)
-    requireActivity().finish()
-}
+
+    private fun returnHomeActivity() {
+        val intent = Intent(requireContext(), HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        requireActivity().finish()
+    }
 
 }
