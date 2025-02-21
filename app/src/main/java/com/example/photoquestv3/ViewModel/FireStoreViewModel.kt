@@ -25,8 +25,20 @@ class FireStoreViewModel: ViewModel() {
     //    test
     val posts123 = MutableLiveData<List<Post>>()
 
+
+    private val _profileImage = MutableLiveData<String?>()
+    val profileImage: MutableLiveData<String?> = _profileImage
+
+    private val _userQuote = MutableLiveData<String?>()
+    val userQuote: MutableLiveData<String?> = _userQuote
+
+    private val _followingStatus = MutableLiveData<Boolean>()
+    val followingStatus: LiveData<Boolean> = _followingStatus
+
+
     private val _userImages = MutableLiveData<List<String>>()
     val userImages: LiveData<List<String>> = _userImages
+
 
     //    Call in Fragment or Activity.
     fun fetchPosts() {
@@ -73,6 +85,15 @@ class FireStoreViewModel: ViewModel() {
             }
     }
 
+
+    fun checkFollowingStatus(currentUserId: String,targetUserId: String) : LiveData<Boolean> {
+        return fireStoreDb.checkFollowingStatus(currentUserId,targetUserId)
+    }
+
+    fun unfollowUser(currentUserId: String,targetUserId: String) {
+        fireStoreDb.unfollowFollower(currentUserId,targetUserId)
+    }
+    
     fun loadUserImages(userId: String){
         viewModelScope.launch {
             val images = fireStoreDb.fetchUserImages(userId)

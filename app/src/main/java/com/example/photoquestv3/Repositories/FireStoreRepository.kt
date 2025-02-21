@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -33,7 +35,9 @@ class FireStoreRepository {
 
     private var likesListener: ListenerRegistration? = null
 
-
+    /**
+     * Function to add a User to the database
+     */
  suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
         val user = User(email,name,userName,uid,imageUrl,biography)
 
@@ -50,7 +54,10 @@ class FireStoreRepository {
         }
     }
 
-    //    Updated with timestamp
+
+    /**
+     * Function to Save a post to the Database
+     */
     suspend fun savePostToDatabase(imageUrl: String,description : String) {
         val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
@@ -150,7 +157,10 @@ class FireStoreRepository {
             null
         }
     }
- 
+
+    /**
+     * Method to Follow a person
+     */
     fun followUser(currentUserId : String, targetUserId : String) {
         CoroutineScope(Dispatchers.IO).launch {
         val currentUserRef = db.collection("users").document(currentUserId)
@@ -164,42 +174,52 @@ class FireStoreRepository {
             }
 
         }
-        //
 
-    }
+
+     }
+
     
-    
-    fun getFollowerPosts(currentUserId: String) : LiveData<List<Post>> {
-        val liveData =  MutableLiveData<List<Post>>()
+
+    /**
+     * Method to get followers posts
+     * //TODO Need to fetch own posts aswell
+     */
+    fun getFollowerPosts(currentUserId: String): LiveData<List<Post>> {
+        val liveData = MutableLiveData<List<Post>>()
 
         val currentUserRef = db.collection("users").document(currentUserId)
 
         currentUserRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
-
                 val following = documentSnapshot.get("following") as List<String>
 
-                val postsRef = db.collection("posts")
-                postsRef.whereIn("userid", following)
-                    .orderBy("timestamp",Query.Direction.DESCENDING)
-                    .addSnapshotListener {snapshot, exception ->
-                        if (exception != null) {
-                            Log.d("FireStore","Error getting posts")
-                            return@addSnapshotListener
-                        }
-
-                        val postslist = mutableListOf<Post>()
-                        snapshot?.documents?.forEach {documents ->
-                            val post = documents.toObject(Post::class.java)
-                            if (post != null) {
-                                postslist.add(post)
+                if (following.isNotEmpty()) {
+                    val postsRef = db.collection("posts")
+                    postsRef.whereIn("userid", following)
+                        .orderBy("timestamp", Query.Direction.DESCENDING)
+                        .addSnapshotListener { snapshot, exception ->
+                            if (exception != null) {
+                                Log.d("FireStore", "Error getting posts")
+                                return@addSnapshotListener
                             }
-                        }
 
-                        liveData.value = postslist
-                    }
+                            val postsList = mutableListOf<Post>()
+                            snapshot?.documents?.forEach { document ->
+                                val post = document.toObject(Post::class.java)
+                                if (post != null) {
+                                    postsList.add(post)
+                                }
+                            }
+
+
+                            liveData.value = postsList
+                        }
+                } else {
+                    liveData.value = emptyList()
+                }
             }
         }
+
         return liveData
     }
 
@@ -304,6 +324,42 @@ class FireStoreRepository {
                 Log.d("FireStore","Error during unfollow operation..")
             }
          }
+
+    }
+
+    /**
+     * Method to unfollow
+     */
+    fun unfollowFollower(currentUserId: String,targetUserId: String) {
+         CoroutineScope(Dispatchers.IO).launch {
+        val currentUserRef = db.collection("users").document(currentUserId)
+        val targetUserRef = db.collection("users").document(targetUserId)
+            try {
+                currentUserRef.update("following",FieldValue.arrayRemove(targetUserId)).await()
+                targetUserRef.update("followers",FieldValue.arrayRemove(currentUserId)).await()
+
+            }catch (e : Exception) {
+                Log.d("FireStore","Error during unfollow operation..")
+            }
+         }
+
+    }
+
+//
+    fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
+        val liveData = MutableLiveData<Boolean>()
+
+        val currentUserRef = db.collection("users").document(currentUserId)
+        currentUserRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val following = document.get("following") as List<String>
+                liveData.value = following.contains(targetUserId)
+            } else {
+                liveData.value = false
+            }
+        }
+
+        return liveData
 
     }
 

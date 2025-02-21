@@ -47,9 +47,12 @@ class ProfileFragment : Fragment() {
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
-                updateUserData()
-                fireStoreVm.loadUserImages(uid)
+                updateData()
+                checkFollowingStatus()
                 layoutManager()
+                fireStoreVm.loadUserImages(uid)
+            }
+
 
             }
         }
@@ -62,11 +65,22 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.followButton.setOnClickListener {
             auth.getCurrentUser()?.let { currentUser ->
-                fireStoreVm.followUser(currentUser.uid, targetUserId = user.uid)
+                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
+                    if (isFollowing) {
+                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                    } else {
+                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                    }
+                    checkFollowingStatus()
+                }
             }
         }
+
+
+        
 
         binding.buttonLogout.setOnClickListener{
             authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
@@ -103,6 +117,18 @@ class ProfileFragment : Fragment() {
             .placeholder(R.drawable.photo)
             .into(binding.profileImageImageView)
     }
+    
+    private fun checkFollowingStatus() {
+        auth.getCurrentUser()?.let { currentUser ->
+            fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
+                if (isFollowing) {
+                    binding.followButton.text = "Unfollow"
+                } else {
+                    binding.followButton.text = "Follow"
+                }
+            }
+        }
+    }
 
     private fun layoutManager(){
         binding.profileRecycler.apply{
@@ -110,6 +136,5 @@ class ProfileFragment : Fragment() {
             adapter = profileAdapter
         }
     }
-
 
 }
