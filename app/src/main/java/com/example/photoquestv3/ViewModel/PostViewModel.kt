@@ -1,22 +1,15 @@
 package com.example.photoquestv3.ViewModel
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.Repositories.PostRepository
-import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.getField
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class PostViewModel : ViewModel() {
@@ -71,24 +64,8 @@ class PostViewModel : ViewModel() {
         viewModelScope.launch {
             if (postId != null) {
                 setItemId(postId)
-                startListeningToLikes(postId)
+
                 val success = fireStoreRepo.addLikesToPost(postId)
-                if (success) {
-                    _dataChanged.value = true
-                } else {
-                    _toastMessage.value = "Failed to like post"
-                    _toastMessage.value = null
-                }
-            }
-        }
-    }
-
-    fun addLikesToPost123(postId: String?) {
-        viewModelScope.launch {
-            if (postId != null) {
-                setItemId(postId)
-
-                val success = fireStoreRepo.addLikesToPost123(postId)
                 if (success) {
                     _toastMessage.value = "Successfully added a like!"
                 } else {

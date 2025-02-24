@@ -3,17 +3,12 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
@@ -260,46 +255,6 @@ class FireStoreRepository {
             }
     }
 
-    suspend fun addLikesToPost(postId: String): Boolean {
-
-        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-
-        try {
-            val docRef = db.collection("posts").document(postId)
-            val document = docRef.get().await()
-
-            if (document.exists()) {
-
-                docRef.update("likedBy", FieldValue.arrayUnion(currentUser)).await()
-                val likeCounter = document.getLong("likes") ?: 0
-
-                val friendsLiked = document.get("likedBy") as? List<String>
-
-                if (friendsLiked?.contains(currentUser) == false) {
-                    val newLikeCounter = likeCounter + 1
-                    docRef.update("likes", newLikeCounter).await()
-                    Log.d("!!!", "Likes +")
-                    return true
-
-                } else {
-
-                    val newLikeCounter = likeCounter - 1
-                    docRef.update("likes", newLikeCounter).await()
-                    docRef.update("likedBy", FieldValue.arrayRemove(currentUser)).await()
-                    Log.d("!!!", "Likes -")
-                    return false
-                }
-
-            } else {
-                Log.d("!!!", "Post doesnt exist.")
-                return false
-            }
-        } catch (e: Exception) {
-            Log.e("PostRepository", "Error updating likes", e)
-            return false
-        }
-    }
-
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
@@ -317,7 +272,7 @@ class FireStoreRepository {
 
     }
 
-    suspend fun addLikesToPost123(postId: String): Boolean {
+    suspend fun addLikesToPost(postId: String): Boolean {
         try {
             val docRef = db.collection("posts").document(postId)
             val currentUserId = auth.currentUser?.uid ?: return false
