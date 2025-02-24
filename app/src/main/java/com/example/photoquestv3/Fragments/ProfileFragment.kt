@@ -57,13 +57,6 @@ class ProfileFragment : Fragment() {
         authUser = Firebase.auth
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
 
-        challengesVm.countCompletedChallenges()
-        challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { completedCount ->
-            binding.profileHeartTextView.text = completedCount.toString()
-
-        }
-
-
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
@@ -74,6 +67,15 @@ class ProfileFragment : Fragment() {
                 fireStoreVm.loadUserImages(uid)
                 fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profileFollowerTextView.text = count.toString()
+                }
+
+
+                // Shows how many challenges user has completed.
+                challengesVm.countCompletedChallenges(uid)
+
+                    challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { count ->
+                    binding.profileHeartTextView.text = count.toString()
+
                 }
 
                 fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner) { count ->
@@ -185,6 +187,10 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    /**
+     *
+     * Shows the settingsbutton in users own profile, hides in other user's profile.
+     */
     fun showSettings() {
         val currentUser = auth.getCurrentUser()
 

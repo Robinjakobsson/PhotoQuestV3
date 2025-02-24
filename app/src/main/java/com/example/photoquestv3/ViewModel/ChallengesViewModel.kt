@@ -36,8 +36,13 @@ class ChallengesViewModel : ViewModel() {
         }
     }
 
-    fun countCompletedChallenges() {
-        challengesRepository.countCompletedChallenges { count, error ->
+    /**
+     * Fetch number of completed challenges.
+     */
+
+    fun countCompletedChallenges(uid: String) {
+
+        challengesRepository.countCompletedChallenges(uid) { count, error ->
             if (error != null) {
                 Log.d("ChallengesViewModel", "Error fetching number of completed challenges")
             } else {
