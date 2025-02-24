@@ -344,12 +344,16 @@ class FireStoreRepository {
 
     fun fetchFriendList(postId: String): LiveData<List<User>> {
         val liveData = MutableLiveData<List<User>>()
-        Log.d("FireStoreRepository", "fetchFriendList called for postId: $postId")
 
-        db.collection("posts").document(postId).get()
-            .addOnSuccessListener { doc ->
-                if (doc.exists()) {
-                    val likedBy = doc.get("likedBy") as? List<String> ?: emptyList()
+        db.collection("posts").document(postId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreRepository", "Error fetching likes: ${error.message}")
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val likedBy = snapshot.get("likedBy") as? List<String> ?: emptyList()
 
                     if (likedBy.isNotEmpty()) {
                         db.collection("users").whereIn("uid", likedBy).get()
@@ -367,9 +371,6 @@ class FireStoreRepository {
                 } else {
                     liveData.value = emptyList()
                 }
-            }.addOnFailureListener {
-                Log.e("FireStoreRepository", "Error fetching post data: ${it.message}")
-                liveData.value = emptyList()
             }
 
         return liveData
