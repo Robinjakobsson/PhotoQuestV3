@@ -14,116 +14,154 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="400dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="1dp"
+            android:layout_marginEnd="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.454"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_Image_ImageView">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:textStyle="bold"
-                    android:id="@+id/profile_Name_TextView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/profile_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.197" />
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/user_Quote_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
-                    app:layout_constraintVertical_bias="0.111" />
+                    <LinearLayout
+                        android:id="@+id/inside_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/profile_Follower_Button"
-                    android:layout_width="49dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_person"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:id="@+id/profile_heart_Button"
-                    android:layout_width="47dp"
-                    android:layout_height="46dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/heart_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_Follower_Button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <LinearLayout
+                        android:id="@+id/user_bio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="start"
+                        >
 
-                <ImageButton
-                    android:id="@+id/profile_post_button"
-                    android:layout_width="46dp"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/post_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_heart_Button"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Name_TextView"
-                    app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:textStyle="bold"
+                            android:id="@+id/profile_Name_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.014"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.197" />
 
-                <TextView
-                    android:id="@+id/profile_Post_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="192dp"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_post_button"
-                    app:layout_constraintVertical_bias="0.333" />
+                        <TextView
+                            android:id="@+id/user_Quote_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="TextView"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.014"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
+                            app:layout_constraintVertical_bias="0.111" />
 
-                <TextView
-                    android:id="@+id/profile_Heart_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Post_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_heart_Button"
-                    app:layout_constraintVertical_bias="0.09" />
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/profile_Follower_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.73"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Heart_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Follower_Button"
-                    app:layout_constraintVertical_bias="0.523" />
+                    <LinearLayout
+                        android:id="@+id/icons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="end"
+                        android:gravity="end"
+                        >
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/profile_post_button"
+                            android:layout_gravity="start"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/photoquest_posts"
+                            android:scaleType="fitXY"
+                            />
+
+                        <ImageView
+                            android:id="@+id/profile_heart_Button"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:layout_marginEnd="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/photoquest_star"
+                            />
+
+                        <ImageView
+                            android:id="@+id/profile_Follower_Button"
+                            android:layout_gravity="end"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/photoquest_profile"
+                            />
+
+                    </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/numbers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:gravity="end"
+                         >
+
+                        <TextView
+                            android:id="@+id/profile_Post_TextView"
+                            android:layout_gravity="start"
+                            android:gravity="center_horizontal"
+                            android:layout_width="52dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:text="123p"
+                            />
+
+                        <TextView
+                            android:id="@+id/profile_Heart_TextView"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:layout_width="52dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:text="123c"
+                            />
+
+                        <TextView
+                            android:id="@+id/profile_Follower_TextView"
+                            android:layout_gravity="end"
+                            android:gravity="center_horizontal"
+                            android:layout_width="52dp"
+                            android:layout_height="wrap_content"
+                            android:text="123f"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
         </androidx.cardview.widget.CardView>
 
@@ -131,6 +169,7 @@
             android:id="@+id/profileRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="0dp"
             android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
