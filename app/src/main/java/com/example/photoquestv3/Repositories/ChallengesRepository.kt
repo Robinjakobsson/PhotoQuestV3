@@ -133,24 +133,24 @@ class ChallengesRepository {
 
         collection?.collection("challenges")?.whereEqualTo("date", formattedDate)
             ?.get()
-                ?.addOnSuccessListener { documents ->
-                    if (documents != null && !documents.isEmpty) {
-                        val document = documents.documents[0]
-                        document.reference.update("completed", true)
-                            .addOnSuccessListener {
-                                Log.d("ChallengesRepository", "$formattedDate challenge completed!")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w("ChallengesRepository", "Error updating challenge", e)
-                            }
-                    } else {
-                        Log.w("ChallengesRepository", "No challenge found $formattedDate")
-                    }
+            ?.addOnSuccessListener { documents ->
+                if (documents != null && !documents.isEmpty) {
+                    val document = documents.documents[0]
+                    document.reference.update("completed", true)
+                        .addOnSuccessListener {
+                            Log.d("ChallengesRepository", "$formattedDate challenge completed!")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("ChallengesRepository", "Error updating challenge", e)
+                        }
+                } else {
+                    Log.w("ChallengesRepository", "No challenge found $formattedDate")
                 }
-                ?.addOnFailureListener { e ->
-                    Log.w("ChallengesRepository", "Can't find challenge", e)
-                }
-        }
+            }
+            ?.addOnFailureListener { e ->
+                Log.w("ChallengesRepository", "Can't find challenge", e)
+            }
+    }
 
     fun markChallengeNotDone() {
 
@@ -176,6 +176,23 @@ class ChallengesRepository {
             }
             ?.addOnFailureListener { e ->
                 Log.w("!!!!", "Can't find challenge", e)
+            }
+    }
+
+    fun countCompletedChallenges(onResult: (Int?, String?) -> Unit) {
+
+        collection?.collection("challenges")?.whereEqualTo("completed", true)
+            ?.get()
+            ?.addOnSuccessListener { document ->
+
+                val numberOfCompletedChallenges = document.size()
+                Log.d("ChallengesRepository", "Number of completed challenges: ${numberOfCompletedChallenges}")
+                onResult(numberOfCompletedChallenges, null)
+            }?.addOnFailureListener() { exception ->
+                Log.d(
+                    "ChallengesRepository", "Failed to fetch number of completed challenges ${exception.message}")
+
+                onResult(null, exception.message)
             }
     }
 

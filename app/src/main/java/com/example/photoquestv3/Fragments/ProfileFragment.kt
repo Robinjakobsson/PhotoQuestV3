@@ -16,7 +16,9 @@ import com.example.photoquestv3.Adapter.ProfileAdapter
 import com.example.photoquestv3.Fragments.SettingsFragment
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
+import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentProfileBinding
@@ -36,6 +38,7 @@ class ProfileFragment : Fragment() {
     lateinit var fireStoreVm: FireStoreViewModel
     private lateinit var user: User
     private lateinit var profileAdapter: ProfileAdapter
+    private lateinit var challengesVm : ChallengesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +51,14 @@ class ProfileFragment : Fragment() {
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
         profileAdapter = ProfileAdapter(emptyList())
         authUser = Firebase.auth
+        challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
+
+        challengesVm.countCompletedChallenges()
+        challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { completedCount ->
+           binding.profileHeartTextView.text = completedCount.toString()
+
+        }
+
 
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
