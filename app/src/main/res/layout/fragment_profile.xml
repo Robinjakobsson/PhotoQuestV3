@@ -67,11 +67,12 @@
 
                 <ImageButton
                     android:id="@+id/profile_heart_Button"
-                    android:layout_width="47dp"
-                    android:layout_height="46dp"
+                    android:layout_width="40dp"
+                    android:layout_height="36dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/heart_icon"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/photo_quest_logo_start"
                     app:layout_constraintEnd_toStartOf="@+id/profile_Follower_Button"
                     app:layout_constraintTop_toTopOf="parent" />
 
