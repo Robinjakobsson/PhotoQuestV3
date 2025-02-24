@@ -98,13 +98,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-
-
-
-        binding.buttonLogout.setOnClickListener{
-            authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
-            returnHomeActivity()
-        }
         binding.profileSettingButton.setOnClickListener {
             startSettingsFragment()
         }
