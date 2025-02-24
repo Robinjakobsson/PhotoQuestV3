@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,7 +45,6 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
         fireStoreVm.userImages.observe(viewLifecycleOwner){images -> profileAdapter.updateData(images) }
-
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
         profileAdapter = ProfileAdapter(emptyList())
         authUser = Firebase.auth
@@ -60,6 +60,11 @@ class ProfileFragment : Fragment() {
                 fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner){ count ->
                     binding.profileFollowerTextView.text = count.toString()
                 }
+
+                fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner){count ->
+                    binding.profilePostTextView.text = count.toString()
+                }
+
             }
         }
         return binding.root
