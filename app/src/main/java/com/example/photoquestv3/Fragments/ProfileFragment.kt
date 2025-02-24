@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
     lateinit var fireStoreVm: FireStoreViewModel
     private lateinit var user: User
     private lateinit var profileAdapter: ProfileAdapter
-    private lateinit var challengesVm : ChallengesViewModel
+    private lateinit var challengesVm: ChallengesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +47,11 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
-        fireStoreVm.userImages.observe(viewLifecycleOwner){images -> profileAdapter.updateData(images) }
+        fireStoreVm.userImages.observe(viewLifecycleOwner) { images ->
+            profileAdapter.updateData(
+                images
+            )
+        }
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
         profileAdapter = ProfileAdapter(emptyList())
         authUser = Firebase.auth
@@ -55,7 +59,7 @@ class ProfileFragment : Fragment() {
 
         challengesVm.countCompletedChallenges()
         challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { completedCount ->
-           binding.profileHeartTextView.text = completedCount.toString()
+            binding.profileHeartTextView.text = completedCount.toString()
 
         }
 
@@ -68,13 +72,15 @@ class ProfileFragment : Fragment() {
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
-                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner){ count ->
+                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profileFollowerTextView.text = count.toString()
                 }
 
-                fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner){count ->
+                fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profilePostTextView.text = count.toString()
                 }
+
+                showSettings()
 
             }
         }
@@ -87,20 +93,18 @@ class ProfileFragment : Fragment() {
 
         binding.followButton.setOnClickListener {
             auth.getCurrentUser()?.let { currentUser ->
-                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
-                    if (isFollowing) {
-                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
-                    } else {
-                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
+                    .observe(viewLifecycleOwner) { isFollowing ->
+                        if (isFollowing) {
+                            fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                        } else {
+                            fireStoreVm.followUser(currentUser.uid, user.uid)
+                        }
+                        checkFollowingStatus()
                     }
-                    checkFollowingStatus()
-                }
             }
         }
 
-        binding.profileSettingButton.setOnClickListener {
-            startSettingsFragment()
-        }
     }
 
     override fun onDestroyView() {
@@ -135,15 +139,12 @@ class ProfileFragment : Fragment() {
     }
 
 
-
-
     private fun startSettingsFragment() {
         val settingsFragment = SettingsFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, settingsFragment, "settingsFragment")
             .commit()
     }
-
 
 
     private fun returnHomeActivity() {
@@ -177,10 +178,24 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun layoutManager(){
-        binding.profileRecycler.apply{
-            layoutManager = GridLayoutManager(context,2)
+    private fun layoutManager() {
+        binding.profileRecycler.apply {
+            layoutManager = GridLayoutManager(context, 2)
             adapter = profileAdapter
+        }
+    }
+
+    fun showSettings() {
+        val currentUser = auth.getCurrentUser()
+
+        if (currentUser?.uid != user.uid) {
+            binding.profileSettingButton.visibility = View.GONE
+        } else {
+            binding.followButton.visibility = View.VISIBLE
+
+            binding.profileSettingButton.setOnClickListener {
+                startSettingsFragment()
+            }
         }
     }
 }
