@@ -13,7 +13,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/infoLikesInBottomSheet"
-        tools:listitem="@layout/item_likes" />
+        tools:listitem="@layout/item_likes"
+        android:padding="5dp"
+        />
 
     <TextView
         android:id="@+id/infoLikesInBottomSheet"

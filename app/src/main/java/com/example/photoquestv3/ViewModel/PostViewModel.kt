@@ -109,7 +109,7 @@ class PostViewModel : ViewModel() {
         fireStoreRepo.stopListeningToLikes()
     }
 
-    fun fetchFriendsLiked(postId: String) : LiveData<List<User>> {
+    fun fetchFriendList(postId: String) : LiveData<List<User>> {
        return fireStoreRepo.fetchFriendList(postId)
     }
 

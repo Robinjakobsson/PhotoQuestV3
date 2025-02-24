@@ -45,7 +45,7 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
         adapter = LikesAdapter(mutableListOf())
         binding.likesRecyclerView.adapter = adapter
 
-        postVm.fetchFriendsLiked(postId).observe(viewLifecycleOwner) { friends ->
+        postVm.fetchFriendList(postId).observe(viewLifecycleOwner) { friends ->
             Log.d("!!!", "Observed friends: ${friends.size}")
             adapter.updateList(friends)
 
