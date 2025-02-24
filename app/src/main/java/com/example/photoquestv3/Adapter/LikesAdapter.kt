@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.model.content.RoundedCorners
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 
@@ -39,10 +41,6 @@ class LikesAdapter (
             .load(friendItem.imageUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.profileImage)
-    }
-
-    fun getFriendLikeAt(position: Int): User {
-        return friendList[position]
     }
 
     fun updateList(friends : List<User>) {
