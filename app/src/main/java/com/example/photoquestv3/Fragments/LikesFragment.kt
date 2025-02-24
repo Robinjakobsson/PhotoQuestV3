@@ -21,7 +21,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
 
-    private var binding: FragmentLikesBinding? = null
+    private var _binding: FragmentLikesBinding? = null
+    private val binding get() = _binding!!
+
+
+
     var listOfFriends = mutableListOf<User>()
     lateinit var postVm: PostViewModel
 
@@ -31,9 +35,8 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLikesBinding.inflate(inflater, container, false)
-
-        return binding!!.root
+        _binding = FragmentLikesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +55,11 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
         }
 
         postVm.fetchFriendsLiked(postId)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
