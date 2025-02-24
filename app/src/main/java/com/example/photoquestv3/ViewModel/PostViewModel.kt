@@ -113,10 +113,7 @@ class PostViewModel : ViewModel() {
         viewModelScope.launch {
             fireStoreRepo.fetchFriendList(postId) { friendsLiked ->
                 Log.d("!!!", "fetchfriendsLikes körs")
-                val friends = friendsLiked.map { friendName ->
-                    User(username = friendName)
-                }
-                _listOfFriends.value = friends
+                _listOfFriends.value = friendsLiked
             }
         }
     }

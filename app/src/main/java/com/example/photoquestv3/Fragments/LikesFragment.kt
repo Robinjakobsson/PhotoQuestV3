@@ -24,10 +24,8 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
     private var _binding: FragmentLikesBinding? = null
     private val binding get() = _binding!!
 
-
-
-    var listOfFriends = mutableListOf<User>()
-    lateinit var postVm: PostViewModel
+    private var listOfFriends = mutableListOf<User>()
+    private lateinit var postVm: PostViewModel
 
     lateinit var adapter: LikesAdapter
 
@@ -44,9 +42,9 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
 
         postVm = ViewModelProvider(this)[PostViewModel::class.java]
 
-        binding?.likesRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        adapter = LikesAdapter(requireContext(), listOfFriends)
-        binding?.likesRecyclerView?.adapter = adapter
+        binding.likesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = LikesAdapter(listOfFriends)
+        binding.likesRecyclerView.adapter = adapter
 
         postVm.listOfFriends.observe(viewLifecycleOwner) { friends ->
             Log.d("!!!", "Observed friends: ${friends.size}")
