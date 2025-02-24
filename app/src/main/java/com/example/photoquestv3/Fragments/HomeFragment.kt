@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.PostAdapter
@@ -21,9 +19,6 @@ import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 
-import com.example.photoquestv3.databinding.FragmentRegisterBinding
-
-
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -31,10 +26,9 @@ class HomeFragment : Fragment() {
     private lateinit var challengesVm: ChallengesViewModel
     private lateinit var vmFireStore: FireStoreViewModel
     private lateinit var postVm: PostViewModel
-    private lateinit var authVm : AuthViewModel
-    lateinit var adapter : PostAdapter
-    private lateinit var currentUserId : String
-
+    private lateinit var authVm: AuthViewModel
+    lateinit var adapter: PostAdapter
+    private lateinit var currentUserId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +40,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeViewModels() // initierar ViewModels i denna
+        initializeViewModels()
         currentUserId = authVm.getCurrentUser()?.uid.toString()
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = PostAdapter(emptyList(), postVm, onPostClicked = { post ->
+            navigateToProfile(post.userid)
+        })
+        binding.recyclerView.adapter = adapter
 
         postVm.toastMessage.observe(viewLifecycleOwner) { messages ->
             messages?.let {
@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
             Log.d("HomeFragment", "Selected post id is: $itemId")
         }
 
-        observeAndDisplayPosts() // Gjorde en funktion av allt kladd
+        observeAndDisplayPosts()
 
         postVm.dataChanged.observe(viewLifecycleOwner) { dataChanged ->
             if (dataChanged) {
@@ -68,11 +68,6 @@ class HomeFragment : Fragment() {
         }
 
         showDailyChallenge()
-
-    }
-
-    private fun fetchPosts123() {
-        vmFireStore.fetchPosts123()
     }
 
     private fun showDailyChallenge() {
@@ -105,16 +100,13 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     fun observeAndDisplayPosts() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         vmFireStore.getPostsFromFollowing(currentUserId).observe(viewLifecycleOwner) { posts ->
-            adapter = PostAdapter(posts, postVm, onPostClicked = { post ->
-                navigateToProfile(post.userid)
-            })
-            binding.recyclerView.adapter = adapter
             adapter.updatePosts(posts)
         }
     }
+
     fun initializeViewModels() {
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
