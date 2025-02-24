@@ -57,6 +57,8 @@ class ProfileFragment : Fragment() {
         authUser = Firebase.auth
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
 
+
+
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
                 user = fireStoreVm.fetchUserData(uid) ?: return@launch
@@ -65,6 +67,8 @@ class ProfileFragment : Fragment() {
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
+
+
                 fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profileFollowerTextView.text = count.toString()
                 }
@@ -81,7 +85,6 @@ class ProfileFragment : Fragment() {
                 fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profilePostTextView.text = count.toString()
                 }
-
                 showSettings()
 
             }
@@ -106,7 +109,6 @@ class ProfileFragment : Fragment() {
                     }
             }
         }
-
     }
 
     override fun onDestroyView() {
@@ -197,7 +199,7 @@ class ProfileFragment : Fragment() {
         if (currentUser?.uid != user.uid) {
             binding.profileSettingButton.visibility = View.GONE
         } else {
-            binding.followButton.visibility = View.VISIBLE
+            binding.profileSettingButton.visibility = View.VISIBLE
 
             binding.profileSettingButton.setOnClickListener {
                 startSettingsFragment()

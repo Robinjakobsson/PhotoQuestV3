@@ -170,10 +170,12 @@
             android:id="@+id/follow_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/profile_Setting_Button"
-            app:layout_constraintRight_toRightOf="parent"
             android:layout_margin="10dp"
-            android:text="@string/follow"/>
+            android:layout_marginBottom="24dp"
+            android:text="@string/follow"
+            app:layout_constraintBottom_toTopOf="@+id/cardView2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/profile_Image_ImageView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
