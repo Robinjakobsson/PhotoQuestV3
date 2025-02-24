@@ -39,20 +39,19 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         postVm = ViewModelProvider(this)[PostViewModel::class.java]
 
         binding.likesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = LikesAdapter(listOfFriends)
+        adapter = LikesAdapter(mutableListOf())
         binding.likesRecyclerView.adapter = adapter
 
-        postVm.listOfFriends.observe(viewLifecycleOwner) { friends ->
+        postVm.fetchFriendsLiked(postId).observe(viewLifecycleOwner) { friends ->
             Log.d("!!!", "Observed friends: ${friends.size}")
             adapter.updateList(friends)
 
         }
 
-        postVm.fetchFriendsLiked(postId)
+
     }
 
     override fun onDestroyView() {

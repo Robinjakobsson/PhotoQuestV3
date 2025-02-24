@@ -108,15 +108,11 @@ class PostViewModel : ViewModel() {
         super.onCleared()
         fireStoreRepo.stopListeningToLikes()
     }
-    
-        fun fetchFriendsLiked(postId: String) {
-        viewModelScope.launch {
-            fireStoreRepo.fetchFriendList(postId) { friendsLiked ->
-                Log.d("!!!", "fetchfriendsLikes körs")
-                _listOfFriends.value = friendsLiked
-            }
-        }
+
+    fun fetchFriendsLiked(postId: String) : LiveData<List<User>> {
+       return fireStoreRepo.fetchFriendList(postId)
     }
+
 }
 
 

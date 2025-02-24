@@ -12,7 +12,7 @@ import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 
 class LikesAdapter (
-    private var friendList: List<User>,
+    private var friendList: MutableList<User>,
 ) : RecyclerView.Adapter<LikesAdapter.LikesViewHolder>() {
 
     inner class LikesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,9 +46,8 @@ class LikesAdapter (
     }
 
     fun updateList(friends : List<User>) {
-        friendList = friends
-        Log.d("LikesAdapter", "Updating list with ${friends.size} friends")
+        friendList.clear()
+        friendList.addAll(friends)
         notifyDataSetChanged()
-
     }
 }

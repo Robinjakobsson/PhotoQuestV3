@@ -342,34 +342,37 @@ class FireStoreRepository {
     }
 
 
-    suspend fun fetchFriendList(postId: String, callback: (List<User>) -> Unit) {
+    fun fetchFriendList(postId: String): LiveData<List<User>> {
+        val liveData = MutableLiveData<List<User>>()
         Log.d("FireStoreRepository", "fetchFriendList called for postId: $postId")
-        try {
-            val docRef = db.collection("posts").document(postId)
-            val document = docRef.get().await()
 
-            if (document.exists()) {
-                val friendsLiked = document.get("likedBy") as? List<String> ?: emptyList()
-                val friends = mutableListOf<User>()
+        db.collection("posts").document(postId).get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    val likedBy = doc.get("likedBy") as? List<String> ?: emptyList()
 
-                for (userId in friendsLiked) {
-                    try {
-                        val userDocument = db.collection("users").document(userId).get().await()
-                        val user = userDocument.toObject(User::class.java)
-                        if (user != null) {
-                            friends.add(user)
-                        }
-                    } catch (e: Exception) {
-                        Log.d("FireStoreRepository", "Error fetching user: ${e.message}")
+                    if (likedBy.isNotEmpty()) {
+                        db.collection("users").whereIn("uid", likedBy).get()
+                            .addOnSuccessListener { usersSnapshot ->
+                                val friendsList = usersSnapshot.toObjects(User::class.java)
+                                liveData.value = friendsList
+                            }
+                            .addOnFailureListener {
+                                Log.e("FireStoreRepository", "Error fetching user data: ${it.message}")
+                                liveData.value = emptyList()
+                            }
+                    } else {
+                        liveData.value = emptyList()
                     }
+                } else {
+                    liveData.value = emptyList()
                 }
-                callback(friends)
-            } else {
-                callback(emptyList())
+            }.addOnFailureListener {
+                Log.e("FireStoreRepository", "Error fetching post data: ${it.message}")
+                liveData.value = emptyList()
             }
-        } catch (e: Exception) {
-            Log.e("!!!", "Error fetching friends", e)
-        }
+
+        return liveData
     }
 
 
