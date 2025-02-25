@@ -60,11 +60,11 @@ class PostAdapter(
 
 
         if(post.isChecked) {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#70FFFF33"))
 
         }
         else {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#90FFFFFF"))
         }
 
         holder.likeCounter.text = post.likes.toString()
