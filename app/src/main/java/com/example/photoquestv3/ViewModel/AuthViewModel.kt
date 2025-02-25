@@ -18,6 +18,12 @@ class AuthViewModel : ViewModel() {
     val username: MutableLiveData<String> =_userName
 
 
+    fun createGoogleAccount(email: String,password: String,name: String,username: String,imageUri: Uri,biography: String,onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
+        viewModelScope.launch {
+            auth.createGoogleAccount(email, name, username, imageUri, biography, onSuccess, onFailure)
+        }
+    }
+
 
      fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {

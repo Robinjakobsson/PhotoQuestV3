@@ -1,5 +1,7 @@
 package com.example.photoquestv3.Adapter
 
+
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,26 +10,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
+import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.Models.Post
-import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
-import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class PostAdapter(
     private var postList: List<Post>,
-    val postVm : PostViewModel,
-    val onPostClicked: (Post) -> Unit
+    val postVm: PostViewModel,
+    val onPostClicked: (Post) -> Unit,
+    val onPostTextClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
@@ -44,8 +47,7 @@ class PostAdapter(
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
         val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
         var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
-
-
+        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -61,11 +63,19 @@ class PostAdapter(
         val post = postList[position]
         holder.userName.text = post.username
         holder.description.text = post.description
-      
-//        Likes
+
+
+        if(post.isChecked) {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+
+        }
+        else {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+        }
+
         holder.likeCounter.text = post.likes.toString()
 
-        holder.likeCounter.setOnClickListener{
+        holder.likeCounter.setOnClickListener {
 
             val postId = post.postId
             val likesFragment = LikesFragment(postId)
@@ -76,15 +86,15 @@ class PostAdapter(
             }
 
         }
-        
+
         holder.likeButton.setOnClickListener {
-            postVm.addLikesToPost123(post.postId)
+            postVm.addLikesToPost(post.postId)
         }
-  
+
 
         holder.optionImage.setOnClickListener() {
             postVm.setItemId(post.postId)
-            
+
             val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
@@ -109,12 +119,18 @@ class PostAdapter(
             }
         }
 
-        holder.userName.setOnClickListener{
+        holder.userName.setOnClickListener {
             onPostClicked(post)
         }
-        holder.profileImage.setOnClickListener{
+        holder.profileImage.setOnClickListener {
             onPostClicked(post)
         }
-    }
+        holder.description.setOnClickListener {
+            val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
+            if (post.userid == currentUser) {
+                onPostTextClicked(post)
+            }
+        }
 
+    }
 }

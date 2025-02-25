@@ -1,6 +1,5 @@
 package com.example.photoquestv3.Adapter
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,27 +7,23 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.model.content.RoundedCorners
 import com.bumptech.glide.Glide
-import com.example.photoquestv3.Models.Challenges
-import com.example.photoquestv3.Models.Comment
-import com.example.photoquestv3.Models.Post
+import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 
 class LikesAdapter (
-
-    private val context : Context,
-    private var friendList: List<User>,
-    ) : RecyclerView.Adapter<LikesAdapter.LikesViewHolder>() {
+    private var friendList: MutableList<User>,
+) : RecyclerView.Adapter<LikesAdapter.LikesViewHolder>() {
 
     inner class LikesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var username: TextView = itemView.findViewById(R.id.userNameTextViewLikes)
-        var profileImage : ImageView = itemView.findViewById(R.id.ProfileImageLikes)
+        val username: TextView = itemView.findViewById(R.id.textUserName)
+        val profileImage : ImageView = itemView.findViewById(R.id.imageProfile)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikesViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_likes, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_likes, parent, false)
         return LikesViewHolder(view)
     }
 
@@ -37,21 +32,21 @@ class LikesAdapter (
     }
 
     override fun onBindViewHolder(holder: LikesViewHolder, position: Int) {
-        val friend = friendList[position]
+        val friendItem = friendList[position]
 
-        holder.username.text = friend.username
+        holder.username.text = friendItem.username
+        holder.profileImage.setImageResource(R.drawable.ic_person)
 
         Glide.with(holder.itemView.context)
-            .load(friend.imageUrl)
+            .load(friendItem.imageUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.profileImage)
     }
 
     
     fun updateList(friends : List<User>) {
-        friendList = friends
-        Log.d("!!!", "update friendlist. ${friendList.size}")
+        friendList.clear()
+        friendList.addAll(friends)
         notifyDataSetChanged()
-
     }
 }

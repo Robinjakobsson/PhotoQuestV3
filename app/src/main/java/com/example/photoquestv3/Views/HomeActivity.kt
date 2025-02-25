@@ -13,6 +13,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.example.photoquestv3.Fragments.RegisterFragment
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.example.photoquestv3.databinding.ActivityHomeBinding
@@ -20,6 +21,7 @@ import com.example.photoquestv3.databinding.ActivityHomeBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class HomeActivity : AppCompatActivity() {
     lateinit var binding: ActivityHomeBinding
@@ -37,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         auth = Firebase.auth
 
         binding.signUpButton.setOnClickListener { startRegisterFragment() }
@@ -47,6 +50,8 @@ class HomeActivity : AppCompatActivity() {
             startFeedActivity()
         }
     }
+
+
 
 
     fun startLoginFragment() {

@@ -71,9 +71,11 @@ class LoginFragment : Fragment() {
             }
         }
 
+        //used by facebook
         binding.fbLoginButton.setPermissions("email")
         binding.fbLoginButton.setOnClickListener { signInWithFb() }
 
+//returns to HomeActivity if back button pressed
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -88,6 +90,7 @@ class LoginFragment : Fragment() {
         binding.googleSignInButton.setOnClickListener { signInWithGoogle() }
     }
 
+    //creates a launcher for google auth
     fun getClient(): GoogleSignInClient {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client_id))
@@ -102,6 +105,7 @@ class LoginFragment : Fragment() {
         launcher.launch(signInClient.signInIntent)
     }
 
+    //open fb login page and checks for successful authentication
     private fun signInWithFb() {
         binding.fbLoginButton.registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
@@ -120,7 +124,7 @@ class LoginFragment : Fragment() {
                 }
             })
     }
-
+//if user is signed in with fb, gets data from fb with GraphRequest
     private fun getDataFromFb() {
         val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()) { jsonObject, response ->
             try {
@@ -131,6 +135,7 @@ class LoginFragment : Fragment() {
                 val imageUri = Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.facebook}")
 
                 val currentUser = firebaseAuth.currentUser
+                //if user is signed in, uppdates data i firestore with facebooks data
                 if (currentUser != null) {
                     val db = FirebaseFirestore.getInstance()
                     val usersRef = db.collection("users")
@@ -179,6 +184,7 @@ class LoginFragment : Fragment() {
         request.executeAsync()
     }
 
+    //gets token from fb
     private fun handleFacebookAccessToken(accessToken: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
         firebaseAuth.signInWithCredential(credential)
@@ -192,12 +198,13 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireActivity(), "Facebook authentication successful.", Toast.LENGTH_SHORT).show()
             }
     }
-
+//part of fb auth
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
+    //method for signing in with email and password
     private fun signIn() {
         val email = binding.loginEmail.text.toString().trim()
         val password = binding.loginPassword.text.toString().trim()
@@ -258,7 +265,7 @@ class LoginFragment : Fragment() {
                             val name = currentUser.displayName!!
                             val username = currentUser.displayName!!.lowercase()
 
-                            auth.createAccount(
+                            auth.createGoogleAccount(
                                 email,
                                 "why do we have it?",
                                 name,

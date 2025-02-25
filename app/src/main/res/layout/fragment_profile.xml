@@ -1,5 +1,3 @@
-
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,128 +8,177 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:id="@+id/settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+            
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
+            <ImageView
+                android:id="@+id/profile_Setting_Button"
+                android:layout_weight="0"
+                android:layout_width="52dp"
+                android:layout_height="45dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/photoquest_settings" />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="400dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.454"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_Image_ImageView">
+            app:layout_constraintTop_toBottomOf="@+id/follow_button">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout"
+            <ImageView
+                android:src="@drawable/card_gradient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
-                <TextView
-                    android:textStyle="bold"
-                    android:id="@+id/profile_Name_TextView"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/inside_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextVieww"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.197" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/user_Quote_TextView"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/user_bio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="start">
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:id="@+id/profile_Name_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.014"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.197" />
+
+                        <TextView
+                            android:id="@+id/user_Quote_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="TextView"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.014"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
+                            app:layout_constraintVertical_bias="0.111" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/icons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="end"
+                        android:gravity="end">
+
+                        <ImageView
+                            android:id="@+id/profile_post_button"
+                            android:layout_gravity="start"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:layout_marginEnd="20dp"
+                            android:src="@drawable/photoquest_posts"
+                            android:scaleType="fitXY" />
+
+                        <ImageView
+                            android:id="@+id/profile_heart_Button"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:layout_marginEnd="20dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/photoquest_star" />
+
+                        <ImageView
+                            android:id="@+id/profile_Follower_Button"
+                            android:layout_gravity="end"
+                            android:layout_width="52dp"
+                            android:layout_height="45dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/photoquest_profile" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/numbers"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
-                    app:layout_constraintVertical_bias="0.111" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="end">
 
-                <ImageButton
-                    android:id="@+id/profile_Follower_Button"
-                    android:layout_width="49dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_person"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/profile_Post_TextView"
+                        android:layout_gravity="start"
+                        android:gravity="center_horizontal"
+                        android:layout_width="52dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="123p" />
 
-                <ImageButton
-                    android:id="@+id/profile_heart_Button"
-                    android:layout_width="40dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/photo_quest_logo_start"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_Follower_Button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/profile_Heart_TextView"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_width="52dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="0" />
 
-                <ImageButton
-                    android:id="@+id/profile_post_button"
-                    android:layout_width="46dp"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/post_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_heart_Button"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Name_TextView"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/profile_Follower_TextView"
+                        android:layout_gravity="end"
+                        android:gravity="center_horizontal"
+                        android:layout_width="52dp"
+                        android:layout_height="wrap_content"
+                        android:text="123f" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/profile_Post_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="192dp"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_post_button"
-                    app:layout_constraintVertical_bias="0.333" />
-
-                <TextView
-                    android:id="@+id/profile_Heart_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Post_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_heart_Button"
-                    app:layout_constraintVertical_bias="0.09" />
-
-                <TextView
-                    android:id="@+id/profile_Follower_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.73"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Heart_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Follower_Button"
-                    app:layout_constraintVertical_bias="0.523" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/profileRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="0dp"
             android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -139,45 +186,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
-
-        <ImageView
-            android:id="@+id/profile_Image_ImageView"
-            android:layout_width="141dp"
-            android:layout_height="117dp"
-            android:layout_marginTop="56dp"
-            android:src="@drawable/image_rounded_corners"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_cardview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:cardCornerRadius="15dp"
+            android:layout_marginTop="30dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/settings_layout">
 
-        <ImageButton
-            android:id="@+id/profile_Setting_Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="88dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="97dp"
-            android:src="@drawable/setting_icon"
-            app:layout_constraintBottom_toTopOf="@+id/cardView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/profile_Image_ImageView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            <ImageView
+                android:id="@+id/profile_Image_ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/photoquest_profile" />
+        </androidx.cardview.widget.CardView>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/follow_button"
+            android:background="@drawable/button_gradient_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginBottom="24dp"
-            android:text="@string/follow"
-            app:layout_constraintBottom_toTopOf="@+id/cardView2"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profile_Image_ImageView" />
-
+            android:fontFamily="@font/impetus_heavy"
+            android:layout_marginTop="20dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:stateListAnimator="@null"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/profile_cardview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/follow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+</FrameLayout>

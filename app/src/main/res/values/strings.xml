@@ -38,5 +38,6 @@
     <string name="a_comment_has_been_made">A comment has been made</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="your_post_is_liked_by">Your post is liked by:</string>
 </resources>
 

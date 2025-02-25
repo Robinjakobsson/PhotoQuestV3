@@ -3,17 +3,12 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
@@ -56,7 +51,7 @@ class FireStoreRepository {
     /**
      * Function to Save a post to the Database
      */
-    suspend fun savePostToDatabase(imageUrl: String,description : String) {
+    suspend fun savePostToDatabase(imageUrl: String,description : String,isChecked : Boolean) {
         val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
@@ -68,7 +63,8 @@ class FireStoreRepository {
             "userid" to (currentUser?.uid ?: ""),
             "likes" to 0,
             "likedBy" to emptyList<String>(),
-            "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
+            "timestamp" to FieldValue.serverTimestamp(),
+            "isChecked" to isChecked// Timestamp implemented
         )
         try {
             db.collection("posts").document(postId).set(post).await()
@@ -155,6 +151,9 @@ class FireStoreRepository {
         }
     }
 
+    /**
+     * Method to unfollow user
+     */
     fun unfollowFollower(currentUserId: String, targetUserId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val currentUserRef = db.collection("users").document(currentUserId)
@@ -169,8 +168,7 @@ class FireStoreRepository {
     }
 
     /**
-     * Method to get followers posts
-     * //TODO Need to fetch own posts aswell
+     * Method to get posts from people you follow
      */
     fun getFollowerPosts(currentUserId: String): LiveData<List<Post>> {
         val liveData = MutableLiveData<List<Post>>()
@@ -184,6 +182,7 @@ class FireStoreRepository {
                 } else {
                     following
                 }
+
                 if (userId.isNotEmpty()) {
                     val postsRef = db.collection("posts")
                     postsRef.whereIn("userid", userId)
@@ -192,21 +191,29 @@ class FireStoreRepository {
                             if (error != null) {
                                 Log.d("FireStore", "Error getting posts: ${error.message}")
                                 return@addSnapshotListener
-
                             }
                             val postList = mutableListOf<Post>()
                             snapshot?.documents?.forEach { document ->
+                                val isChecked = document.getBoolean("isChecked") ?: false
+                                Log.d("PostFragment", "isChecked value: $isChecked")
+
                                 val post = document.toObject(Post::class.java)
-                                if (post != null) { postList.add(post) }
+                                if (post != null) {
+                                    post.isChecked = isChecked
+
+                                    postList.add(post)
+                                }
                             }
+
                             liveData.value = postList
                         }
-                } else { liveData.value = emptyList() }
+                } else {
+                    liveData.value = emptyList()
+                }
             }
         }
         return liveData
     }
-
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
@@ -298,6 +305,9 @@ class FireStoreRepository {
         }
     }
 
+    /**
+     * Method to check if you are already following
+     */
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
@@ -315,7 +325,7 @@ class FireStoreRepository {
 
     }
 
-    suspend fun addLikesToPost123(postId: String): Boolean {
+    suspend fun addLikesToPost(postId: String): Boolean {
         try {
             val docRef = db.collection("posts").document(postId)
             val currentUserId = auth.currentUser?.uid ?: return false
@@ -340,25 +350,38 @@ class FireStoreRepository {
     }
 
 
-    suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
+    fun fetchFriendList(postId: String): LiveData<List<User>> {
+        val liveData = MutableLiveData<List<User>>()
 
-        Log.d("!!!", "fetchFriendsList from repo körs")
-        try {
-            val docRef = db.collection("posts").document(postId)
-            val document = docRef.get().await()
+        db.collection("posts").document(postId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreRepository", "Error fetching likes: ${error.message}")
+                    return@addSnapshotListener
+                }
 
-            if (document.exists()) {
-                val friendsLiked = document.get("likedBy") as? List<String>
+                if (snapshot != null && snapshot.exists()) {
+                    val likedBy = snapshot.get("likedBy") as? List<String> ?: emptyList()
 
-                if (friendsLiked != null) {
-                    callback(friendsLiked)
-
-                    Log.d("!!!", "Friends fetched. ${friendsLiked}")
+                    if (likedBy.isNotEmpty()) {
+                        db.collection("users").whereIn("uid", likedBy).get()
+                            .addOnSuccessListener { usersSnapshot ->
+                                val friendsList = usersSnapshot.toObjects(User::class.java)
+                                liveData.value = friendsList
+                            }
+                            .addOnFailureListener {
+                                Log.e("FireStoreRepository", "Error fetching user data: ${it.message}")
+                                liveData.value = emptyList()
+                            }
+                    } else {
+                        liveData.value = emptyList()
+                    }
+                } else {
+                    liveData.value = emptyList()
                 }
             }
-        } catch (e: Exception) {
-            Log.e("!!!", "Error fetching friends", e)
-        }
+
+        return liveData
     }
 
 
@@ -389,6 +412,5 @@ class FireStoreRepository {
             }
         return followerCount
     }
-
 }
 

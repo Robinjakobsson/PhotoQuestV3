@@ -21,9 +21,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
 
-    private var binding: FragmentLikesBinding? = null
-    var listOfFriends = mutableListOf<User>()
-    lateinit var postVm: PostViewModel
+    private var _binding: FragmentLikesBinding? = null
+    private val binding get() = _binding!!
+
+    private var listOfFriends = mutableListOf<User>()
+    private lateinit var postVm: PostViewModel
 
     lateinit var adapter: LikesAdapter
 
@@ -31,27 +33,30 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLikesBinding.inflate(inflater, container, false)
-
-        return binding!!.root
+        _binding = FragmentLikesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         postVm = ViewModelProvider(this)[PostViewModel::class.java]
 
-        binding?.likesRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        adapter = LikesAdapter(requireContext(), listOfFriends)
-        binding?.likesRecyclerView?.adapter = adapter
+        binding.likesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter = LikesAdapter(mutableListOf())
+        binding.likesRecyclerView.adapter = adapter
 
-        postVm.listOfFriends.observe(viewLifecycleOwner) { friends ->
+        postVm.fetchFriendList(postId).observe(viewLifecycleOwner) { friends ->
             Log.d("!!!", "Observed friends: ${friends.size}")
             adapter.updateList(friends)
 
         }
 
-        postVm.fetchFriendsLiked(postId)
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
