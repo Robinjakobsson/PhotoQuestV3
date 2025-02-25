@@ -109,12 +109,22 @@ class LoginFragment : Fragment() {
             object : FacebookCallback<LoginResult> {
                 override fun onCancel() {
                     Log.d("FBLogin", "Facebook login cancelled by user.")
-                    Toast.makeText(requireActivity(), "Facebook login cancelled.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Facebook login cancelled.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 override fun onError(error: FacebookException) {
                     Log.e("FBLogin", "Error during Facebook login: ${error.message}", error)
-                    Toast.makeText(requireActivity(), "Facebook login error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Facebook login error: ${error.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 override fun onSuccess(result: LoginResult) {
                     handleFacebookAccessToken(result.accessToken)
                     getDataFromFb()
@@ -122,131 +132,7 @@ class LoginFragment : Fragment() {
                 }
             })
     }
-//if user is signed in with fb, gets data from fb with GraphRequest
-    private fun getDataFromFb() {
-        val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()) { jsonObject, response ->
-            try {
-                val email = jsonObject!!.getString("email")
-                val name = jsonObject.getString("name")
-                val username = jsonObject.getString("name")
-                val biography = "Bio från Facebook-användare"
-                val imageUri = Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.facebook}")
 
-                val currentUser = firebaseAuth.currentUser
-                //if user is signed in, uppdates data i firestore with facebooks data
-                if (currentUser != null) {
-                    val db = FirebaseFirestore.getInstance()
-                    val usersRef = db.collection("users")
-                    usersRef.document(currentUser.uid).get().addOnSuccessListener { document ->
-                        if (document.exists()) {
-                            // Uppdatera befintlig användardata
-                            usersRef.document(currentUser.uid).update(
-                                mapOf(
-                                    "email" to email,
-                                    "name" to name,
-                                    "username" to username,
-                                    "profileImage" to imageUri.toString(),
-                                    "biography" to biography
-                                )
-                            ).addOnSuccessListener {
-                                Log.d("FBUpdate", "User data updated successfully")
-                            }.addOnFailureListener { exception ->
-                                Log.e("FBUpdate", "Failed to update user data: ${exception.message}")
-                            }
-                        } else {
-                            // Skapa nytt konto i Firestore
-                            auth.createAccount(
-                                email,
-                                "why do we have it?",
-                                name,
-                                username,
-                                imageUri,
-                                biography,
-                                { Log.d("FacebookDebug", "Account created successfully!") },
-                                { exception -> Log.d("FacebookDebug", "The account could not be created: ${exception.message}") }
-                            )
-                        }
-                    }.addOnFailureListener { exception ->
-                        Log.e("FBUpdate", "Error fetching user document: ${exception.message}")
-                    }
-                } else {
-                    Log.d("FB", "No current user available")
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        val parameters = Bundle()
-        parameters.putString("fields", "email,name,picture.type(large)")
-        request.parameters = parameters
-        request.executeAsync()
-    }
-
-    //gets token from fb
-    private fun handleFacebookAccessToken(accessToken: AccessToken) {
-        val credential = FacebookAuthProvider.getCredential(accessToken.token)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnFailureListener {
-                Log.d("FacebookDebug", "Facebook authentication failed: ${it.message}")
-                Toast.makeText(requireActivity(), "Facebook authentication failed.", Toast.LENGTH_SHORT).show()
-            }
-            .addOnSuccessListener { result ->
-                val email = result.user?.email
-                Log.d("FacebookDebug", "Facebook authentication successful. Email: $email")
-                Toast.makeText(requireActivity(), "Facebook authentication successful.", Toast.LENGTH_SHORT).show()
-            }
-    }
-//part of fb auth
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
-
-    //method for signing in with email and password
-    private fun signIn() {
-        val email = binding.loginEmail.text.toString().trim()
-        val password = binding.loginPassword.text.toString().trim()
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
-            return
-        } else {
-            binding.progressBarLogin.visibility = View.VISIBLE
-            auth.signIn(email, password, onSuccess = {
-                binding.progressBarLogin.visibility = View.GONE
-                Toast.makeText(requireContext(), "Welcome! $email", Toast.LENGTH_SHORT).show()
-                startFeedActivity()
-            }, onFailure = {
-                binding.progressBarLogin.visibility = View.GONE
-                Toast.makeText(requireContext(), "Login failed..", Toast.LENGTH_SHORT).show()
-            })
-        }
-    }
-
-    private fun forgotPassword() {
-        val email = binding.loginEmail.text.toString().trim()
-        if (email.isNotEmpty()) {
-            auth.forgotPassword(email,
-                onSuccess = { Toast.makeText(context, "Mail sent!", Toast.LENGTH_SHORT).show() },
-                onFailure = { exception ->
-                    Toast.makeText(context, "Ooops: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-            )
-        } else {
-            Toast.makeText(context, "Enter a valid email-address", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    fun startFeedActivity() {
-        val intent = Intent(requireActivity(), FeedActivity::class.java)
-        requireActivity().startActivity(intent)
-    }
-
-    //    Handles Google Sign-In
     fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
@@ -271,7 +157,12 @@ class LoginFragment : Fragment() {
                                 Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.google}"),
                                 "",
                                 { Log.d("GoogleDebug", "Account created successfully!") },
-                                { exception -> Log.d("GoogleDebug", "The account could not be created: ${exception.message}") }
+                                { exception ->
+                                    Log.d(
+                                        "GoogleDebug",
+                                        "The account could not be created: ${exception.message}"
+                                    )
+                                }
                             )
                         }
                     }
@@ -283,6 +174,168 @@ class LoginFragment : Fragment() {
             } else {
                 Log.d("!!!", "Google auth failed")
             }
+
+        }
+
+
+        //if user is signed in with fb, gets data from fb with GraphRequest
+
+    }
+
+    //gets token from fb
+    private fun handleFacebookAccessToken(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnFailureListener {
+                Log.d(
+                    "FacebookDebug",
+                    "Facebook authentication failed: ${it.message}"
+                )
+                Toast.makeText(
+                    requireActivity(),
+                    "Facebook authentication failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .addOnSuccessListener { result ->
+                val email = result.user?.email
+                Log.d(
+                    "FacebookDebug",
+                    "Facebook authentication successful. Email: $email"
+                )
+                Toast.makeText(
+                    requireActivity(),
+                    "Facebook authentication successful.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
+    //part of fb auth
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
+    //method for signing in with email and password
+    private fun signIn() {
+        val email = binding.loginEmail.text.toString().trim()
+        val password = binding.loginPassword.text.toString().trim()
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "All fields are required!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            return
+        } else {
+            binding.progressBarLogin.visibility = View.VISIBLE
+            auth.signIn(email, password, onSuccess = {
+                binding.progressBarLogin.visibility = View.GONE
+                Toast.makeText(
+                    requireContext(),
+                    "Welcome! $email",
+                    Toast.LENGTH_SHORT
+                ).show()
+                startFeedActivity()
+            }, onFailure = {
+                binding.progressBarLogin.visibility = View.GONE
+                Toast.makeText(
+                    requireContext(),
+                    "Login failed..",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+        }
+    }
+
+    private fun forgotPassword() {
+        val email = binding.loginEmail.text.toString().trim()
+        if (email.isNotEmpty()) {
+            auth.forgotPassword(email,
+                onSuccess = {
+                    Toast.makeText(context, "Mail sent!", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = { exception ->
+                    Toast.makeText(
+                        context,
+                        "Ooops: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            )
+        } else {
+            Toast.makeText(
+                context,
+                "Enter a valid email-address",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    fun startFeedActivity() {
+        val intent = Intent(requireActivity(), FeedActivity::class.java)
+        requireActivity().startActivity(intent)
+    }
+
+
+
+    private fun getDataFromFb() {
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser != null) {
+            val db = FirebaseFirestore.getInstance()
+            val usersRef = db.collection("users")
+            usersRef.document(currentUser!!.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        return@addOnSuccessListener
+                    } else {
+                        val request =
+                            GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()) { jsonObject, response ->
+                                try {
+                                    val email = jsonObject!!.getString("email")
+                                    val name = jsonObject.getString("name")
+                                    val username = jsonObject.getString("name")
+
+                                    auth.createFacebookAccount(
+                                        email,
+                                        "why do we have it?",
+                                        name,
+                                        username,
+                                        Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.facebook}"),
+                                        "",
+                                        { Log.d("FacebookDebug", "Account created successfully!") },
+                                        { exception ->
+                                            Log.d(
+                                                "FacebookDebug",
+                                                "The account could not be created: ${exception.message}"
+                                            )
+                                        })
+                                } catch (e: Exception) {
+                                    // Hantera undantag här
+                                }
+                            }
+
+                        // Sätt parametrar och kör requesten inom else-blocke
+
+                        val parameters = Bundle()
+                        parameters.putString("fields", "email,name,picture.type(large)")
+                        request.parameters = parameters
+                        request.executeAsync()
+                    }
+                }
+
         }
     }
 }
