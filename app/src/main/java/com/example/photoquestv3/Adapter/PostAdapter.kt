@@ -1,27 +1,19 @@
 package com.example.photoquestv3.Adapter
 
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.Models.Post
-import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
-import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.google.firebase.auth.ktx.auth
@@ -82,7 +74,7 @@ class PostAdapter(
         }
 
         holder.likeButton.setOnClickListener {
-            postVm.addLikesToPost123(post.postId)
+            postVm.addLikesToPost(post.postId)
         }
 
 
