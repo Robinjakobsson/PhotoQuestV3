@@ -2,6 +2,7 @@ package com.example.photoquestv3.Adapter
 
 
 import android.graphics.Color
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class PostAdapter(
         val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
         var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
         val cardView : CardView = itemView.findViewById(R.id.itemCardView)
+        val logo : ImageView = itemView.findViewById(R.id.challenge_logo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -61,10 +63,12 @@ class PostAdapter(
 
         if(post.isChecked) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+            holder.logo.visibility = View.VISIBLE
 
         }
         else {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+            holder.logo.visibility = View.GONE
         }
 
         holder.likeCounter.text = post.likes.toString()

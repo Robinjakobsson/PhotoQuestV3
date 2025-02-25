@@ -30,7 +30,9 @@
                 android:layout_marginEnd="8dp"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/userprofile"
-                android:background="@drawable/rounded_image_background"/>
+                android:background="@drawable/profile_picture"
+                android:clipToOutline="true"
+                android:outlineProvider="background"/>
 
             <TextView
                 android:id="@+id/userName"
@@ -40,6 +42,14 @@
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/challenge_logo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/photoquest_star"
+                android:visibility="gone"/>
+
 
             <ImageView
                 android:id="@+id/moreOptions"
