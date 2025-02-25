@@ -16,7 +16,9 @@ import com.example.photoquestv3.Adapter.ProfileAdapter
 import com.example.photoquestv3.Fragments.SettingsFragment
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
+import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentProfileBinding
@@ -36,6 +38,7 @@ class ProfileFragment : Fragment() {
     lateinit var fireStoreVm: FireStoreViewModel
     private lateinit var user: User
     private lateinit var profileAdapter: ProfileAdapter
+    private lateinit var challengesVm: ChallengesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,10 +47,17 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         fireStoreVm = ViewModelProvider(this)[FireStoreViewModel::class.java]
-        fireStoreVm.userImages.observe(viewLifecycleOwner){images -> profileAdapter.updateData(images) }
+        fireStoreVm.userImages.observe(viewLifecycleOwner) { images ->
+            profileAdapter.updateData(
+                images
+            )
+        }
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
         profileAdapter = ProfileAdapter(emptyList())
         authUser = Firebase.auth
+        challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
+
+
 
         arguments?.getString("uid")?.let { uid ->
             lifecycleScope.launch {
@@ -57,13 +67,25 @@ class ProfileFragment : Fragment() {
                 checkFollowingStatus()
                 layoutManager()
                 fireStoreVm.loadUserImages(uid)
-                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner){ count ->
+
+
+                fireStoreVm.getFollowerCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profileFollowerTextView.text = count.toString()
                 }
 
-                fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner){count ->
+
+                // Shows how many challenges user has completed.
+                challengesVm.countCompletedChallenges(uid)
+
+                    challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { count ->
+                    binding.profileHeartTextView.text = count.toString()
+
+                }
+
+                fireStoreVm.fetchUserPostCount(uid).observe(viewLifecycleOwner) { count ->
                     binding.profilePostTextView.text = count.toString()
                 }
+                showSettings()
 
             }
         }
@@ -76,26 +98,16 @@ class ProfileFragment : Fragment() {
 
         binding.followButton.setOnClickListener {
             auth.getCurrentUser()?.let { currentUser ->
-                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid).observe(viewLifecycleOwner) { isFollowing ->
-                    if (isFollowing) {
-                        fireStoreVm.unfollowUser(currentUser.uid, user.uid)
-                    } else {
-                        fireStoreVm.followUser(currentUser.uid, user.uid)
+                fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
+                    .observe(viewLifecycleOwner) { isFollowing ->
+                        if (isFollowing) {
+                            fireStoreVm.unfollowUser(currentUser.uid, user.uid)
+                        } else {
+                            fireStoreVm.followUser(currentUser.uid, user.uid)
+                        }
+                        checkFollowingStatus()
                     }
-                    checkFollowingStatus()
-                }
             }
-        }
-
-
-
-
-        binding.buttonLogout.setOnClickListener{
-            authUser.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
-            returnHomeActivity()
-        }
-        binding.profileSettingButton.setOnClickListener {
-            startSettingsFragment()
         }
     }
 
@@ -131,15 +143,12 @@ class ProfileFragment : Fragment() {
     }
 
 
-
-
     private fun startSettingsFragment() {
         val settingsFragment = SettingsFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, settingsFragment, "settingsFragment")
             .commit()
     }
-
 
 
     private fun returnHomeActivity() {
@@ -173,10 +182,28 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun layoutManager(){
-        binding.profileRecycler.apply{
-            layoutManager = GridLayoutManager(context,2)
+    private fun layoutManager() {
+        binding.profileRecycler.apply {
+            layoutManager = GridLayoutManager(context, 2)
             adapter = profileAdapter
+        }
+    }
+
+    /**
+     *
+     * Shows the settingsbutton in users own profile, hides in other user's profile.
+     */
+    fun showSettings() {
+        val currentUser = auth.getCurrentUser()
+
+        if (currentUser?.uid != user.uid) {
+            binding.profileSettingButton.visibility = View.GONE
+        } else {
+            binding.profileSettingButton.visibility = View.VISIBLE
+
+            binding.profileSettingButton.setOnClickListener {
+                startSettingsFragment()
+            }
         }
     }
 }
