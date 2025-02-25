@@ -124,7 +124,7 @@ class HomeFragment : Fragment() {
     private fun editPostTextDialog(post: Post) {
 
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Edit Comment")
+        builder.setTitle("Edit Post")
 
         val input = EditText(requireContext())
         input.setText(post.description)
