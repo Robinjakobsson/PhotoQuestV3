@@ -35,16 +35,16 @@ class ChallengesRecyclerAdapter (
 
         // Changes the star to yellow if challenge is completed, else, an empty star is shown.
         if (challenge.completed == true) {
-            holder.starImageView.setImageResource(R.drawable.baseline_star_24)
+            holder.starImageView.setImageResource(R.drawable.photoquest_star)
 
         } else {
-            holder.starImageView.setImageResource(R.drawable.baseline_star_outline_24)
+            holder.starImageView.setImageResource(R.drawable.photoquest_star_outline)
         }
 
         if (position == challenges.size - 1){
-            cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+            cardView.setCardBackgroundColor(Color.parseColor("#70ffff33"))
         } else {
-            cardView.setCardBackgroundColor(Color.parseColor("#00000000"))
+            cardView.setCardBackgroundColor(Color.parseColor("#50ffffff"))
         }
 
 

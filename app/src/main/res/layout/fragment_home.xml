@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".Fragments.HomeFragment">
+    tools:context=".Fragments.HomeFragment"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/daily_challenge_cardView"
@@ -13,9 +14,9 @@
         android:layout_height="wrap_content"
         android:padding="100dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="15dp"
-        app:cardBackgroundColor="@android:color/white"
+        app:cardBackgroundColor="#90ffffff"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
