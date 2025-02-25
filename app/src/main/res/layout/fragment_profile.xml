@@ -49,7 +49,7 @@
 
             <ImageView
                 android:src="@drawable/card_gradient"
-                android:layout_width="match_parent"
+                android:layout_width="match_parent" add
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
 
