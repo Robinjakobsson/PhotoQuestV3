@@ -9,7 +9,6 @@ import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.CommentRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
-import com.example.photoquestv3.Repositories.PostRepository
 import com.example.photoquestv3.Repositories.PostRepository1
 import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -41,7 +40,7 @@ class PostViewModel : ViewModel() {
     val toastMessage: LiveData<String?> get() = _toastMessage
 
     private val auth = AuthRepository()
-    private val postRepository = PostRepository()
+
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
     val postId = itemId.value
@@ -86,11 +85,6 @@ class PostViewModel : ViewModel() {
             }
         }
     }
-
-    private fun startListeningToLikes(postId: String) {
-        fireStoreRepo.restartListeningToLikes(postId)
-    }
-
     override fun onCleared() {
         super.onCleared()
         fireStoreRepo.stopListeningToLikes()

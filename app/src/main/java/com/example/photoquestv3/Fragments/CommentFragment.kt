@@ -1,8 +1,6 @@
 package com.example.photoquestv3.Fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.CommentAdapter
 import com.example.photoquestv3.Models.Comment
-import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.CommentViewModel
 import com.example.photoquestv3.databinding.FragmentCommentBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper

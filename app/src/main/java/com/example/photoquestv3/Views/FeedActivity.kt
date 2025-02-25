@@ -52,10 +52,10 @@ class FeedActivity : AppCompatActivity() {
         }
     }
 
-        //  fun for replacing fragment.
-        private fun replaceFragment(fragment: Fragment) {
-            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
-        }
+    //  fun for replacing fragment.
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit()
+    }
     private fun startHomeFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout,HomeFragment()).commit()
     }
@@ -72,4 +72,4 @@ class FeedActivity : AppCompatActivity() {
 
         replaceFragment(profile)
     }
-    }
+}

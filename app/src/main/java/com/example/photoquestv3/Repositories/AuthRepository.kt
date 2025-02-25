@@ -18,8 +18,6 @@ class AuthRepository {
     private val db = FireStoreRepository()
     private var currentUser = auth.currentUser
 
-    private val challenges = ChallengesRepository()
-
     fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

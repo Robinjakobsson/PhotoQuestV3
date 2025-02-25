@@ -142,20 +142,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     private fun startSettingsFragment() {
         val settingsFragment = SettingsFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.frame_layout, settingsFragment, "settingsFragment")
             .commit()
-    }
-
-
-    private fun returnHomeActivity() {
-        val intent = Intent(requireContext(), HomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun updateUserData() {

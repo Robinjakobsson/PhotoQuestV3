@@ -46,10 +46,10 @@ class CommentAdapter(
             .into(holder.imageProfile)
 
         holder.itemView.setOnClickListener {
-           val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
-           if (commentsItem.userId == currentUser) {
+            val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
+            if (commentsItem.userId == currentUser) {
                 onCommentClicked(commentsItem)
-           }
+            }
         }
     }
 

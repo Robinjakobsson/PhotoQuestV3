@@ -9,7 +9,7 @@ import com.example.photoquestv3.Repositories.ChallengesRepository
 
 class ChallengesViewModel : ViewModel() {
 
-    val challengesRepository = ChallengesRepository()
+    private val challengesRepository = ChallengesRepository()
 
     val challenges: LiveData<List<Challenges>> = challengesRepository.listOfChallenges
 

@@ -8,13 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.example.photoquestv3.R
 import com.example.photoquestv3.Views.HomeActivity
-import com.example.photoquestv3.databinding.FragmentProfileBinding
-import com.example.photoquestv3.databinding.FragmentSearchBinding
 import com.example.photoquestv3.databinding.FragmentSettingsBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
