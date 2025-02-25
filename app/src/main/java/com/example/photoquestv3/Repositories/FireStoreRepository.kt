@@ -23,8 +23,6 @@ class FireStoreRepository {
     val db = Firebase.firestore
     private val auth = Firebase.auth
 
-
-
     private val _likes = MutableLiveData<Int>()
     val likes: MutableLiveData<Int> = _likes
 

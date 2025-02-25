@@ -58,7 +58,7 @@ class ChallengesFragment : Fragment() {
 
         }
         vmChallenges.getChallengesFromDatabase()
-
+//commit
     }
 
 }

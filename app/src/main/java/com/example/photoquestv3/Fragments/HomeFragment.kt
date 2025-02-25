@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,9 +46,13 @@ class HomeFragment : Fragment() {
         currentUserId = authVm.getCurrentUser()?.uid.toString()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = PostAdapter(emptyList(), postVm, onPostClicked = { post ->
-            navigateToProfile(post.userid)
-        })
+        adapter = PostAdapter(
+            emptyList(),
+            postVm,
+            onPostTextClicked = { post -> editPostTextDialog(post) },
+            onPostClicked = { post ->
+                navigateToProfile(post.userid)
+            })
         binding.recyclerView.adapter = adapter
 
         postVm.toastMessage.observe(viewLifecycleOwner) { messages ->
@@ -112,5 +118,37 @@ class HomeFragment : Fragment() {
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
         postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
         authVm = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
+    }
+
+
+    private fun editPostTextDialog(post: Post) {
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Edit Post")
+
+        val input = EditText(requireContext())
+        input.setText(post.description)
+        builder.setView(input)
+
+        builder.setPositiveButton("Update") { dialog, _ ->
+
+            val newText = input.text.toString().trim()
+            if (newText.isNotEmpty()) {
+                postVm.updatePostText(post.postId, newText, onSuccess = {
+                    Toast.makeText(requireContext(), "Post updated", Toast.LENGTH_SHORT).show()
+                }, onFailure = {
+                    Toast.makeText(requireContext(), "Failed to update post", Toast.LENGTH_SHORT)
+                        .show()
+                })
+            } else {
+                Toast.makeText(requireContext(), "Please enter new text", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 }
