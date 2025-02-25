@@ -39,5 +39,6 @@
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="your_post_is_liked_by">Your post is liked by:</string>
+    <string name="upload_image">Upload image</string>
 </resources>
 
