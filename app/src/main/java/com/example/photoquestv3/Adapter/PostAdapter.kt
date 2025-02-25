@@ -17,17 +17,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
+import com.example.photoquestv3.Models.Comment
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class PostAdapter(
     private var postList: List<Post>,
-    val postVm : PostViewModel,
-    val onPostClicked: (Post) -> Unit
+    val postVm: PostViewModel,
+    val onPostClicked: (Post) -> Unit,
+    val onPostTextClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
 
@@ -42,8 +46,8 @@ class PostAdapter(
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
-        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
-        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
+        val likeButton: ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter: TextView = itemView.findViewById(R.id.likeCounter)
 
 
     }
@@ -61,11 +65,11 @@ class PostAdapter(
         val post = postList[position]
         holder.userName.text = post.username
         holder.description.text = post.description
-      
+
 //        Likes
         holder.likeCounter.text = post.likes.toString()
 
-        holder.likeCounter.setOnClickListener{
+        holder.likeCounter.setOnClickListener {
 
             val postId = post.postId
             val likesFragment = LikesFragment(postId)
@@ -76,15 +80,15 @@ class PostAdapter(
             }
 
         }
-        
+
         holder.likeButton.setOnClickListener {
             postVm.addLikesToPost123(post.postId)
         }
-  
+
 
         holder.optionImage.setOnClickListener() {
             postVm.setItemId(post.postId)
-            
+
             val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
@@ -109,12 +113,18 @@ class PostAdapter(
             }
         }
 
-        holder.userName.setOnClickListener{
+        holder.userName.setOnClickListener {
             onPostClicked(post)
         }
-        holder.profileImage.setOnClickListener{
+        holder.profileImage.setOnClickListener {
             onPostClicked(post)
         }
-    }
+        holder.description.setOnClickListener {
+            val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
+            if (post.userid == currentUser) {
+                onPostTextClicked(post)
+            }
+        }
 
+    }
 }
