@@ -58,7 +58,7 @@ class FireStoreRepository {
     /**
      * Function to Save a post to the Database
      */
-    suspend fun savePostToDatabase(imageUrl: String,description : String) {
+    suspend fun savePostToDatabase(imageUrl: String,description : String,isChecked : Boolean) {
         val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
@@ -70,7 +70,8 @@ class FireStoreRepository {
             "userid" to (currentUser?.uid ?: ""),
             "likes" to 0,
             "likedBy" to emptyList<String>(),
-            "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
+            "timestamp" to FieldValue.serverTimestamp(),
+            "isChecked" to isChecked// Timestamp implemented
         )
         try {
             db.collection("posts").document(postId).set(post).await()
@@ -157,6 +158,9 @@ class FireStoreRepository {
         }
     }
 
+    /**
+     * Method to unfollow user
+     */
     fun unfollowFollower(currentUserId: String, targetUserId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val currentUserRef = db.collection("users").document(currentUserId)
@@ -171,8 +175,7 @@ class FireStoreRepository {
     }
 
     /**
-     * Method to get followers posts
-     * //TODO Need to fetch own posts aswell
+     * Method to get posts from people you follow
      */
     fun getFollowerPosts(currentUserId: String): LiveData<List<Post>> {
         val liveData = MutableLiveData<List<Post>>()
@@ -186,6 +189,7 @@ class FireStoreRepository {
                 } else {
                     following
                 }
+
                 if (userId.isNotEmpty()) {
                     val postsRef = db.collection("posts")
                     postsRef.whereIn("userid", userId)
@@ -194,21 +198,29 @@ class FireStoreRepository {
                             if (error != null) {
                                 Log.d("FireStore", "Error getting posts: ${error.message}")
                                 return@addSnapshotListener
-
                             }
                             val postList = mutableListOf<Post>()
                             snapshot?.documents?.forEach { document ->
+                                val isChecked = document.getBoolean("isChecked") ?: false
+                                Log.d("PostFragment", "isChecked value: $isChecked")
+
                                 val post = document.toObject(Post::class.java)
-                                if (post != null) { postList.add(post) }
+                                if (post != null) {
+                                    post.isChecked = isChecked
+
+                                    postList.add(post)
+                                }
                             }
+                            // Skicka listan med posts till LiveData
                             liveData.value = postList
                         }
-                } else { liveData.value = emptyList() }
+                } else {
+                    liveData.value = emptyList()  // Om ingen följare finns, sätt LiveData till tom lista
+                }
             }
         }
         return liveData
     }
-
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
@@ -300,6 +312,9 @@ class FireStoreRepository {
         }
     }
 
+    /**
+     * Method to check if you are already following
+     */
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
@@ -391,6 +406,5 @@ class FireStoreRepository {
             }
         return followerCount
     }
-
 }
 

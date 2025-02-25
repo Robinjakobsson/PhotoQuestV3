@@ -28,6 +28,8 @@ class PostFragment : Fragment() {
     private lateinit var storageVm: StorageViewModel
     private var selectedImageUri : Uri? = null
     private lateinit var challengesVm: ChallengesViewModel
+    var isChecked : Boolean = false
+
 
 
     override fun onCreateView(
@@ -61,7 +63,7 @@ class PostFragment : Fragment() {
 
         binding.challengeCheckbox.setOnClickListener {
 
-            val isChecked = binding.challengeCheckbox.isChecked
+             isChecked = binding.challengeCheckbox.isChecked
             challengesVm.setChallengeCheckedState(isChecked)
 
             if (isChecked) {
@@ -80,13 +82,17 @@ class PostFragment : Fragment() {
 
     private fun uploadPost() {
         val description = binding.textDescription.text.toString()
+        isChecked = binding.challengeCheckbox.isChecked
+
+        Log.d("ASD","$isChecked")
 
         binding.progressBar.visibility = View.VISIBLE
 
         if (selectedImageUri != null && description.isNotBlank()) {
-            storageVm.uploadPost(selectedImageUri!!,description, onSuccess = {
+            storageVm.uploadPost(selectedImageUri!!,description,isChecked, onSuccess = {
                 Toast.makeText(requireContext(),"Successfully Uploaded Post!",Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
+                Log.d("ASD","$isChecked")
             }, onFailure = {
                 Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE

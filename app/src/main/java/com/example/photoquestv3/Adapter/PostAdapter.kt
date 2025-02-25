@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Adapter
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
@@ -44,6 +46,7 @@ class PostAdapter(
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
         val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
         var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
+        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
 
 
     }
@@ -61,8 +64,16 @@ class PostAdapter(
         val post = postList[position]
         holder.userName.text = post.username
         holder.description.text = post.description
-      
-//        Likes
+
+        if(post.isChecked) {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+
+        }
+        else {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+        }
+
+
         holder.likeCounter.text = post.likes.toString()
 
         holder.likeCounter.setOnClickListener{
