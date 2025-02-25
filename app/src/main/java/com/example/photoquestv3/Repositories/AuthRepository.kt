@@ -38,7 +38,7 @@ class AuthRepository {
         }
     }
 
-    fun createGoogleAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun createGoogleOrFacebookAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val imageUrl = uploadPicture(imageUri)
@@ -55,22 +55,22 @@ class AuthRepository {
         }
     }
 
-    fun createFacebookAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val imageUrl = uploadPicture(imageUri)
-                val uid = auth.currentUser?.uid ?: throw Exception("Ingen inloggad användare")
-                saveUserToDatabase(email, username, uid, imageUrl, name, biography)
-                withContext(Dispatchers.Main) {
-                    onSuccess()
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onFailure(e)
-                }
-            }
-        }
-    }
+//    fun createFacebookAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val imageUrl = uploadPicture(imageUri)
+//                val uid = auth.currentUser?.uid ?: throw Exception("Ingen inloggad användare")
+//                saveUserToDatabase(email, username, uid, imageUrl, name, biography)
+//                withContext(Dispatchers.Main) {
+//                    onSuccess()
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    onFailure(e)
+//                }
+//            }
+//        }
+//    }
 
     fun signIn(email: String,password: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {

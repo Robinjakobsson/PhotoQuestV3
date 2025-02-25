@@ -127,8 +127,7 @@ class LoginFragment : Fragment() {
 
                 override fun onSuccess(result: LoginResult) {
                     handleFacebookAccessToken(result.accessToken)
-                    getDataFromFb()
-                    startFeedActivity()
+
                 }
             })
     }
@@ -149,7 +148,7 @@ class LoginFragment : Fragment() {
                             val name = currentUser.displayName!!
                             val username = currentUser.displayName!!.lowercase()
 
-                            auth.createGoogleAccount(
+                            auth.createGoogleOrFacebookAccount(
                                 email,
                                 "why do we have it?",
                                 name,
@@ -208,6 +207,8 @@ class LoginFragment : Fragment() {
                     "Facebook authentication successful.",
                     Toast.LENGTH_SHORT
                 ).show()
+                getDataFromFb()
+                startFeedActivity()
             }
     }
 
@@ -308,7 +309,7 @@ class LoginFragment : Fragment() {
                                     val name = jsonObject.getString("name")
                                     val username = jsonObject.getString("name")
 
-                                    auth.createFacebookAccount(
+                                    auth.createGoogleOrFacebookAccount(
                                         email,
                                         "why do we have it?",
                                         name,
