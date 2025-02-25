@@ -265,7 +265,7 @@ class LoginFragment : Fragment() {
                             val name = currentUser.displayName!!
                             val username = currentUser.displayName!!.lowercase()
 
-                            auth.createAccount(
+                            auth.createGoogleAccount(
                                 email,
                                 "why do we have it?",
                                 name,
