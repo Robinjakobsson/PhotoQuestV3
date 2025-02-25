@@ -47,6 +47,7 @@ class LikesAdapter (
             .into(holder.profileImage)
     }
 
+    
     fun updateList(friends : List<User>) {
         friendList = friends
         Log.d("!!!", "update friendlist. ${friendList.size}")

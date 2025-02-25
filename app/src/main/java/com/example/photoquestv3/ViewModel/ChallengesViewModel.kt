@@ -16,6 +16,10 @@ class ChallengesViewModel : ViewModel() {
     private val _isChecked = MutableLiveData<Boolean>()
     val isChecked: LiveData<Boolean> get() = _isChecked
 
+
+    private val _numberOfCompletedChallenges = MutableLiveData<Int?>()
+    val numberOfCompletedChallenges: MutableLiveData<Int?> get() = _numberOfCompletedChallenges
+
     fun setChallengeCheckedState(state: Boolean) {
         _isChecked.value = state
         Log.d("!!!!", "Checkbox state set to: $state")
@@ -26,11 +30,27 @@ class ChallengesViewModel : ViewModel() {
         challengesRepository.getChallengesFromDatabase()
     }
 
-        fun getDailyChallenge(onResult: (Challenges?) -> Unit) {
-            challengesRepository.getLatestChallenge { latestChallenge ->
-                onResult(latestChallenge)
-            }
+    fun getDailyChallenge(onResult: (Challenges?) -> Unit) {
+        challengesRepository.getLatestChallenge { latestChallenge ->
+            onResult(latestChallenge)
         }
+    }
+
+    /**
+     * Fetch number of completed challenges.
+     */
+
+    fun countCompletedChallenges(uid: String) {
+
+        challengesRepository.countCompletedChallenges(uid) { count, error ->
+            if (error != null) {
+                Log.d("ChallengesViewModel", "Error fetching number of completed challenges")
+            } else {
+                _numberOfCompletedChallenges.value = count
+            }
+
+        }
+    }
 
     fun markChallengeDone() {
         challengesRepository.markChallengeDone()
@@ -40,4 +60,4 @@ class ChallengesViewModel : ViewModel() {
         challengesRepository.markChallengeNotDone()
     }
 
-    }
+}

@@ -43,6 +43,8 @@ class ChallengesRecyclerAdapter (
 
         if (position == challenges.size - 1){
             cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+        } else {
+            cardView.setCardBackgroundColor(Color.parseColor("#00000000"))
         }
 
 

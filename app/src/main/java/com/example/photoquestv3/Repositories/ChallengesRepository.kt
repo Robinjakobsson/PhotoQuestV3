@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.photoquestv3.Models.ChallengeObjects
 import com.example.photoquestv3.Models.Challenges
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -25,6 +27,10 @@ class ChallengesRepository {
     private val _listOfChallenges = MutableLiveData<List<Challenges>>()
     val listOfChallenges: LiveData<List<Challenges>> get() = _listOfChallenges
 
+
+    /**
+     * Fetch all previous challenges from database and today's challenge.
+     */
     fun getChallengesFromDatabase() {
 
         val today = Calendar.getInstance().time
@@ -133,24 +139,24 @@ class ChallengesRepository {
 
         collection?.collection("challenges")?.whereEqualTo("date", formattedDate)
             ?.get()
-                ?.addOnSuccessListener { documents ->
-                    if (documents != null && !documents.isEmpty) {
-                        val document = documents.documents[0]
-                        document.reference.update("completed", true)
-                            .addOnSuccessListener {
-                                Log.d("ChallengesRepository", "$formattedDate challenge completed!")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w("ChallengesRepository", "Error updating challenge", e)
-                            }
-                    } else {
-                        Log.w("ChallengesRepository", "No challenge found $formattedDate")
-                    }
+            ?.addOnSuccessListener { documents ->
+                if (documents != null && !documents.isEmpty) {
+                    val document = documents.documents[0]
+                    document.reference.update("completed", true)
+                        .addOnSuccessListener {
+                            Log.d("ChallengesRepository", "$formattedDate challenge completed!")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("ChallengesRepository", "Error updating challenge", e)
+                        }
+                } else {
+                    Log.w("ChallengesRepository", "No challenge found $formattedDate")
                 }
-                ?.addOnFailureListener { e ->
-                    Log.w("ChallengesRepository", "Can't find challenge", e)
-                }
-        }
+            }
+            ?.addOnFailureListener { e ->
+                Log.w("ChallengesRepository", "Can't find challenge", e)
+            }
+    }
 
     fun markChallengeNotDone() {
 
@@ -179,4 +185,29 @@ class ChallengesRepository {
             }
     }
 
+    /**
+     * Fetch how many challenges the users has completed. Where the challenges boolean is true.
+     */
+    fun countCompletedChallenges(uid: String, onResult: (Int?, String?) -> Unit) {
+
+        db.collection("users").document(uid).collection("challenges")
+            .whereEqualTo("completed", true)
+            .get()
+            .addOnSuccessListener { document ->
+
+                val numberOfCompletedChallenges = document.size()
+                Log.d(
+                    "ChallengesRepository",
+                    "Number of completed challenges: ${numberOfCompletedChallenges}"
+                )
+                onResult(numberOfCompletedChallenges, null)
+            }.addOnFailureListener() { exception ->
+                Log.d(
+                    "ChallengesRepository",
+                    "Failed to fetch number of completed challenges ${exception.message}"
+                )
+
+                onResult(null, exception.message)
+            }
+    }
 }
