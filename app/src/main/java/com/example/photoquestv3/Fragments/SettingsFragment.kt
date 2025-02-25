@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
     lateinit var auth: FirebaseAuth
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +40,11 @@ class SettingsFragment : Fragment() {
         auth = Firebase.auth
         binding.deleteAccount.setOnClickListener {
             showPopup()
+        }
+
+        binding.buttonLogout.setOnClickListener{
+            auth.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
+            returnHomeActivity()
         }
     }
 

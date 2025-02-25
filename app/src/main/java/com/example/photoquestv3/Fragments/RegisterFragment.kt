@@ -61,6 +61,7 @@ class RegisterFragment : Fragment() {
 
     }
 
+    //
     private fun register() {
         val email = binding?.emailEt?.text.toString()
         val password = binding?.passwordEt?.text.toString()

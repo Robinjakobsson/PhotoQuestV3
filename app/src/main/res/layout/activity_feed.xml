@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.FeedActivity">
+    tools:context=".Views.FeedActivity"
+    android:background="@drawable/background_gradient"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rec_container"
@@ -26,6 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+            android:elevation="0dp"
+
             >
         </FrameLayout>
 

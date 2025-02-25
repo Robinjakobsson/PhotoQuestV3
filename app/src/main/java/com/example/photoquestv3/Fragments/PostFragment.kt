@@ -10,13 +10,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.Models.Challenges
+import com.example.photoquestv3.Models.Comment
+import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
+import com.example.photoquestv3.ViewModel.CommentViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
 import com.example.photoquestv3.databinding.FragmentPostBinding
@@ -29,7 +34,7 @@ class PostFragment : Fragment() {
     private var selectedImageUri : Uri? = null
     private lateinit var challengesVm: ChallengesViewModel
     var isChecked : Boolean = false
-
+    private lateinit var vmPost: PostViewModel
 
 
     override fun onCreateView(
@@ -127,6 +132,34 @@ class PostFragment : Fragment() {
     }
 
 
-
+//    private fun editPostTextDialog(post: Post) {
+//
+//        val builder = AlertDialog.Builder(requireContext())
+//        builder.setTitle("Edit Comment")
+//
+//        val input = EditText(requireContext())
+//        input.setText(post.description)
+//        builder.setView(input)
+//
+//        builder.setPositiveButton("Update") { dialog, _ ->
+//
+//            val newText = input.text.toString().trim()
+//            if (newText.isNotEmpty()) {
+//                vmPost.updatePostText(post.description, newText, onSuccess = {
+//                    Toast.makeText(requireContext(), "Post updated", Toast.LENGTH_SHORT).show()
+//                }, onFailure = {
+//                    Toast.makeText(requireContext(), "Failed to update post", Toast.LENGTH_SHORT).show()
+//                })
+//            } else {
+//                Toast.makeText(requireContext(), "Please enter new text", Toast.LENGTH_SHORT).show()
+//            }
+//            dialog.dismiss()
+//        }
+//
+//        builder.setNegativeButton("Cancel") { dialog, _ ->
+//            dialog.dismiss()
+//        }
+//        builder.show()
+//    }
 
 }

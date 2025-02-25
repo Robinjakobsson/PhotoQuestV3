@@ -3,17 +3,12 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.photoquestv3.Models.Challenges
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
@@ -27,8 +22,6 @@ class FireStoreRepository {
 
     val db = Firebase.firestore
     private val auth = Firebase.auth
-
-
 
     private val _likes = MutableLiveData<Int>()
     val likes: MutableLiveData<Int> = _likes
@@ -332,7 +325,7 @@ class FireStoreRepository {
 
     }
 
-    suspend fun addLikesToPost123(postId: String): Boolean {
+    suspend fun addLikesToPost(postId: String): Boolean {
         try {
             val docRef = db.collection("posts").document(postId)
             val currentUserId = auth.currentUser?.uid ?: return false
@@ -357,25 +350,38 @@ class FireStoreRepository {
     }
 
 
-    suspend fun fetchFriendList(postId: String, callback: (List<String>) -> Unit) {
+    fun fetchFriendList(postId: String): LiveData<List<User>> {
+        val liveData = MutableLiveData<List<User>>()
 
-        Log.d("!!!", "fetchFriendsList from repo körs")
-        try {
-            val docRef = db.collection("posts").document(postId)
-            val document = docRef.get().await()
+        db.collection("posts").document(postId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FireStoreRepository", "Error fetching likes: ${error.message}")
+                    return@addSnapshotListener
+                }
 
-            if (document.exists()) {
-                val friendsLiked = document.get("likedBy") as? List<String>
+                if (snapshot != null && snapshot.exists()) {
+                    val likedBy = snapshot.get("likedBy") as? List<String> ?: emptyList()
 
-                if (friendsLiked != null) {
-                    callback(friendsLiked)
-
-                    Log.d("!!!", "Friends fetched. ${friendsLiked}")
+                    if (likedBy.isNotEmpty()) {
+                        db.collection("users").whereIn("uid", likedBy).get()
+                            .addOnSuccessListener { usersSnapshot ->
+                                val friendsList = usersSnapshot.toObjects(User::class.java)
+                                liveData.value = friendsList
+                            }
+                            .addOnFailureListener {
+                                Log.e("FireStoreRepository", "Error fetching user data: ${it.message}")
+                                liveData.value = emptyList()
+                            }
+                    } else {
+                        liveData.value = emptyList()
+                    }
+                } else {
+                    liveData.value = emptyList()
                 }
             }
-        } catch (e: Exception) {
-            Log.e("!!!", "Error fetching friends", e)
-        }
+
+        return liveData
     }
 
 
