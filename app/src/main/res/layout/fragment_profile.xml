@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         
         <LinearLayout
             android:id="@+id/settings_layout"
@@ -48,10 +49,10 @@
             app:layout_constraintTop_toBottomOf="@+id/follow_button">
 
             <ImageView
-                android:src="@drawable/card_gradient"
-                android:layout_width="match_parent" add
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/card_gradient" />
 
             <LinearLayout
                 android:id="@+id/profile_layout"
@@ -59,6 +60,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
+
+
 
                 <LinearLayout
                     android:id="@+id/inside_layout"
@@ -78,7 +81,7 @@
                             android:id="@+id/profile_Name_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
+                            android:text="Name"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.014"
@@ -88,87 +91,100 @@
 
                         <TextView
                             android:id="@+id/user_Quote_TextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="TextView"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.014"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
-                            app:layout_constraintVertical_bias="0.111" />
+                            android:text="Your story here"
+                            android:maxLines="2"
+                            android:lines="2"
+                             />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/icons"
-                        android:layout_width="match_parent"
+                        android:id="@+id/icons_numbers"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:layout_gravity="end"
-                        android:gravity="end">
+                        android:layout_weight="1"
+                        >
 
-                        <ImageView
-                            android:id="@+id/profile_post_button"
-                            android:layout_gravity="start"
-                            android:layout_width="52dp"
-                            android:layout_height="45dp"
-                            android:layout_marginEnd="20dp"
-                            android:src="@drawable/photoquest_posts"
-                            android:scaleType="fitXY" />
-
-                        <ImageView
-                            android:id="@+id/profile_heart_Button"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_width="52dp"
-                            android:layout_height="45dp"
-                            android:layout_marginEnd="20dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/photoquest_star" />
-
-                        <ImageView
-                            android:id="@+id/profile_Follower_Button"
+                        <LinearLayout
+                            android:id="@+id/icons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
                             android:layout_gravity="end"
-                            android:layout_width="52dp"
-                            android:layout_height="45dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/photoquest_profile" />
+                            android:layout_weight="1"
+                            android:gravity="end">
+
+                            <ImageView
+                                android:id="@+id/profile_post_button"
+                                android:layout_gravity="start"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:layout_marginEnd="20dp"
+                                android:src="@drawable/photoquest_posts"
+                                android:scaleType="fitXY" />
+
+                            <ImageView
+                                android:id="@+id/profile_heart_Button"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:layout_marginEnd="20dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/photoquest_star" />
+
+                            <ImageView
+                                android:id="@+id/profile_Follower_Button"
+                                android:layout_gravity="end"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/photoquest_profile" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/numbers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="end">
+
+                            <TextView
+                                android:id="@+id/profile_Post_TextView"
+                                android:layout_gravity="start"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:text="123p" />
+
+                            <TextView
+                                android:id="@+id/profile_Heart_TextView"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:text="0" />
+
+                            <TextView
+                                android:id="@+id/profile_Follower_TextView"
+                                android:layout_gravity="end"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:text="123f" />
+                        </LinearLayout>
+
                     </LinearLayout>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/numbers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:gravity="end">
 
-                    <TextView
-                        android:id="@+id/profile_Post_TextView"
-                        android:layout_gravity="start"
-                        android:gravity="center_horizontal"
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="123p" />
 
-                    <TextView
-                        android:id="@+id/profile_Heart_TextView"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:text="0" />
-
-                    <TextView
-                        android:id="@+id/profile_Follower_TextView"
-                        android:layout_gravity="end"
-                        android:gravity="center_horizontal"
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:text="123f" />
                 </LinearLayout>
 
             </LinearLayout>
