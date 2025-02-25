@@ -11,134 +11,93 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_gradient_main"
+                android:fontFamily="@font/impetus_heavy"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:layout_gravity="start"
+                android:layout_weight="0"
+                android:stateListAnimator="@null"
+                android:text="@string/sign_out"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </Space>
+
+            <ImageView
+                android:id="@+id/profile_Setting_Button"
+                android:layout_weight="0"
+                android:layout_width="52dp"
+                android:layout_height="45dp"
+                android:scaleType="fitXY"
+                android:layout_gravity=""
+                android:src="@drawable/photoquest_settings"
+                />
+
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="400dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="1dp"
+            android:id="@+id/profile_cardview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_Image_ImageView">
+            app:cardCornerRadius="15dp"
+            android:layout_marginTop="30dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/settings_layout"
+            >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout"
+            <ImageView
+                android:id="@+id/profile_Image_ImageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:textStyle="bold"
-                    android:id="@+id/profile_Name_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.197" />
-
-                <TextView
-                    android:id="@+id/user_Quote_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.014"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Name_TextView"
-                    app:layout_constraintVertical_bias="0.111" />
-
-                <ImageButton
-                    android:id="@+id/profile_Follower_Button"
-                    android:layout_width="49dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_person"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/profile_heart_Button"
-                    android:layout_width="40dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="20dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/photo_quest_logo_start"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_Follower_Button"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/profile_post_button"
-                    android:layout_width="46dp"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/post_icon"
-                    app:layout_constraintEnd_toStartOf="@+id/profile_heart_Button"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Name_TextView"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/profile_Post_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="192dp"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_post_button"
-                    app:layout_constraintVertical_bias="0.333" />
-
-                <TextView
-                    android:id="@+id/profile_Heart_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Post_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_heart_Button"
-                    app:layout_constraintVertical_bias="0.09" />
-
-                <TextView
-                    android:id="@+id/profile_Follower_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.73"
-                    app:layout_constraintStart_toEndOf="@+id/profile_Heart_TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_Follower_Button"
-                    app:layout_constraintVertical_bias="0.523" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/photoquest_profile"
+                 />
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/profileRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="0dp"
-            android:padding="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/follow_button"
+            android:background="@drawable/button_gradient_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/impetus_heavy"
+            android:layout_marginTop="20dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:stateListAnimator="@null"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/profile_cardview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/follow"/>
 
         <ImageView
             android:id="@+id/profile_Image_ImageView"
@@ -176,6 +135,19 @@
             app:layout_constraintBottom_toTopOf="@+id/cardView2"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profile_Image_ImageView" />
+      
+           <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
