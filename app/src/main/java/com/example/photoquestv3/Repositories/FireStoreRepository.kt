@@ -51,7 +51,7 @@ class FireStoreRepository {
     /**
      * Function to Save a post to the Database
      */
-    suspend fun savePostToDatabase(imageUrl: String,description : String) {
+    suspend fun savePostToDatabase(imageUrl: String,description : String,isChecked : Boolean) {
         val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
@@ -63,7 +63,8 @@ class FireStoreRepository {
             "userid" to (currentUser?.uid ?: ""),
             "likes" to 0,
             "likedBy" to emptyList<String>(),
-            "timestamp" to FieldValue.serverTimestamp() // Timestamp implemented
+            "timestamp" to FieldValue.serverTimestamp(),
+            "isChecked" to isChecked// Timestamp implemented
         )
         try {
             db.collection("posts").document(postId).set(post).await()
@@ -150,6 +151,9 @@ class FireStoreRepository {
         }
     }
 
+    /**
+     * Method to unfollow user
+     */
     fun unfollowFollower(currentUserId: String, targetUserId: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val currentUserRef = db.collection("users").document(currentUserId)
@@ -164,8 +168,7 @@ class FireStoreRepository {
     }
 
     /**
-     * Method to get followers posts
-     * //TODO Need to fetch own posts aswell
+     * Method to get posts from people you follow
      */
     fun getFollowerPosts(currentUserId: String): LiveData<List<Post>> {
         val liveData = MutableLiveData<List<Post>>()
@@ -179,6 +182,7 @@ class FireStoreRepository {
                 } else {
                     following
                 }
+
                 if (userId.isNotEmpty()) {
                     val postsRef = db.collection("posts")
                     postsRef.whereIn("userid", userId)
@@ -187,21 +191,29 @@ class FireStoreRepository {
                             if (error != null) {
                                 Log.d("FireStore", "Error getting posts: ${error.message}")
                                 return@addSnapshotListener
-
                             }
                             val postList = mutableListOf<Post>()
                             snapshot?.documents?.forEach { document ->
+                                val isChecked = document.getBoolean("isChecked") ?: false
+                                Log.d("PostFragment", "isChecked value: $isChecked")
+
                                 val post = document.toObject(Post::class.java)
-                                if (post != null) { postList.add(post) }
+                                if (post != null) {
+                                    post.isChecked = isChecked
+
+                                    postList.add(post)
+                                }
                             }
+
                             liveData.value = postList
                         }
-                } else { liveData.value = emptyList() }
+                } else {
+                    liveData.value = emptyList()
+                }
             }
         }
         return liveData
     }
-
 
     suspend fun deletePost(postId: String, currentUserId: String?): String {
         try {
@@ -253,6 +265,49 @@ class FireStoreRepository {
             }
     }
 
+    suspend fun addLikesToPost(postId: String): Boolean {
+
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+
+        try {
+            val docRef = db.collection("posts").document(postId)
+            val document = docRef.get().await()
+
+            if (document.exists()) {
+
+                docRef.update("likedBy", FieldValue.arrayUnion(currentUser)).await()
+                val likeCounter = document.getLong("likes") ?: 0
+
+                val friendsLiked = document.get("likedBy") as? List<String>
+
+                if (friendsLiked?.contains(currentUser) == false) {
+                    val newLikeCounter = likeCounter + 1
+                    docRef.update("likes", newLikeCounter).await()
+                    Log.d("!!!", "Likes +")
+                    return true
+
+                } else {
+
+                    val newLikeCounter = likeCounter - 1
+                    docRef.update("likes", newLikeCounter).await()
+                    docRef.update("likedBy", FieldValue.arrayRemove(currentUser)).await()
+                    Log.d("!!!", "Likes -")
+                    return false
+                }
+
+            } else {
+                Log.d("!!!", "Post doesnt exist.")
+                return false
+            }
+        } catch (e: Exception) {
+            Log.e("PostRepository", "Error updating likes", e)
+            return false
+        }
+    }
+
+    /**
+     * Method to check if you are already following
+     */
     fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
         val liveData = MutableLiveData<Boolean>()
 
@@ -357,6 +412,5 @@ class FireStoreRepository {
             }
         return followerCount
     }
-
 }
 

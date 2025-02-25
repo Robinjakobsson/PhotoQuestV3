@@ -1,11 +1,18 @@
 package com.example.photoquestv3.Adapter
 
+
+import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
 import androidx.recyclerview.widget.RecyclerView
@@ -38,10 +45,9 @@ class PostAdapter(
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
-        val likeButton: ImageView = itemView.findViewById(R.id.likeIcon)
-        var likeCounter: TextView = itemView.findViewById(R.id.likeCounter)
-
-
+        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
+        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -58,7 +64,15 @@ class PostAdapter(
         holder.userName.text = post.username
         holder.description.text = post.description
 
-//        Likes
+
+        if(post.isChecked) {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+
+        }
+        else {
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+        }
+
         holder.likeCounter.text = post.likes.toString()
 
         holder.likeCounter.setOnClickListener {
