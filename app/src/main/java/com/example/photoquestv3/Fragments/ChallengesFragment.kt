@@ -1,26 +1,18 @@
 package com.example.photoquestv3.Fragments
 
 
-import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Models.Challenges
-import com.example.photoquestv3.R
 import com.example.photoquestv3.Adapter.ChallengesRecyclerAdapter
-import com.example.photoquestv3.Models.ChallengeObjects
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.databinding.FragmentChallengesBinding
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
+
 
 class ChallengesFragment : Fragment() {
 

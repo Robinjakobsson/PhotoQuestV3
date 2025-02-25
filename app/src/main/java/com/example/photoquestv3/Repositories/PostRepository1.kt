@@ -6,8 +6,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class PostRepository1 {
+
     private val db = Firebase.firestore
-    private val auth = Firebase.auth
 
     fun updatePostText(
         postId: String,

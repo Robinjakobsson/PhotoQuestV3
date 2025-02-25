@@ -24,7 +24,6 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-
      fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
             auth.createAccount(email,password,name,username,imageUri,biography,onSuccess,onFailure)
@@ -45,18 +44,6 @@ class AuthViewModel : ViewModel() {
 
     fun getCurrentUser() : FirebaseUser? {
         return auth.getCurrentUser()
-    }
-
-    fun fetchUserName(){
-        viewModelScope.launch {
-            try {
-                val userName = auth.getUserName()
-                _userName.postValue(userName)
-
-            }catch (e: Exception){
-                Log.d("AuthViewModel", "Error")
-            }
-        }
     }
 
 }

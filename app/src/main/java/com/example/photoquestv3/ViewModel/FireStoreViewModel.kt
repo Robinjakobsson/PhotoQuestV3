@@ -95,7 +95,6 @@ class FireStoreViewModel: ViewModel() {
             }
     }
 
-
     fun checkFollowingStatus(currentUserId: String,targetUserId: String) : LiveData<Boolean> {
         return fireStoreDb.checkFollowingStatus(currentUserId,targetUserId)
     }

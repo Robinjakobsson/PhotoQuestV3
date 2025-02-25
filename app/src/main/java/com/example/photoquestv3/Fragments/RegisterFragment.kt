@@ -12,9 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import com.example.photoquestv3.R
 import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.FeedActivity

@@ -12,8 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
-import com.example.photoquestv3.Views.Fragments.LoginFragment
-import com.example.photoquestv3.Views.Fragments.ProfileFragment
 
 class SearchResultsAdapter(
     val context: Context,

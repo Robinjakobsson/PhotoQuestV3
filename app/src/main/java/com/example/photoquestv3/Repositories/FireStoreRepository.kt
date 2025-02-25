@@ -106,26 +106,6 @@ class FireStoreRepository {
         return userList
     }
 
-
-    fun dbCollectionUser(): CollectionReference {
-        return db.collection("users")
-    }
-
-
-    suspend fun fetchProfileImage(): String? {
-        val currentUser = auth.currentUser ?: return null
-        return try {
-            val documentSnapshot = db.collection("users")
-                .document(currentUser.uid)
-                .get()
-                .await()
-            documentSnapshot.getString("imageUrl")
-        } catch (e: Exception) {
-            Log.e("FireStoreRepository", "Error fetching profile image: ${e.message}", e)
-            null
-        }
-    }
-
     suspend fun fetchUserData(uid : String) : User? {
         val userRef = db.collection("users").document(uid)
             .get()
@@ -149,6 +129,26 @@ class FireStoreRepository {
                 Log.d("FireStore", "Error following user: ${e.message}")
             }
         }
+    }
+
+    /**
+     * Method to check if you are already following
+     */
+    fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
+        val liveData = MutableLiveData<Boolean>()
+
+        val currentUserRef = db.collection("users").document(currentUserId)
+        currentUserRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val following = document.get("following") as List<String>
+                liveData.value = following.contains(targetUserId)
+            } else {
+                liveData.value = false
+            }
+        }
+
+        return liveData
+
     }
 
     /**
@@ -263,66 +263,6 @@ class FireStoreRepository {
                     _likes.postValue(likes)
                 } else { Log.d("PostRepository", "No likes found for postId $postId")}
             }
-    }
-
-    suspend fun addLikesToPost(postId: String): Boolean {
-
-        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-
-        try {
-            val docRef = db.collection("posts").document(postId)
-            val document = docRef.get().await()
-
-            if (document.exists()) {
-
-                docRef.update("likedBy", FieldValue.arrayUnion(currentUser)).await()
-                val likeCounter = document.getLong("likes") ?: 0
-
-                val friendsLiked = document.get("likedBy") as? List<String>
-
-                if (friendsLiked?.contains(currentUser) == false) {
-                    val newLikeCounter = likeCounter + 1
-                    docRef.update("likes", newLikeCounter).await()
-                    Log.d("!!!", "Likes +")
-                    return true
-
-                } else {
-
-                    val newLikeCounter = likeCounter - 1
-                    docRef.update("likes", newLikeCounter).await()
-                    docRef.update("likedBy", FieldValue.arrayRemove(currentUser)).await()
-                    Log.d("!!!", "Likes -")
-                    return false
-                }
-
-            } else {
-                Log.d("!!!", "Post doesnt exist.")
-                return false
-            }
-        } catch (e: Exception) {
-            Log.e("PostRepository", "Error updating likes", e)
-            return false
-        }
-    }
-
-    /**
-     * Method to check if you are already following
-     */
-    fun checkFollowingStatus(currentUserId: String, targetUserId: String): LiveData<Boolean> {
-        val liveData = MutableLiveData<Boolean>()
-
-        val currentUserRef = db.collection("users").document(currentUserId)
-        currentUserRef.get().addOnSuccessListener { document ->
-            if (document.exists()) {
-                val following = document.get("following") as List<String>
-                liveData.value = following.contains(targetUserId)
-            } else {
-                liveData.value = false
-            }
-        }
-
-        return liveData
-
     }
 
     suspend fun addLikesToPost(postId: String): Boolean {

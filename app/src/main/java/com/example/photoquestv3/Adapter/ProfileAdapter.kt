@@ -35,4 +35,4 @@ class ProfileAdapter(var imageUrl: List<String>) : RecyclerView.Adapter<ProfileA
         imageUrl = newImages
         notifyDataSetChanged()
     }
-    }
+}

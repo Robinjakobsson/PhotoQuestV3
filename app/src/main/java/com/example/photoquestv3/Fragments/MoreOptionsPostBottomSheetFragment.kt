@@ -9,11 +9,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.databinding.MoreOptionsPostBottonSheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.firestore.FirebaseFirestore
 
 class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
 
