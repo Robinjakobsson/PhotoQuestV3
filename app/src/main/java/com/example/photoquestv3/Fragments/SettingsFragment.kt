@@ -17,18 +17,17 @@ import com.google.firebase.ktx.Firebase
 
 
 class SettingsFragment : Fragment() {
-    lateinit var binding: FragmentSettingsBinding
+
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
     lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        //  binding =FragmentSettingsBinding.inflate(layoutInflater)
-        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
-        // Inflate the layout for this fragment
-        // return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -109,6 +108,12 @@ class SettingsFragment : Fragment() {
                     }
                 }
             }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun deleteAccountFromFirestore() {
