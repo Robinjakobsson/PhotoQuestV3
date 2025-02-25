@@ -38,6 +38,18 @@ class AuthRepository {
         }
     }
 
+    suspend fun deleteAuthUser() {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            try {
+                currentUser.delete().await()
+                Log.d("AuthRepository", "[DELETE] User account deleted successfully: ${currentUser.uid}")
+            } catch (e: Exception) {
+                Log.e("AuthRepository", "[DELETE ERROR] Error deleting user account: ${e.message}")
+            }
+        } else { Log.d("AuthRepository", "[DELETE] No current user found") }
+    }
+
     fun createGoogleAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

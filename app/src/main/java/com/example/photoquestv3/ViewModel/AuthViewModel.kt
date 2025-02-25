@@ -24,9 +24,20 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-     fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
             auth.createAccount(email,password,name,username,imageUri,biography,onSuccess,onFailure)
+        }
+    }
+
+    fun deleteAuthUser(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+             auth.deleteAuthUser()
+             onSuccess()
+            } catch (e: Exception) {
+                onFailure(e)
+            }
         }
     }
     fun signIn(email: String,password: String,onSuccess: () -> Unit,onFailure: (Exception) -> Unit) {
