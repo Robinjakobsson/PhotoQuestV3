@@ -211,11 +211,11 @@ class FireStoreRepository {
                                     postList.add(post)
                                 }
                             }
-                            // Skicka listan med posts till LiveData
+
                             liveData.value = postList
                         }
                 } else {
-                    liveData.value = emptyList()  // Om ingen följare finns, sätt LiveData till tom lista
+                    liveData.value = emptyList()
                 }
             }
         }
