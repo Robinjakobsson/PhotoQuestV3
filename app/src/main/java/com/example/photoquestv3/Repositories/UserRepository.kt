@@ -21,7 +21,7 @@ class UserRepository {
 
     private fun addSnapShotListener(uid: String) {
 
-        if (listener != null) {return}
+        if (listener != null) { return }
 
         listener = db.collection("users").document(uid)
             .addSnapshotListener { snapshot, error ->
