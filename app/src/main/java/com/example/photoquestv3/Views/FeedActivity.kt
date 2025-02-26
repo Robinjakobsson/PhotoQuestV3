@@ -55,9 +55,7 @@ class FeedActivity : AppCompatActivity() {
 
         }
 
-        lifecycleScope.launch {
-            fetchAndPostAPIPost()
-        }
+        dailyPhotoAPICall(this)
         startHomeFragment()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -102,8 +100,12 @@ class FeedActivity : AppCompatActivity() {
 
     fun dailyPhotoAPICall(context: Context) {
 
+
         Log.d("API", "Works...")
         val currentTime = Calendar.getInstance()
+
+        Log.d("!!!", "${currentTime.time}")
+
         val dueTime = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 12)
             set(Calendar.MINUTE, 0)
