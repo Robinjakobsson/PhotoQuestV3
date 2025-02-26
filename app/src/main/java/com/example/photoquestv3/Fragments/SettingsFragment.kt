@@ -64,7 +64,7 @@ class SettingsFragment : Fragment() {
 
         binding.buttonUpdate.setOnClickListener {
 
-            updateProfileData()
+            updateProfilePic()
 
 
         }
@@ -106,57 +106,36 @@ class SettingsFragment : Fragment() {
         requireActivity().finish()
     }
 
-    private fun updateProfileData() {
+    private fun updateProfilePic() {
+        selectedImageUri?.let { uri ->
 
-        val name = binding.etUpdateNameInput.text.toString()
-        val username = binding.etUpdateUserNameInput.text.toString()
-        val bio = binding.etBioInput.text.toString()
-        val profileImg = binding.imgUpdateProfileImage
-
-        if (name.isNotEmpty() && username.isNotEmpty() && bio.isNotEmpty()) {
-            Toast.makeText(requireContext(), "Updated!", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
-        }
-
-
-    }
-
-//    private fun register() {
-//        val email = binding?.emailEt?.text.toString()
-//        val password = binding?.passwordEt?.text.toString()
-//        val name = binding?.nameEt?.text.toString()
-//        val bio = binding?.biographyEt?.text.toString()
-//        val username = binding?.usernameEt?.text.toString()
-//        val imageUri = selectedImageUri
-//
-//        binding?.progressBar?.visibility = View.VISIBLE
-//
-//        if (email.isEmpty() || password.isEmpty() || name.isEmpty() || bio.isEmpty() || username.isEmpty()) {
-//            Toast.makeText(requireContext(),"All fields are required!",Toast.LENGTH_SHORT).show()
-//            return
-//        }
-//        if (imageUri == null) {
-//            Toast.makeText(requireContext(),"Please select a picture!",Toast.LENGTH_SHORT).show()
-//            return
-//        }else {
-//            auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
-//
-//
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    challenges.addChallengesToNewUser()
-//
-//                    Toast.makeText(requireContext(), "Welcome $username", Toast.LENGTH_SHORT).show()
-//                    binding?.progressBar?.visibility = View.GONE
-//                    startFeedActivity()
-//                }, 1000)
-//
-//            }, onFailure = {
-//                binding?.progressBar?.visibility = View.GONE
-//                Toast.makeText(requireContext(),"Account not created..",Toast.LENGTH_SHORT).show()
-//            })
-//        }
-//    }
-
-
+            storageVm.uploadProfileImage(uri, onSuccess = { downloadUrl ->
+                try {
+                    val currentUser = authVm.getCurrentUserUid()
+                    userVm.updateUserField(currentUser, "imageUri", downloadUrl,
+                        onSuccess = {
+                            Toast.makeText(
+                                requireContext(),
+                                "Profile picture updated",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }, onFailure = { e ->
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to update image: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        })
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }, onFailure = {
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to upload image: ${it.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+        } ?: run { Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show() }}
 }

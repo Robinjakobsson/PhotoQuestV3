@@ -23,7 +23,6 @@ class StorageViewModel : ViewModel() {
            }
         }
     }
-
     fun uploadPost(imageUri: Uri,description : String, isChecked : Boolean, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
         viewModelScope.launch {
             Log.d("viewmodel","$isChecked")

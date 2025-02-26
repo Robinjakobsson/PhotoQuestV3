@@ -24,6 +24,17 @@ class UserViewModel: ViewModel()  {
         }
     }
 
+    fun updateUserField(uid: String, field: String, value: Any, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUserField(uid, field, value)
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e)
+            }
+        }
+    }
+
 
     fun deleteUserAccount(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
