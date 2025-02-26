@@ -64,9 +64,9 @@ class SettingsFragment : Fragment() {
 
         binding.buttonUpdate.setOnClickListener {
 
-            updateProfilePic()
-
-
+//            updateProfilePic()
+//            updateName()
+            updateUserName()
         }
 
     }
@@ -137,5 +137,57 @@ class SettingsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             })
-        } ?: run { Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show() }}
+        } ?: run { Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show() }
+    }
+
+    private fun updateName() {
+
+        val newName = binding.etUpdateNameInput.text.toString()
+        if (newName.isBlank()) {
+            Toast.makeText(requireContext(), "Name cannot be empty", Toast.LENGTH_SHORT).show()
+        } else {
+            val currentUser = authVm.getCurrentUserUid()
+            userVm.updateUserField(currentUser, "name", newName,
+                onSuccess = {
+                    Toast.makeText(requireContext(), "Name is updated", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "Failed to update name", Toast.LENGTH_SHORT).show()
+                })
+        }
+    }
+
+    private fun updateUserName() {
+
+        val newUserName = binding.etUpdateUserNameInput.text.toString()
+        if (newUserName.isBlank()) {
+            Toast.makeText(requireContext(), "Name cannot be empty", Toast.LENGTH_SHORT).show()
+        } else {
+            val currentUser = authVm.getCurrentUserUid()
+            userVm.updateUserField(currentUser, "name", newUserName,
+                onSuccess = {
+                    Toast.makeText(requireContext(), "Name is updated", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "Failed to update name", Toast.LENGTH_SHORT).show()
+                })
+        }
+    }
+
+    private fun updateBio() {
+
+        val newBio = binding.etBioInput.text.toString()
+        if (newBio.isBlank()) {
+            Toast.makeText(requireContext(), "Name cannot be empty", Toast.LENGTH_SHORT).show()
+        } else {
+            val currentUser = authVm.getCurrentUserUid()
+            userVm.updateUserField(currentUser, "name", newBio,
+                onSuccess = {
+                    Toast.makeText(requireContext(), "Name is updated", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "Failed to update name", Toast.LENGTH_SHORT).show()
+                })
+        }
+    }
 }

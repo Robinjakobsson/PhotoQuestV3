@@ -43,7 +43,6 @@ class UserViewModel: ViewModel()  {
         }
     }
 
-
     fun deleteUserAccount(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
