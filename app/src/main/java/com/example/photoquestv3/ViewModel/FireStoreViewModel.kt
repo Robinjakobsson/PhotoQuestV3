@@ -125,10 +125,10 @@ class FireStoreViewModel: ViewModel() {
         return userPostCount
     }
 
-    fun getFollowers(uid : String) {
+    fun getFollowers(uid : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
         viewModelScope.launch {
             try {
-                val users = fireStoreDb.getFollowers(uid)
+                val users = fireStoreDb.getFollowers(uid,onSuccess,onFailure)
                 _followers.value = users
             }catch (e : Exception) {
                 Log.d("viEWModel","could not get users..")

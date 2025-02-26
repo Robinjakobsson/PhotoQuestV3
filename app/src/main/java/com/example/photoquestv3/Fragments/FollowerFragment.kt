@@ -49,7 +49,13 @@ class FollowerFragment() : BottomSheetDialogFragment() {
         binding?.followerRecyclerView?.adapter = adapter
 
         if (userid != null) {
-            fireStoreVm.getFollowers(userid!!)
+            binding?.progressBar?.visibility = View.VISIBLE
+
+            fireStoreVm.getFollowers(userid!!, onSuccess = {
+                binding?.progressBar?.visibility = View.GONE
+            }, onFailure = {
+                binding?.progressBar?.visibility = View.GONE
+            } )
         }
         fireStoreVm.followers.observe(viewLifecycleOwner, Observer { users ->
             adapter.updateData(users)

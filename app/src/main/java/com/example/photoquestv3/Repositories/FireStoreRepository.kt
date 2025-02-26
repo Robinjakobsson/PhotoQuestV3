@@ -372,7 +372,7 @@ class FireStoreRepository {
         return followerCount
     }
 
-    suspend fun getFollowers(uid: String) : List<User> {
+    suspend fun getFollowers(uid: String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) : List<User> {
         val userRef = db.collection("users").document(uid).get().await()
 
         if (userRef.exists()) {
@@ -390,9 +390,11 @@ class FireStoreRepository {
                     }
                 }
             }
+            onSuccess()
             return followingUsers
 
         }
+        onFailure(Exception("No users found.."))
         return emptyList()
     }
 
