@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Adapter.ProfileAdapter
+import com.example.photoquestv3.Fragments.FollowerFragment
 import com.example.photoquestv3.Fragments.SettingsFragment
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
@@ -109,6 +110,14 @@ class ProfileFragment : Fragment() {
                     }
             }
         }
+        binding.profileFollowerButton.setOnClickListener {
+            val followerFragment = FollowerFragment()
+
+            followerFragment.show(parentFragmentManager,"bottomSheet")
+
+
+        }
+
     }
 
     override fun onDestroyView() {
