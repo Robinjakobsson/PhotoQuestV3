@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginBottom="15dp"
     android:id="@+id/itemCardView"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    app:cardElevation="0dp"
     >
 
     <LinearLayout
@@ -22,15 +22,24 @@
             android:padding="8dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/profileImage"
-                android:src="@drawable/ic_person"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="8dp"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/userprofile"
-                android:background="@drawable/rounded_image_background"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                android:layout_marginEnd="10dp"
+                >
+
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:src="@drawable/ic_person"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/userprofile"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
 
             <TextView
                 android:id="@+id/userName"
@@ -63,7 +72,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -74,8 +85,9 @@
                     android:id="@+id/likeIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginEnd="5dp"
                     android:contentDescription="@string/trash_image"
-                    android:src="@drawable/ic_thumb_up_trans"
+                    android:src="@drawable/photoquest_like_icon_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +98,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="24dp"
                     android:contentDescription="@string/comment_section"
-                    android:src="@drawable/ic_add_comment"
+                    android:src="@drawable/photoquest_comment_icon_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/likeCounter"
                     app:layout_constraintTop_toTopOf="parent"
@@ -96,6 +108,7 @@
                     android:id="@+id/likeCounter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/likeIcon"

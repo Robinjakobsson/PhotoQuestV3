@@ -52,6 +52,7 @@ class PostFragment : Fragment() {
 
         binding.selectImageButton.setOnClickListener { pickImageLauncher.launch("image/*") }
 
+
         binding.postButton.setOnClickListener { uploadPost() }
 
 
