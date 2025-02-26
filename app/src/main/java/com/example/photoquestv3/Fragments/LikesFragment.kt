@@ -43,13 +43,10 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
             adapter.updateList(friends)
 
         }
-
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

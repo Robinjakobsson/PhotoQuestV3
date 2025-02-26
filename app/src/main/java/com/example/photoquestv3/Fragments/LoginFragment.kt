@@ -147,13 +147,12 @@ class LoginFragment : Fragment() {
                         if (document.exists()) {
                             return@addOnSuccessListener
                         } else {
-                           val challenges = ChallengesRepository()
+                            val challenges = ChallengesRepository()
 
                             val email = currentUser.email!!
                             val name = currentUser.displayName!!
                             val username = currentUser.displayName!!.lowercase()
-                            val googleSignInAccount = currentUser
-                            val imageUri = googleSignInAccount.photoUrl!!
+                            val imageUri = currentUser.photoUrl!!
                             auth.createGoogleOrFacebookAccount(
                                 email,
                                 "why do we have it?",
@@ -171,7 +170,8 @@ class LoginFragment : Fragment() {
                             )
                             Handler(Looper.getMainLooper()).postDelayed({
                                 challenges.addChallengesToNewUser()
-                                Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT)
+                                    .show()
                                 startFeedActivity()
                             }, 1000)
                         }
@@ -185,15 +185,10 @@ class LoginFragment : Fragment() {
             } else {
                 Log.d("!!!", "Google auth failed")
             }
-
         }
-
-
-        //if user is signed in with fb, gets data from fb with GraphRequest
-
     }
 
-    //gets token from fb
+    //gets token from fb and start methods that create new user and challenges
     private fun handleFacebookAccessToken(accessToken: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
         firebaseAuth.signInWithCredential(credential)
@@ -227,9 +222,9 @@ class LoginFragment : Fragment() {
                         Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
                         startFeedActivity()
                     }, 1000)
+                } else {
+                    Log.d("GoogleFacebookSignIn", "User is null")
                 }
-                else {
-                Log.d("GoogleFacebookSignIn", "User is null")}
             }
     }
 
@@ -311,7 +306,7 @@ class LoginFragment : Fragment() {
         requireActivity().startActivity(intent)
     }
 
-
+    //Creates user for facebook auth
     private fun getDataFromFb() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
@@ -347,11 +342,9 @@ class LoginFragment : Fragment() {
                                             )
                                         })
                                 } catch (e: Exception) {
-                                    // Hantera undantag här
+                                    Log.d("FacebookDebug", "$e")
                                 }
                             }
-
-                        // Sätt parametrar och kör requesten inom else-blocke
 
                         val parameters = Bundle()
                         parameters.putString("fields", "email,name,picture.type(large)")

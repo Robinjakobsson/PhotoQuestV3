@@ -24,11 +24,6 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-//    fun createFacebookAccount(email: String,password: String,name: String,username: String,imageUri: Uri,biography: String,onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
-//        viewModelScope.launch {
-//            auth.createFacebookAccount(email, name, username, imageUri, biography, onSuccess, onFailure)
-//        }
-//    }
 
      fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {

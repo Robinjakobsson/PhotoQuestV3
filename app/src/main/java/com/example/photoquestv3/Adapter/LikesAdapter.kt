@@ -13,13 +13,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 
-class LikesAdapter (
+class LikesAdapter(
     private var friendList: MutableList<User>,
 ) : RecyclerView.Adapter<LikesAdapter.LikesViewHolder>() {
 
     inner class LikesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val username: TextView = itemView.findViewById(R.id.textUserName)
-        val profileImage : ImageView = itemView.findViewById(R.id.imageProfile)
+        val profileImage: ImageView = itemView.findViewById(R.id.imageProfile)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikesViewHolder {
@@ -44,7 +44,7 @@ class LikesAdapter (
     }
 
 
-    fun updateList(friends : List<User>) {
+    fun updateList(friends: List<User>) {
         friendList.clear()
         friendList.addAll(friends)
         notifyDataSetChanged()

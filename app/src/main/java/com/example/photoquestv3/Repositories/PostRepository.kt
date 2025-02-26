@@ -1,11 +1,10 @@
 package com.example.photoquestv3.Repositories
 
 import android.util.Log
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class PostRepository1 {
+class PostRepository {
 
     private val db = Firebase.firestore
 
