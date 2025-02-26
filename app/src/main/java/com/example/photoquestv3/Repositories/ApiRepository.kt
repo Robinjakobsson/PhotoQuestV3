@@ -3,6 +3,7 @@ package com.example.photoquestv3.Repositories
 import android.util.Log
 import com.example.photoquestv3.API.PhotoResponse
 import com.example.photoquestv3.API.UnsplashedService
+import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,6 +11,7 @@ import kotlinx.coroutines.tasks.await
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.UUID
+import kotlin.math.log
 
 class ApiRepository {
 
@@ -50,27 +52,32 @@ class ApiRepository {
         val name = "PhotoCat"
         val description1 = "Today's pic!"
 
-        Log.d("!!!", "Hämtad användare: $user")
+        Log.d("123", "Hämtad användare: ${user?.username}")
 
-        val post = hashMapOf(
-            "postId" to postId,
-            "profilePic" to (user?.imageUrl.toString()),
-            "imageUrl" to imageUrl,
-            "description" to description1,
-            "name" to name,
-            "userid" to (targetUserId ?: ""),
-            "likes" to 0,
-            "likedBy" to emptyList<String>(),
-            "timestamp" to FieldValue.serverTimestamp(),
-            "isChecked" to false// Timestamp implemented
-        )
-        Log.d("!!!", "Post som ska sparas: $post")
+        if (user != null) {
+            Log.d("456","${user.username}")
 
-        try {
-            db.collection("posts").document(postId).set(post).await()
-            Log.d("FireStoreRepository", "Successfully Created post $post!")
-        } catch (e: Exception) {
-            Log.d("FireStoreRepository", "Failed to save post to database...", e)
+            val post = hashMapOf(
+                "postId" to postId,
+                "username" to (name),
+                "profilePic" to (user?.imageUrl),
+                "imageUrl" to imageUrl,
+                "description" to description1,
+                "userid" to (user?.uid),
+                "likes" to 0,
+                "likedBy" to emptyList<String>(),
+                "timestamp" to FieldValue.serverTimestamp(),
+                "isChecked" to false
+            )
+            Log.d("678", "Post som ska sparas: $post")
+
+
+            try {
+                db.collection("posts").document(postId).set(post).await()
+                Log.d("FireStoreRepository", "Successfully Created post $post!")
+            } catch (e: Exception) {
+                Log.d("FireStoreRepository", "Failed to save post to database...", e)
+            }
         }
     }
 

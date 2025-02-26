@@ -9,7 +9,7 @@ data class User(
     val uid : String = "",
     val imageUrl : String = "",
     val biography : String = "",
-    val usernamesearch : String = username.lowercase(),
+    val usernamesearch : String = "",
     val followers : List<String> = listOf(),
     val following : List<String> = listOf()) : Serializable {
 }
