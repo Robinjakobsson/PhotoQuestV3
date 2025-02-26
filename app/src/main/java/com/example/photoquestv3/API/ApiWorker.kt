@@ -14,15 +14,17 @@ class ApiWorker(context: Context, params: WorkerParameters) : CoroutineWorker(co
     override suspend fun doWork(): Result {
 
         try {
-            val photo =
-                apiRepository.getRandomPhoto("xoqINlwV1EP_aaTfLsLqwPpqlGMM9Wau696KtmitXtg")
+            val photo = apiRepository.getRandomPhoto("xoqINlwV1EP_aaTfLsLqwPpqlGMM9Wau696KtmitXtg")
 
             if (photo != null) {
+
+                apiRepository.saveApiPostToDatabase(photo.urls?.regular, photo.description)
                 Log.d("!!!", "Did fetch photo!!!!!")
+                return Result.success()
             } else {
+                return Result.failure()
                 Log.d("!!!", "Did not fetch photo")
             }
-            return Result.success()
 
         } catch (e: Exception) {
             Log.d("!!!", "API did not work")

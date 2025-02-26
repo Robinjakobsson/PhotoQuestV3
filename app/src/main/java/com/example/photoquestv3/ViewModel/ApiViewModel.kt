@@ -13,7 +13,13 @@ class ApiViewModel : ViewModel(){
     fun fetchRandomPhoto ( clientId : String, onResult: (PhotoResponse?) -> Unit) {
         viewModelScope.launch {
             val photo = repository.getRandomPhoto(clientId)
+
+
+
+
             onResult(photo)
+
+
         }
     }
 }
