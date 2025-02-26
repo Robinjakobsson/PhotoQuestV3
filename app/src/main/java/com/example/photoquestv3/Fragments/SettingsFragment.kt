@@ -10,15 +10,19 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentSettingsBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
     lateinit var auth: FirebaseAuth
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +38,20 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = Firebase.auth
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
         binding.deleteAccount.setOnClickListener {
             showPopup()
         }
 
-        binding.buttonLogout.setOnClickListener{
-            auth.signOut()  //changed places of those two, otherwise sees HomeActivity that user is signed in
+        binding.buttonLogout.setOnClickListener {
+            auth.signOut() //changed places of those two, otherwise sees HomeActivity that user is signed in
+            googleSignInClient.revokeAccess()
             returnHomeActivity()
         }
     }
