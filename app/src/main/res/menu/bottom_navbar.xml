@@ -19,7 +19,7 @@
 
     <item android:title="Search"
         android:id="@+id/search"
-        android:icon="@drawable/photoquest_search_black"
+        android:icon="@drawable/photoquest_search_black_new"
         />
 
 
