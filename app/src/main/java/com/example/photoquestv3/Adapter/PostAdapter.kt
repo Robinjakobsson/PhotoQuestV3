@@ -1,6 +1,5 @@
 package com.example.photoquestv3.Adapter
 
-
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
@@ -23,10 +22,11 @@ import com.google.firebase.ktx.Firebase
 class PostAdapter(
     private var postList: List<Post>,
     val postVm: PostViewModel,
+    private val currentUserId: String,
+    var currentUserProfileUrl: String?,
     val onPostClicked: (Post) -> Unit,
     val onPostTextClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
-
 
     fun updatePosts(newPosts: List<Post>) {
         postList = newPosts
@@ -39,9 +39,9 @@ class PostAdapter(
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
-        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
-        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
-        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
+        val likeButton: ImageView = itemView.findViewById(R.id.likeIcon)
+        val likeCounter: TextView = itemView.findViewById(R.id.likeCounter)
+        val cardView: CardView = itemView.findViewById(R.id.itemCardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -49,46 +49,36 @@ class PostAdapter(
         return PostViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return postList.size
-    }
+    override fun getItemCount(): Int = postList.size
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
         holder.userName.text = post.username
         holder.description.text = post.description
 
-
-        if(post.isChecked) {
+        // Sätt bakgrund baserat på post.isChecked
+        if (post.isChecked) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
-
-        }
-        else {
+        } else {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
         }
-
         holder.likeCounter.text = post.likes.toString()
 
         holder.likeCounter.setOnClickListener {
-
             val postId = post.postId
             val likesFragment = LikesFragment(postId)
-
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
                 likesFragment.show(it, likesFragment.tag)
             }
-
         }
 
         holder.likeButton.setOnClickListener {
             postVm.addLikesToPost(post.postId)
         }
 
-
-        holder.optionImage.setOnClickListener() {
+        holder.optionImage.setOnClickListener {
             postVm.setItemId(post.postId)
-
             val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
@@ -96,8 +86,13 @@ class PostAdapter(
             }
         }
 
+        val profileUrl = if (post.userid == currentUserId) {
+            currentUserProfileUrl
+        } else {
+            post.profilePic
+        }
         Glide.with(holder.itemView.context)
-            .load(post.profilePic)
+            .load(profileUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.profileImage)
 
@@ -106,7 +101,6 @@ class PostAdapter(
             .into(holder.imagePost)
 
         holder.itemView.findViewById<ImageView>(R.id.addComment).setOnClickListener {
-
             val bottomSheet = CommentFragment(post.postId)
             (holder.itemView.context as AppCompatActivity).supportFragmentManager.let { fm ->
                 bottomSheet.show(fm, "CommentBottomSheet")
@@ -119,12 +113,12 @@ class PostAdapter(
         holder.profileImage.setOnClickListener {
             onPostClicked(post)
         }
+
         holder.description.setOnClickListener {
             val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
             if (post.userid == currentUser) {
                 onPostTextClicked(post)
             }
         }
-
     }
 }

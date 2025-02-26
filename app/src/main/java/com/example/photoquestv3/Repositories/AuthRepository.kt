@@ -159,4 +159,8 @@ class AuthRepository {
         return userName
     }
 
+    fun getCurrentUserUid() : String {
+        return auth.currentUser?.uid ?: throw Exception("No logged in user")
+    }
+
 }

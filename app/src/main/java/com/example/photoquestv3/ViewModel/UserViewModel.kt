@@ -1,9 +1,11 @@
 package com.example.photoquestv3.ViewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
+import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.Repositories.UserRepository
 import kotlinx.coroutines.launch
 
@@ -12,6 +14,12 @@ class UserViewModel: ViewModel()  {
     private val userRepository = UserRepository()
     private val authRepository = AuthRepository()
 
+    val userData: LiveData<User?> = userRepository.userData
+
+    init {
+        val currentUser = authRepository.getCurrentUserUid()
+        userRepository.restartListening(currentUser)
+    }
 
     fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
@@ -51,6 +59,11 @@ class UserViewModel: ViewModel()  {
 
     fun signOut() {
         authRepository.signOut()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        userRepository.stopListening()
     }
 
 

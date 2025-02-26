@@ -112,7 +112,7 @@ class SettingsFragment : Fragment() {
             storageVm.uploadProfileImage(uri, onSuccess = { downloadUrl ->
                 try {
                     val currentUser = authVm.getCurrentUserUid()
-                    userVm.updateUserField(currentUser, "imageUri", downloadUrl,
+                    userVm.updateUserField(currentUser, "imageUrl", downloadUrl,
                         onSuccess = {
                             Toast.makeText(
                                 requireContext(),

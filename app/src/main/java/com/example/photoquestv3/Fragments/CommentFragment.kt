@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.photoquestv3.ViewModel.UserViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -25,7 +26,9 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
 
     private var _binding: FragmentCommentBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var vmComment: CommentViewModel
+    private lateinit var vmUser: UserViewModel
     private lateinit var commentAdapter: CommentAdapter
 
     override fun onCreateView(
@@ -39,17 +42,22 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vmComment = ViewModelProvider(this)[CommentViewModel::class.java]
-        vmComment.startListeningToComments(postId)
+        vmUser = ViewModelProvider(this)[UserViewModel::class.java]
 
+        vmComment.startListeningToComments(postId)
         recycleViewSetup()
         swipeToDeleteComment()
-
         vmComment.comments.observe(viewLifecycleOwner) { comments ->
             commentAdapter.updateComments(comments)
 
             if (comments.isNotEmpty()) {
                 binding.commentSection.scrollToPosition(comments.size - 1)
             }
+        }
+
+        vmUser.userData.observe(viewLifecycleOwner) { user ->
+            commentAdapter.currentUserProfileUrl = user?.imageUrl
+            commentAdapter.notifyDataSetChanged()
         }
 
         binding.editTextComment.setOnEditorActionListener { _, actionId, _ ->
@@ -111,7 +119,7 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     }
     private fun recycleViewSetup()  {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
-        commentAdapter = CommentAdapter(emptyList()) { comment -> editCommentDialog(comment) }
+        commentAdapter = CommentAdapter(emptyList(), currentUserProfileUrl = null) { comment -> editCommentDialog(comment) }
         binding.commentSection.adapter = commentAdapter
     }
     private fun swipeToDeleteComment() {

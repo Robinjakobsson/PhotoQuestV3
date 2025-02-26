@@ -58,7 +58,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun getCurrentUserUid() : String {
-        return auth.getCurrentUser()?.uid ?: throw Exception("No logged in user")
+       return auth.getCurrentUserUid()
     }
 
 }

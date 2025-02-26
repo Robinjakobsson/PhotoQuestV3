@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 
 class CommentAdapter(
     private var commentList: List<Comment>,
+    var currentUserProfileUrl: String?,
     private val onCommentClicked: (Comment) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
@@ -40,8 +41,14 @@ class CommentAdapter(
         holder.comment.text = commentsItem.comment
         holder.heart.setImageResource(R.drawable.ic_heart)
 
+        val profileUrl = if (commentsItem.userId == Firebase.auth.currentUser?.uid) {
+            currentUserProfileUrl ?: commentsItem.profilePicture
+        } else {
+            commentsItem.profilePicture
+        }
+
         Glide.with(holder.itemView.context)
-            .load(commentsItem.profilePicture)
+            .load(profileUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.imageProfile)
 
