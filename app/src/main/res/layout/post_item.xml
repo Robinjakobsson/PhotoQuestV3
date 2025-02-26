@@ -87,7 +87,7 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="5dp"
                     android:contentDescription="@string/trash_image"
-                    android:src="@drawable/photoquest_like_icon_outline"
+                    android:src="@drawable/photoquest_heart_icon_outline"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
