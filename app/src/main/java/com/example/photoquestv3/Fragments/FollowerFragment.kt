@@ -14,6 +14,7 @@ import com.example.photoquestv3.R
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentFollowerBinding
 import com.example.photoquestv3.databinding.FragmentProfileBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -45,7 +46,9 @@ class FollowerFragment() : BottomSheetDialogFragment() {
         auth = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
 
         binding?.followerRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        adapter = FollowerAdapter(mutableListOf())
+        adapter = FollowerAdapter(mutableListOf(), onFollowerClicked = { user ->
+            navigateToProfile(user.uid)
+        })
         binding?.followerRecyclerView?.adapter = adapter
 
         if (userid != null) {
@@ -66,5 +69,18 @@ class FollowerFragment() : BottomSheetDialogFragment() {
         super.onDestroy()
 
         binding = null
+    }
+    fun navigateToProfile(userid : String) {
+        val bundle = Bundle()
+        bundle.putString("uid",userid)
+
+        val profileFragment = ProfileFragment()
+
+        profileFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, profileFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

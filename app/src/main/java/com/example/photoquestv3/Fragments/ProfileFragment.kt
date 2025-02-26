@@ -110,18 +110,7 @@ class ProfileFragment : Fragment() {
                     }
             }
         }
-        binding.profileFollowerButton.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("userid",user.uid)
-
-            val followerFragment = FollowerFragment()
-
-            followerFragment.arguments = bundle
-
-            followerFragment.show(parentFragmentManager,"bottomSheet")
-
-
-        }
+        binding.profileFollowerButton.setOnClickListener { sendArguments() }
 
     }
 
@@ -210,5 +199,16 @@ class ProfileFragment : Fragment() {
                 startSettingsFragment()
             }
         }
+    }
+    fun sendArguments() {
+        val bundle = Bundle()
+        bundle.putString("userid",user.uid)
+
+        val followerFragment = FollowerFragment()
+
+        followerFragment.arguments = bundle
+
+        followerFragment.show(parentFragmentManager,"bottomSheet")
+
     }
 }

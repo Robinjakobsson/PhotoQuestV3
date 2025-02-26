@@ -11,7 +11,8 @@ import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 
 class FollowerAdapter(
-    val followers : MutableList<User>
+    val followers : MutableList<User>,
+    val onFollowerClicked : (User) -> Unit
 ) : RecyclerView.Adapter<FollowerAdapter.FollowerViewHolder>() {
 
     inner class FollowerViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
@@ -37,6 +38,13 @@ class FollowerAdapter(
             .load(follower.imageUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.profileImage)
+
+        holder.profileImage.setOnClickListener {
+            onFollowerClicked(follower)
+        }
+        holder.username.setOnClickListener {
+            onFollowerClicked(follower)
+        }
     }
 
     fun updateData(newList : List<User>) {
