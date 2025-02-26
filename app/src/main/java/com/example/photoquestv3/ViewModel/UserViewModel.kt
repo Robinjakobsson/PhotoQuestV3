@@ -2,6 +2,7 @@ package com.example.photoquestv3.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -12,6 +13,16 @@ class UserViewModel: ViewModel()  {
     private val authRepository = AuthRepository()
 
 
+    fun updateUser(user: User, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUser(user)
+                onSuccess()
+            } catch (e: Exception) {
+                onFailure(e)
+            }
+        }
+    }
 
 
     fun deleteUserAccount(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
@@ -25,6 +36,10 @@ class UserViewModel: ViewModel()  {
                 onFailure(e)
             }
         }
+    }
+
+    fun signOut() {
+        authRepository.signOut()
     }
 
 

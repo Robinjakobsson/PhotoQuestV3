@@ -42,16 +42,22 @@ class SettingsFragment : Fragment() {
         }
 
         binding.buttonLogout.setOnClickListener{
-                authVm.signOut()
-                returnHomeActivity()
+            returnHomeActivity()
         }
+
+        binding.buttonUpdate.setOnClickListener {
+
+
+
+        }
+
     }
 
     private fun showPopup() {
         val builder = context?.let { AlertDialog.Builder(it) }
         builder!!.setTitle("Yo!")
             .setMessage("Do you want to delete account?")
-            .setPositiveButton("Yes") { dialog, which ->
+            .setPositiveButton("Yes") { _, _ ->
                 userVm.deleteUserAccount(onSuccess = {
                     returnHomeActivity()
                     Toast.makeText(requireContext(), "Account successfully deleted", Toast.LENGTH_SHORT).show()
@@ -59,7 +65,7 @@ class SettingsFragment : Fragment() {
                     Toast.makeText(requireContext(), "Error deleting account", Toast.LENGTH_SHORT).show()
                 })
             }
-            .setNegativeButton("No") { dialog, which ->
+            .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
         val alertDialog: AlertDialog = builder.create()
@@ -80,6 +86,11 @@ class SettingsFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun dummyUpdate() {
+
+
     }
 
 
