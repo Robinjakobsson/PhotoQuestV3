@@ -41,7 +41,7 @@ class AuthRepository {
     fun createGoogleOrFacebookAccount(email: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val imageUrl = uploadPicture(imageUri)
+                val imageUrl = ""
                 val uid = auth.currentUser?.uid ?: throw Exception("Ingen inloggad användare")
                 saveUserToDatabase(email, username, uid, imageUrl, name, biography)
                 withContext(Dispatchers.Main) {

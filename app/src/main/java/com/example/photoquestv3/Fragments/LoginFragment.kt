@@ -3,6 +3,8 @@ package com.example.photoquestv3.Views.Fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
@@ -144,16 +147,19 @@ class LoginFragment : Fragment() {
                         if (document.exists()) {
                             return@addOnSuccessListener
                         } else {
+                           val challenges = ChallengesRepository()
+
                             val email = currentUser.email!!
                             val name = currentUser.displayName!!
                             val username = currentUser.displayName!!.lowercase()
-
+                            val googleSignInAccount = currentUser
+                            val imageUri = googleSignInAccount.photoUrl!!
                             auth.createGoogleOrFacebookAccount(
                                 email,
                                 "why do we have it?",
                                 name,
                                 username,
-                                Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.google}"),
+                                imageUri,
                                 "",
                                 { Log.d("GoogleDebug", "Account created successfully!") },
                                 { exception ->
@@ -163,12 +169,18 @@ class LoginFragment : Fragment() {
                                     )
                                 }
                             )
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                challenges.addChallengesToNewUser()
+                                Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
+                                startFeedActivity()
+                            }, 1000)
                         }
                     }
                     .addOnFailureListener { exception ->
                         Log.d("!!!", "Problem: $exception")
                     }
                 Log.d("!!!", "Google auth success")
+
                 startFeedActivity()
             } else {
                 Log.d("!!!", "Google auth failed")
@@ -208,7 +220,16 @@ class LoginFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
                 getDataFromFb()
-                startFeedActivity()
+                if (firebaseAuth.currentUser != null) {
+                    val challenges = ChallengesRepository()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        challenges.addChallengesToNewUser()
+                        Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
+                        startFeedActivity()
+                    }, 1000)
+                }
+                else {
+                Log.d("GoogleFacebookSignIn", "User is null")}
             }
     }
 
@@ -291,7 +312,6 @@ class LoginFragment : Fragment() {
     }
 
 
-
     private fun getDataFromFb() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
@@ -308,13 +328,16 @@ class LoginFragment : Fragment() {
                                     val email = jsonObject!!.getString("email")
                                     val name = jsonObject.getString("name")
                                     val username = jsonObject.getString("name")
-
+                                    val profilePicUrl =
+                                        jsonObject?.getJSONObject("picture")?.getJSONObject("data")
+                                            ?.getString("url")
+                                    val profilePicUri = Uri.parse(profilePicUrl)
                                     auth.createGoogleOrFacebookAccount(
                                         email,
                                         "why do we have it?",
                                         name,
                                         username,
-                                        Uri.parse("android.resource://com.example.photoquestv3/${R.drawable.facebook}"),
+                                        profilePicUri,
                                         "",
                                         { Log.d("FacebookDebug", "Account created successfully!") },
                                         { exception ->
