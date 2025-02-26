@@ -3,6 +3,7 @@ package com.example.photoquestv3.Fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -189,5 +190,41 @@ class SettingsFragment : Fragment() {
                     Toast.makeText(requireContext(), "Failed to update name", Toast.LENGTH_SHORT).show()
                 })
         }
+    }
+
+    private fun updateUserProfile(
+        newName: String?,
+        newUsername: String?,
+        newBio: String?,
+    ) {
+        val currentUser = authVm.getCurrentUserUid()
+
+        if (!newName.isNullOrBlank() && !newUsername.isNullOrBlank() && !newBio.isNullOrBlank()) {
+
+            val existingUser = userVm.userData.value
+            if (existingUser != null) {
+                val updatedUser = existingUser.copy(
+                    name = newName,
+                    username = newUsername,
+                    biography = newBio
+                )
+                userVm.updateUser(updatedUser, onSuccess = {
+                    Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+                }, onFailure = { e ->
+                    Toast.makeText(requireContext(), "Failed to update profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                })
+            } else {
+                if (!newName.isNullOrBlank()) {
+                    userVm.updateUserField(currentUser, "name", newName, onSuccess = {
+
+                    }, onFailure = {
+
+                    })
+                }
+
+
+            }
+        }
+
     }
 }
