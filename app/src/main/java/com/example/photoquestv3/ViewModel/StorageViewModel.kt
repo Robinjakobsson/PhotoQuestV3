@@ -13,6 +13,17 @@ class StorageViewModel : ViewModel() {
 
     private val storage = StorageRepository()
 
+    fun uploadProfileImage(imageUri : Uri, onSuccess : (String) -> Unit, onFailure : (Exception) -> Unit) {
+        viewModelScope.launch {
+           try {
+               val imageUrl = storage.uploadProfileImage(imageUri)
+               onSuccess(imageUrl)
+           } catch (e: Exception) {
+               onFailure(e)
+           }
+        }
+    }
+
     fun uploadPost(imageUri: Uri,description : String, isChecked : Boolean, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
         viewModelScope.launch {
             Log.d("viewmodel","$isChecked")
