@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Repositories
 
+import android.content.pm.CrossProfileApps
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class FireStoreRepository {
@@ -370,22 +372,28 @@ class FireStoreRepository {
         return followerCount
     }
 
-    suspend fun getFollowers(uid: String) {
+    suspend fun getFollowers(uid: String) : List<User> {
+        val userRef = db.collection("users").document(uid).get().await()
 
+        if (userRef.exists()) {
+            val followingList = userRef.get("followers") as? List<String> ?: emptyList()
+            val followingUsers = mutableListOf<User>()
 
-        val userRef = db.collection("users").document(uid)
-            .get().addOnSuccessListener { documents ->
+            for (followerUid in followingList) {
+                val followerdocs = db.collection("users").document(followerUid).get().await()
+                if (followerdocs.exists()) {
+                    val user = followerdocs.toObject(User::class.java)
 
-                if (documents.exists()) {
-                    val followerRef =
-                        documents.get("followers") as? List<String> ?: emptyList()
-
-                    for (uid in followerRef) {
-
-                        fetchUserData(uid)
+                    if (user != null) {
+                        followingUsers.add(user)
+                        Log.d("users","user : ${user.name}")
                     }
                 }
-
             }
+            return followingUsers
+
+        }
+        return emptyList()
     }
+
 }

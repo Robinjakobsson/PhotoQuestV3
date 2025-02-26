@@ -35,6 +35,9 @@ class FireStoreViewModel: ViewModel() {
     private val _followingStatus = MutableLiveData<Boolean>()
     val followingStatus: LiveData<Boolean> = _followingStatus
 
+    private val _followers = MutableLiveData<List<User>>()
+    val followers : LiveData<List<User>> = _followers
+
 
     private val _userImages = MutableLiveData<List<String>>()
     val userImages: LiveData<List<String>> = _userImages
@@ -121,5 +124,17 @@ class FireStoreViewModel: ViewModel() {
 
         return userPostCount
     }
+
+    fun getFollowers(uid : String) {
+        viewModelScope.launch {
+            try {
+                val users = fireStoreDb.getFollowers(uid)
+                _followers.value = users
+            }catch (e : Exception) {
+                Log.d("viEWModel","could not get users..")
+            }
+        }
+    }
+
 
 }

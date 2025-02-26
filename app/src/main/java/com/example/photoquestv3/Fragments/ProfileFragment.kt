@@ -111,7 +111,12 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.profileFollowerButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("userid",user.uid)
+
             val followerFragment = FollowerFragment()
+
+            followerFragment.arguments = bundle
 
             followerFragment.show(parentFragmentManager,"bottomSheet")
 
