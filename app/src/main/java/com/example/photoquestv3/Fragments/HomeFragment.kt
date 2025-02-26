@@ -11,6 +11,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.photoquestv3.API.ApiWorker
 import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
@@ -20,6 +24,8 @@ import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -74,6 +80,7 @@ class HomeFragment : Fragment() {
         }
 
         showDailyChallenge()
+
     }
 
     private fun showDailyChallenge() {
@@ -151,4 +158,7 @@ class HomeFragment : Fragment() {
         }
         builder.show()
     }
+
+
+
 }
