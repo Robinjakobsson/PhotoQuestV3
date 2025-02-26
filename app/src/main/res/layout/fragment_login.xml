@@ -114,8 +114,8 @@
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/fbLoginButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="15dp" />
 
         <ImageButton
@@ -131,7 +131,9 @@
             android:layout_margin="15dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
-          android:background="@drawable/apple" />
+          android:background="@drawable/apple"
+            android:visibility="gone"
+            />
     </LinearLayout>
 
 </LinearLayout>
