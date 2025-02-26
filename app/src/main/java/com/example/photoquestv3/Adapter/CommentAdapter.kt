@@ -34,6 +34,9 @@ class CommentAdapter(
         return commentList.size
     }
 
+    /**
+     * Binds the comment data to the view holder
+     */
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val commentsItem = commentList[position]
 
@@ -60,10 +63,16 @@ class CommentAdapter(
         }
     }
 
+    /**
+     * Returns the comment at the given position
+     */
     fun getCommentAt(position: Int): Comment {
         return commentList[position]
     }
 
+    /**
+     * Updates the list of comments
+     */
     fun updateComments(newComments: List<Comment>) {
         commentList = newComments
         notifyDataSetChanged()

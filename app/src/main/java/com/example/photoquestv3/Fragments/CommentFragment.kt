@@ -75,6 +75,9 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         _binding = null
     }
 
+    /**
+     * Adds a comment to the database by calling the addComment() function in the CommentViewModel.
+     */
     private fun addComment() {
         val input = binding.editTextComment.text.toString()
         if (input.isEmpty()) {
@@ -88,6 +91,9 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         }
     }
 
+    /**
+     * Edits a comment in the database by calling the updateComment() function in the CommentViewModel.
+     */
     private fun editCommentDialog(comment: Comment) {
 
         val builder = AlertDialog.Builder(requireContext())
@@ -117,11 +123,19 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         }
         builder.show()
     }
+
+    /**
+     * Sets up the RecyclerView for displaying comments.
+     */
     private fun recycleViewSetup()  {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
         commentAdapter = CommentAdapter(emptyList(), currentUserProfileUrl = null) { comment -> editCommentDialog(comment) }
         binding.commentSection.adapter = commentAdapter
     }
+
+    /**
+     * Deletes a comment from the database by calling the deleteComment() function in the CommentViewModel.
+     */
     private fun swipeToDeleteComment() {
 
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
