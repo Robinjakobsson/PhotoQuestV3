@@ -49,8 +49,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        auth = Firebase.auth
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
@@ -61,10 +59,6 @@ class SettingsFragment : Fragment() {
         userVm = ViewModelProvider(this)[UserViewModel::class.java]
         storageVm = ViewModelProvider(this)[StorageViewModel::class.java]
 
-        binding.imgUpdateProfileImage.setOnClickListener {
-            pickImgFromGallery.launch("image/*")
-        }
-
         binding.deleteAccount.setOnClickListener {
             showPopup()
         }
@@ -73,6 +67,14 @@ class SettingsFragment : Fragment() {
             userVm.signOut()
             googleSignInClient.revokeAccess()
             returnHomeActivity()
+        }
+
+        binding.imgUpdateProfileImage.setOnClickListener {
+            pickImgFromGallery.launch("image/*")
+        }
+
+        binding.buttonChangeLanguage.setOnClickListener {
+            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
         }
 
         binding.buttonUpdate.setOnClickListener {
