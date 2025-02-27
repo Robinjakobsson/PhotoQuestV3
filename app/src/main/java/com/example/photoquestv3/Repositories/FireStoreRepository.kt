@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Repositories
 
+import android.content.pm.CrossProfileApps
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class FireStoreRepository {
@@ -46,6 +48,7 @@ class FireStoreRepository {
                 .document(uid)
                 .set(user)
                 .await()
+
 
 
             Log.d("FireStoreRepository","User: $userName Successfully added!")
@@ -376,5 +379,31 @@ class FireStoreRepository {
             }
         return followerCount
     }
-}
 
+    suspend fun getFollowers(uid: String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) : List<User> {
+        val userRef = db.collection("users").document(uid).get().await()
+
+        if (userRef.exists()) {
+            val followingList = userRef.get("followers") as? List<String> ?: emptyList()
+            val followingUsers = mutableListOf<User>()
+
+            for (followerUid in followingList) {
+                val followerdocs = db.collection("users").document(followerUid).get().await()
+                if (followerdocs.exists()) {
+                    val user = followerdocs.toObject(User::class.java)
+
+                    if (user != null) {
+                        followingUsers.add(user)
+                        Log.d("users","user : ${user.name}")
+                    }
+                }
+            }
+            onSuccess()
+            return followingUsers
+
+        }
+        onFailure(Exception("No users found.."))
+        return emptyList()
+    }
+
+}
