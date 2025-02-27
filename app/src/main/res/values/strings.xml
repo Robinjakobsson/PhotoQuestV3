@@ -43,5 +43,6 @@
     <string name="update">UPDATE</string>
     <string name="dummy_text">dummy text</string>
     <string name="your_story_here">Your story here</string>
+    <string name="change_language">CHANGE LANGUAGE</string>
 </resources>
 

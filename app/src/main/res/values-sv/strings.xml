@@ -43,4 +43,5 @@
     <string name="update">UPPDATERA</string>
     <string name="dummy_text">exempeltext</string>
     <string name="your_story_here">Din berättelse här</string>
+    <string name="change_language">ÄNDRA SPRÅK</string>
 </resources>
