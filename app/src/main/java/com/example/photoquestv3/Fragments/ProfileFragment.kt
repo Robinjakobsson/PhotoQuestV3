@@ -77,7 +77,7 @@ class ProfileFragment : Fragment() {
                 // Shows how many challenges user has completed.
                 challengesVm.countCompletedChallenges(uid)
 
-                    challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { count ->
+                challengesVm.numberOfCompletedChallenges.observe(viewLifecycleOwner) { count ->
                     binding.profileHeartTextView.text = count.toString()
 
                 }
@@ -137,7 +137,6 @@ class ProfileFragment : Fragment() {
                         fireStoreVm.unfollowUser(currentUser.uid, user.uid)
                     }
                 }
-
             }
         }
     }

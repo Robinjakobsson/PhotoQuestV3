@@ -20,11 +20,9 @@ class PostFragment : Fragment() {
     private var _binding: FragmentPostBinding? = null
     private val binding get() = _binding!!
     private lateinit var storageVm: StorageViewModel
-    private var selectedImageUri : Uri? = null
+    private var selectedImageUri: Uri? = null
     private lateinit var challengesVm: ChallengesViewModel
-    var isChecked : Boolean = false
-    private lateinit var vmPost: PostViewModel
-
+    var isChecked: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +37,11 @@ class PostFragment : Fragment() {
         storageVm = ViewModelProvider(this)[StorageViewModel::class.java]
         challengesVm = ViewModelProvider(this)[ChallengesViewModel::class.java]
         challengesVm.isChecked.observe(viewLifecycleOwner) { isChecked ->
-            binding.challengeCheckbox.isChecked = isChecked }
-
+            binding.challengeCheckbox.isChecked = isChecked
+        }
 
         val pickImageLauncher =
-            registerForActivityResult(ActivityResultContracts.GetContent()) {uri : Uri? ->
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 if (uri != null) {
                     selectedImageUri = uri
                     binding.selectedImage.setImageURI(selectedImageUri)
@@ -52,13 +50,11 @@ class PostFragment : Fragment() {
 
         binding.selectImageButton.setOnClickListener { pickImageLauncher.launch("image/*") }
 
-
         binding.postButton.setOnClickListener { uploadPost() }
-
 
         binding.challengeCheckbox.setOnClickListener {
 
-             isChecked = binding.challengeCheckbox.isChecked
+            isChecked = binding.challengeCheckbox.isChecked
             challengesVm.setChallengeCheckedState(isChecked)
 
             if (isChecked) {
@@ -68,32 +64,33 @@ class PostFragment : Fragment() {
             }
 
         }
-
         showDailyChallenge()
-
-
-
     }
 
     private fun uploadPost() {
         val description = binding.textDescription.text.toString()
         isChecked = binding.challengeCheckbox.isChecked
 
-        Log.d("ASD","$isChecked")
+        Log.d("ASD", "$isChecked")
 
         binding.progressBar.visibility = View.VISIBLE
 
         if (selectedImageUri != null && description.isNotBlank()) {
-            storageVm.uploadPost(selectedImageUri!!,description,isChecked, onSuccess = {
-                Toast.makeText(requireContext(),"Successfully Uploaded Post!",Toast.LENGTH_SHORT).show()
+            storageVm.uploadPost(selectedImageUri!!, description, isChecked, onSuccess = {
+                Toast.makeText(requireContext(), "Successfully Uploaded Post!", Toast.LENGTH_SHORT)
+                    .show()
                 binding.progressBar.visibility = View.GONE
-                Log.d("ASD","$isChecked")
+                Log.d("ASD", "$isChecked")
             }, onFailure = {
-                Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
             })
         } else {
-            Toast.makeText(requireContext(),"Please Enter a text and a picture!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Please Enter a text and a picture!",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
@@ -103,7 +100,7 @@ class PostFragment : Fragment() {
             if (latestChallenge != null) {
                 binding.dailyChallengePostTv.text = latestChallenge.challenge
             } else {
-                Log.d("HomeFragment","No challenges.")
+                Log.d("HomeFragment", "No challenges.")
             }
         }
     }
@@ -120,36 +117,4 @@ class PostFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-//    private fun editPostTextDialog(post: Post) {
-//
-//        val builder = AlertDialog.Builder(requireContext())
-//        builder.setTitle("Edit Comment")
-//
-//        val input = EditText(requireContext())
-//        input.setText(post.description)
-//        builder.setView(input)
-//
-//        builder.setPositiveButton("Update") { dialog, _ ->
-//
-//            val newText = input.text.toString().trim()
-//            if (newText.isNotEmpty()) {
-//                vmPost.updatePostText(post.description, newText, onSuccess = {
-//                    Toast.makeText(requireContext(), "Post updated", Toast.LENGTH_SHORT).show()
-//                }, onFailure = {
-//                    Toast.makeText(requireContext(), "Failed to update post", Toast.LENGTH_SHORT).show()
-//                })
-//            } else {
-//                Toast.makeText(requireContext(), "Please enter new text", Toast.LENGTH_SHORT).show()
-//            }
-//            dialog.dismiss()
-//        }
-//
-//        builder.setNegativeButton("Cancel") { dialog, _ ->
-//            dialog.dismiss()
-//        }
-//        builder.show()
-//    }
-
 }

@@ -26,8 +26,7 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
         binding = MoreOptionsPostBottonSheetFragmentBinding.inflate(inflater, container, false)
         postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
 
-
-       postVm.toastMessage.observe(this, Observer { message ->
+        postVm.toastMessage.observe(this, Observer { message ->
             message?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
@@ -38,7 +37,6 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
             Log.d("!!!", "my post id is: $itemId")
         }
         return binding!!.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,28 +52,27 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
 
         if (listView != null) {
 
-        postVm.itemId.observe(viewLifecycleOwner, Observer { postId ->
+            postVm.itemId.observe(viewLifecycleOwner, Observer { postId ->
 
-            if (postId != null) {
+                if (postId != null) {
 
-                listView.setOnItemClickListener() { _, _, position, _ ->
+                    listView.setOnItemClickListener() { _, _, position, _ ->
 
-                    when (position) {
+                        when (position) {
 
-                        0 -> {
+                            0 -> {
 
-                        }
+                            }
 
-                        1 -> {
-                            postVm.deletePost(postId)
-                            postVm.updatePostAdapter()
+                            1 -> {
+                                postVm.deletePost(postId)
+                                postVm.updatePostAdapter()
 
+                            }
                         }
                     }
                 }
-            }
-        })
+            })
         }
     }
-
 }
