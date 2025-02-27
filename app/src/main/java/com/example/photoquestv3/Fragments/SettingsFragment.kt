@@ -108,6 +108,8 @@ class SettingsFragment : Fragment() {
         val newUsername = binding.etUpdateUserNameInput.text.toString().trim()
         val newBio = binding.etBioInput.text.toString().trim()
 
+        binding.progressSettings.visibility = View.VISIBLE
+
         val currentUserUid = authVm.getCurrentUserUid()
 
         if (selectedImageUri != null) {
@@ -127,14 +129,17 @@ class SettingsFragment : Fragment() {
                     userVm.updateUser(updatedUser,
                         onSuccess = {
                             Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         },
                         onFailure = { e ->
                             Toast.makeText(requireContext(), "Failed to update profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         }
                     )
                 }
             }, onFailure = {
                 Toast.makeText(requireContext(), "Failed to upload image: ${it.message}", Toast.LENGTH_SHORT).show()
+                    binding.progressSettings.visibility = View.GONE
             })
         } else {
             if (newName.isNotEmpty() || newUsername.isNotEmpty() || newBio.isNotEmpty()) {
@@ -143,9 +148,11 @@ class SettingsFragment : Fragment() {
                     userVm.updateUserField(currentUserUid, "name", newName,
                         onSuccess = {
                             Toast.makeText(requireContext(), "Name updated", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         },
                         onFailure = { e ->
                             Toast.makeText(requireContext(), "Failed to update name: ${e.message}", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         }
                     )
                 }
@@ -153,9 +160,11 @@ class SettingsFragment : Fragment() {
                     userVm.updateUserField(currentUserUid, "username", newUsername,
                         onSuccess = {
                             Toast.makeText(requireContext(), "Username updated", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         },
                         onFailure = { e ->
                             Toast.makeText(requireContext(), "Failed to update username: ${e.message}", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         }
                     )
                 }
@@ -163,14 +172,17 @@ class SettingsFragment : Fragment() {
                     userVm.updateUserField(currentUserUid, "biography", newBio,
                         onSuccess = {
                             Toast.makeText(requireContext(), "Biography updated", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         },
                         onFailure = { e ->
                             Toast.makeText(requireContext(), "Failed to update biography: ${e.message}", Toast.LENGTH_SHORT).show()
+                            binding.progressSettings.visibility = View.GONE
                         }
                     )
                 }
             } else {
                 Toast.makeText(requireContext(), "Nothing to update", Toast.LENGTH_SHORT).show()
+                binding.progressSettings.visibility = View.GONE
             }
         }
     }
