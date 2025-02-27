@@ -27,7 +27,6 @@ For Google and Facebook auth, you need to connect your app with your dev account
 
 
 ## Contributors
-
 - [@ElDavido81](https://github.com/ElDavido81)
 - [@Nittakorall](https://github.com/Nittakorall)
 - [@vandringskompis](https://github.com/vandringskompis)
