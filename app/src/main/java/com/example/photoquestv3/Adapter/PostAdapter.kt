@@ -65,7 +65,7 @@ class PostAdapter(
         if (post.likedBy.contains(currentUserId)){
             holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
         } else{
-            holder.likeButton.setImageResource(R.drawable.heart_icon)
+            holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon_outline)
         }
 
 

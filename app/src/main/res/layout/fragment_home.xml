@@ -52,10 +52,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/daily_challenge_header"/>
 
             <com.airbnb.lottie.LottieAnimationView
-                android:layout_width="75dp"
-                android:layout_height="66dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="62dp"
+                android:layout_height="55dp"
+                android:layout_marginBottom="4dp"
                 android:visibility="visible"
+                android:scaleX="1.78"
+                android:scaleY="1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/starImageView"
                 app:layout_constraintEnd_toEndOf="@+id/starImageView"
                 app:layout_constraintStart_toStartOf="@+id/starImageView"
