@@ -56,24 +56,13 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
-
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
-    implementation(libs.androidx.work.runtime.ktx)
 
-
-    implementation (libs.kotlinx.coroutines.core)
-    implementation (libs.kotlinx.coroutines.android)
-
-
-
-//no idea what this is, found in some video about google auth
+    //no idea what this is, found in some video about google auth
 //    implementation(libs.spots.dialog)
   //  implementation ("com.github.d-max:spots-dialog:1.1@aar")
 

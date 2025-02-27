@@ -54,12 +54,12 @@
 
         <activity
             android:name=".Views.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".Views.FeedActivity"
-            android:exported="false">
-        </activity>
-
-    </application>
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        </application>
 
 </manifest>

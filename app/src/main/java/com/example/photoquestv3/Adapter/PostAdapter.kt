@@ -10,12 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Fragments.CommentFragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.google.firebase.auth.ktx.auth
@@ -24,10 +25,12 @@ import com.google.firebase.ktx.Firebase
 class PostAdapter(
     private var postList: List<Post>,
     val postVm: PostViewModel,
+    private val currentUserId: String,
+    var currentUserProfileUrl: String?,
     val onPostClicked: (Post) -> Unit,
+    val currentUserData: User?,
     val onPostTextClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
-
 
     fun updatePosts(newPosts: List<Post>) {
         postList = newPosts
@@ -61,6 +64,14 @@ class PostAdapter(
         holder.userName.text = post.username
         holder.description.text = post.description
 
+        val displayName = if (post.userid == currentUserId && currentUserData != null) {
+                  currentUserData.username
+        } else {
+            post.username
+        }
+        holder.userName.text = displayName
+        holder.description.text = post.description
+
         val currentUserId = Firebase.auth.currentUser?.uid
         if (post.likedBy.contains(currentUserId)){
             holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
@@ -68,7 +79,7 @@ class PostAdapter(
             holder.likeButton.setImageResource(R.drawable.heart_icon)
         }
 
-
+        // Sätt bakgrund baserat på post.isChecked
         if (post.isChecked) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#70FFFF33"))
 
@@ -87,7 +98,6 @@ class PostAdapter(
             activity?.supportFragmentManager?.let {
                 likesFragment.show(it, likesFragment.tag)
             }
-
         }
 
         holder.likeButton.setOnClickListener {
@@ -122,8 +132,13 @@ class PostAdapter(
             }
         }
 
+        val profileUrl = if (post.userid == currentUserId) {
+            currentUserProfileUrl
+        } else {
+            post.profilePic
+        }
         Glide.with(holder.itemView.context)
-            .load(post.profilePic)
+            .load(profileUrl)
             .placeholder(R.drawable.ic_person)
             .into(holder.profileImage)
 
@@ -132,7 +147,6 @@ class PostAdapter(
             .into(holder.imagePost)
 
         holder.itemView.findViewById<ImageView>(R.id.addComment).setOnClickListener {
-
             val bottomSheet = CommentFragment(post.postId)
             (holder.itemView.context as AppCompatActivity).supportFragmentManager.let { fm ->
                 bottomSheet.show(fm, "CommentBottomSheet")
@@ -151,6 +165,5 @@ class PostAdapter(
                 onPostTextClicked(post)
             }
         }
-
     }
 }

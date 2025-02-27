@@ -15,6 +15,7 @@ class StorageRepository {
     suspend fun uploadProfileImage(imageUri : Uri) : String {
         val profileImageRef = storage.reference.child("profile_images/${UUID.randomUUID()}.jpg")
         profileImageRef.putFile(imageUri).await()
+        Log.d("StorageRepository","$imageUri")
         return  profileImageRef.downloadUrl.await().toString()
     }
     suspend fun uploadPost(imageUri: Uri, description : String, isChecked : Boolean, onSuccess : () -> Unit, onFailure : (Exception) -> Unit ) {
