@@ -92,12 +92,14 @@ class PostAdapter(
 
         holder.likeButton.setOnClickListener {
             val currentUserid = Firebase.auth.currentUser?.uid
+            //  fun for checking and saving like state and animation
             if (currentUserid != null && !post.likedBy.contains(currentUserid)) {
                 if (!post.isChecked) {
                     postVm.addLikesToPost(post.postId)
                     holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
                     post.isChecked = true
 
+                  //  Heart animation control
                     holder.heartAnim.visibility = View.VISIBLE
                     holder.heartAnim.playAnimation()
                     holder.heartAnim.addAnimatorListener(object : Animator.AnimatorListener {
