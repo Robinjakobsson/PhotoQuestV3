@@ -42,5 +42,7 @@
     <string name="upload_image">Upload image</string>
     <string name="delete_account">Delete account</string>
     <string name="update">UPDATE</string>
+    <string name="dummy_text">dummy text</string>
+    <string name="your_story_here">Your story here</string>
 </resources>
 
