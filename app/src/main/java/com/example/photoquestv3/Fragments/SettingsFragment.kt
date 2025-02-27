@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.Models.LanguageManager
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
 import com.example.photoquestv3.ViewModel.UserViewModel
@@ -74,7 +76,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.buttonChangeLanguage.setOnClickListener {
-            Toast.makeText(requireContext(), "Coming soon!", Toast.LENGTH_SHORT).show()
+            languageSelector()
         }
 
         binding.buttonUpdate.setOnClickListener {
@@ -129,30 +131,30 @@ class SettingsFragment : Fragment() {
             storageVm.uploadProfileImage(selectedImageUri!!,
                 onSuccess = { downloadUrl ->
 
-                val existingUser = userVm.userData.value
-                if (existingUser != null) {
+                    val existingUser = userVm.userData.value
+                    if (existingUser != null) {
 
-                    val updatedUser = existingUser.copy(
-                        name = if (newName.isNotEmpty()) newName else existingUser.name,
-                        username = if (newUsername.isNotEmpty()) newUsername else existingUser.username,
-                        biography = if (newBio.isNotEmpty()) newBio else existingUser.biography,
-                        imageUrl = downloadUrl
-                    )
-                    userVm.updateUser(updatedUser,
-                        onSuccess = {
-                            Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
-                            binding.progressSettings.visibility = View.GONE
-                        },
-                        onFailure = { e ->
-                            Toast.makeText(requireContext(), "Failed to update profile: ${e.message}", Toast.LENGTH_SHORT).show()
-                            binding.progressSettings.visibility = View.GONE
-                        }
-                    )
-                }
-            }, onFailure = {
-                Toast.makeText(requireContext(), "Failed to upload image: ${it.message}", Toast.LENGTH_SHORT).show()
+                        val updatedUser = existingUser.copy(
+                            name = if (newName.isNotEmpty()) newName else existingUser.name,
+                            username = if (newUsername.isNotEmpty()) newUsername else existingUser.username,
+                            biography = if (newBio.isNotEmpty()) newBio else existingUser.biography,
+                            imageUrl = downloadUrl
+                        )
+                        userVm.updateUser(updatedUser,
+                            onSuccess = {
+                                Toast.makeText(requireContext(), "Profile updated", Toast.LENGTH_SHORT).show()
+                                binding.progressSettings.visibility = View.GONE
+                            },
+                            onFailure = { e ->
+                                Toast.makeText(requireContext(), "Failed to update profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                                binding.progressSettings.visibility = View.GONE
+                            }
+                        )
+                    }
+                }, onFailure = {
+                    Toast.makeText(requireContext(), "Failed to upload image: ${it.message}", Toast.LENGTH_SHORT).show()
                     binding.progressSettings.visibility = View.GONE
-            })
+                })
         } else {
             if (newName.isNotEmpty() || newUsername.isNotEmpty() || newBio.isNotEmpty()) {
 
@@ -197,5 +199,20 @@ class SettingsFragment : Fragment() {
                 binding.progressSettings.visibility = View.GONE
             }
         }
+    }
+
+    private fun languageSelector() {
+        val languages = arrayOf("English","Español","Svenska" )
+        val languagesCode = arrayOf("en","es","sv")
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Choose language")
+            .setItems(languages) { dialog, which ->
+                LanguageManager.setLanguage(requireActivity() as AppCompatActivity, languagesCode[which])
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
