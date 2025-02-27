@@ -140,6 +140,7 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     /**
      * Deletes a comment from the database by calling the deleteComment() function in the CommentViewModel.
      */
+
     private fun swipeToDeleteComment() {
 
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {

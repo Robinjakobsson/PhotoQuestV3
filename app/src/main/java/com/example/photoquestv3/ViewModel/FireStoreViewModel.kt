@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Models.User
@@ -12,7 +11,6 @@ import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import com.google.firebase.firestore.Query
 
 class FireStoreViewModel: ViewModel() {
 
@@ -34,6 +32,9 @@ class FireStoreViewModel: ViewModel() {
 
     private val _followingStatus = MutableLiveData<Boolean>()
     val followingStatus: LiveData<Boolean> = _followingStatus
+
+    private val _followers = MutableLiveData<List<User>>()
+    val followers : LiveData<List<User>> = _followers
 
 
     private val _userImages = MutableLiveData<List<String>>()
@@ -81,20 +82,6 @@ class FireStoreViewModel: ViewModel() {
     }
 
 
-    fun fetchPosts123() {
-        fireStoreDb.db.collection("posts")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e("FireStoreViewModel", "Error listening to posts: ${error.message}")
-                    return@addSnapshotListener
-                }
-                if (snapshot != null) {
-                    posts123.postValue(snapshot.toObjects(Post::class.java))
-                }
-            }
-    }
-
     fun checkFollowingStatus(currentUserId: String,targetUserId: String) : LiveData<Boolean> {
         return fireStoreDb.checkFollowingStatus(currentUserId,targetUserId)
     }
@@ -121,5 +108,17 @@ class FireStoreViewModel: ViewModel() {
 
         return userPostCount
     }
+
+    fun getFollowers(uid : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val users = fireStoreDb.getFollowers(uid,onSuccess,onFailure)
+                _followers.value = users
+            }catch (e : Exception) {
+                Log.d("viEWModel","could not get users..")
+            }
+        }
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.photoquestv3.Repositories
 
+import android.content.pm.CrossProfileApps
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class FireStoreRepository {
@@ -31,8 +33,15 @@ class FireStoreRepository {
     /**
      * Function to add a User to the database
      */
-    suspend fun addUser(email : String, name : String, userName : String,uid : String, imageUrl : String, biography : String) {
-        val user = User(email,name,userName,uid,imageUrl,biography)
+    suspend fun addUser(
+        email: String,
+        name: String,
+        userName: String,
+        uid: String,
+        imageUrl: String,
+        biography: String
+    ) {
+        val user = User(email, name, userName, uid, imageUrl, biography)
 
         try {
             db.collection("users")
@@ -40,9 +49,17 @@ class FireStoreRepository {
                 .set(user)
                 .await()
 
+
+
             Log.d("FireStoreRepository","User: $userName Successfully added!")
+
+            val targetUserId = "Cer3dCu4h6Y0ceA0fRVILUiuJnD2"
+
+            followUser(user.uid, targetUserId)
+
         }catch (e : Exception) {
             Log.d("FireStoreRepository","User: $userName not added... ${e.message}")
+
             throw e
         }
     }
@@ -51,7 +68,7 @@ class FireStoreRepository {
     /**
      * Function to Save a post to the Database
      */
-    suspend fun savePostToDatabase(imageUrl: String,description : String,isChecked : Boolean) {
+    suspend fun savePostToDatabase(imageUrl: String, description: String, isChecked: Boolean) {
         val currentUser = auth.currentUser
         val postId = UUID.randomUUID().toString()
         val post = hashMapOf(
@@ -68,14 +85,14 @@ class FireStoreRepository {
         )
         try {
             db.collection("posts").document(postId).set(post).await()
-            Log.d("FireStoreRepository","Successfully Created post $post!")
-        } catch (e : Exception) {
-            Log.d("FireStoreRepository","Failed to save post to database...", e)
+            Log.d("FireStoreRepository", "Successfully Created post $post!")
+        } catch (e: Exception) {
+            Log.d("FireStoreRepository", "Failed to save post to database...", e)
         }
     }
 
     //    Fetches all posts by time order
-    suspend fun fetchPostSortedByTime() : List<Post> {
+    suspend fun fetchPostSortedByTime(): List<Post> {
 
         return db.collection("posts")
             .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -106,7 +123,7 @@ class FireStoreRepository {
         return userList
     }
 
-    suspend fun fetchUserData(uid : String) : User? {
+    suspend fun fetchUserData(uid: String): User? {
         val userRef = db.collection("users").document(uid)
             .get()
             .await()
@@ -247,7 +264,9 @@ class FireStoreRepository {
 
     private fun listenForLikes(postId: String) {
 
-        if (likesListener != null) { return }
+        if (likesListener != null) {
+            return
+        }
 
         likesListener = db.collection("posts")
             .document(postId)
@@ -261,7 +280,9 @@ class FireStoreRepository {
                 if (snapshot != null && snapshot.exists()) {
                     val likes = snapshot.getLong("likes")?.toInt() ?: 0
                     _likes.postValue(likes)
-                } else { Log.d("PostRepository", "No likes found for postId $postId")}
+                } else {
+                    Log.d("PostRepository", "No likes found for postId $postId")
+                }
             }
     }
 
@@ -310,7 +331,10 @@ class FireStoreRepository {
                                 liveData.value = friendsList
                             }
                             .addOnFailureListener {
-                                Log.e("FireStoreRepository", "Error fetching user data: ${it.message}")
+                                Log.e(
+                                    "FireStoreRepository",
+                                    "Error fetching user data: ${it.message}"
+                                )
                                 liveData.value = emptyList()
                             }
                     } else {
@@ -327,7 +351,7 @@ class FireStoreRepository {
 
     suspend fun fetchUserImages(userId: String): List<String> {
         val snapshot = db.collection("posts")
-            .whereEqualTo("userid",userId)
+            .whereEqualTo("userid", userId)
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .await()
@@ -342,7 +366,10 @@ class FireStoreRepository {
         db.collection("users").document(userId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    Log.e("FireStoreRepository", "Error listening to follower count: ${error.message}")
+                    Log.e(
+                        "FireStoreRepository",
+                        "Error listening to follower count: ${error.message}"
+                    )
                     return@addSnapshotListener
                 }
                 if (snapshot != null && snapshot.exists()) {
@@ -352,5 +379,31 @@ class FireStoreRepository {
             }
         return followerCount
     }
-}
 
+    suspend fun getFollowers(uid: String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) : List<User> {
+        val userRef = db.collection("users").document(uid).get().await()
+
+        if (userRef.exists()) {
+            val followingList = userRef.get("followers") as? List<String> ?: emptyList()
+            val followingUsers = mutableListOf<User>()
+
+            for (followerUid in followingList) {
+                val followerdocs = db.collection("users").document(followerUid).get().await()
+                if (followerdocs.exists()) {
+                    val user = followerdocs.toObject(User::class.java)
+
+                    if (user != null) {
+                        followingUsers.add(user)
+                        Log.d("users","user : ${user.name}")
+                    }
+                }
+            }
+            onSuccess()
+            return followingUsers
+
+        }
+        onFailure(Exception("No users found.."))
+        return emptyList()
+    }
+
+}

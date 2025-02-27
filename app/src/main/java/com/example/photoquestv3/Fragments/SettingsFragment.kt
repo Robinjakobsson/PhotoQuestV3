@@ -3,7 +3,6 @@ package com.example.photoquestv3.Fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +16,8 @@ import com.example.photoquestv3.ViewModel.StorageViewModel
 import com.example.photoquestv3.ViewModel.UserViewModel
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentSettingsBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 class SettingsFragment : Fragment() {
@@ -48,6 +49,14 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        auth = Firebase.auth
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
         authVm = ViewModelProvider(this)[AuthViewModel::class.java]
         userVm = ViewModelProvider(this)[UserViewModel::class.java]
         storageVm = ViewModelProvider(this)[StorageViewModel::class.java]
@@ -61,6 +70,8 @@ class SettingsFragment : Fragment() {
         }
 
         binding.buttonLogout.setOnClickListener {
+            userVm.signOut()
+            googleSignInClient.revokeAccess()
             returnHomeActivity()
         }
 
@@ -94,7 +105,6 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     private fun returnHomeActivity() {
         val intent = Intent(requireContext(), HomeActivity::class.java)

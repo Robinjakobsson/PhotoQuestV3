@@ -1,5 +1,7 @@
 package com.example.photoquestv3.Adapter
 
+
+import android.animation.Animator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -41,9 +43,11 @@ class PostAdapter(
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
-        val likeButton: ImageView = itemView.findViewById(R.id.likeIcon)
-        val likeCounter: TextView = itemView.findViewById(R.id.likeCounter)
-        val cardView: CardView = itemView.findViewById(R.id.itemCardView)
+        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
+        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
+        val heartAnim: com.airbnb.lottie.LottieAnimationView = itemView.findViewById(R.id.heartAnim)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -51,7 +55,9 @@ class PostAdapter(
         return PostViewHolder(view)
     }
 
-    override fun getItemCount(): Int = postList.size
+    override fun getItemCount(): Int {
+        return postList.size
+    }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
@@ -66,17 +72,28 @@ class PostAdapter(
         holder.userName.text = displayName
         holder.description.text = post.description
 
+        val currentUserId = Firebase.auth.currentUser?.uid
+        if (post.likedBy.contains(currentUserId)){
+            holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
+        } else{
+            holder.likeButton.setImageResource(R.drawable.heart_icon)
+        }
+
         // Sätt bakgrund baserat på post.isChecked
         if (post.isChecked) {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#CC66CC"))
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#70FFFF33"))
+
         } else {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#99CCFF"))
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#90FFFFFF"))
         }
+
         holder.likeCounter.text = post.likes.toString()
 
         holder.likeCounter.setOnClickListener {
+
             val postId = post.postId
             val likesFragment = LikesFragment(postId)
+
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
                 likesFragment.show(it, likesFragment.tag)
@@ -84,11 +101,30 @@ class PostAdapter(
         }
 
         holder.likeButton.setOnClickListener {
-            postVm.addLikesToPost(post.postId)
+            val currentUserid = Firebase.auth.currentUser?.uid
+            //  fun for checking and saving like state and animation
+            if (currentUserid != null && !post.likedBy.contains(currentUserid)) {
+                postVm.addLikesToPost(post.postId)
+                holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
+
+                //  Heart animation control
+                holder.heartAnim.visibility = View.VISIBLE
+                holder.heartAnim.playAnimation()
+                holder.heartAnim.addAnimatorListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+                    override fun onAnimationEnd(animation: Animator) {
+                        holder.heartAnim.visibility = View.GONE
+                        holder.heartAnim.removeAllAnimatorListeners()
+                    }
+                    override fun onAnimationCancel(animation: Animator) {}
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
+            }
         }
 
-        holder.optionImage.setOnClickListener {
+        holder.optionImage.setOnClickListener() {
             postVm.setItemId(post.postId)
+
             val moreOptionsFragment = MoreOptionsPostBottomSheetFragment()
             val activity = holder.itemView.context as? AppCompatActivity
             activity?.supportFragmentManager?.let {
@@ -123,7 +159,6 @@ class PostAdapter(
         holder.profileImage.setOnClickListener {
             onPostClicked(post)
         }
-
         holder.description.setOnClickListener {
             val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
             if (post.userid == currentUser) {

@@ -18,11 +18,12 @@ class AuthViewModel : ViewModel() {
     val username: MutableLiveData<String> =_userName
 
 
-    fun createGoogleAccount(email: String,password: String,name: String,username: String,imageUri: Uri,biography: String,onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
+    fun createGoogleOrFacebookAccount(email: String,password: String,name: String,username: String,imageUri: Uri ,biography: String,onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
         viewModelScope.launch {
-            auth.createGoogleAccount(email, name, username, imageUri, biography, onSuccess, onFailure)
+            auth.createGoogleOrFacebookAccount(email, name, username, imageUri, biography, onSuccess, onFailure)
         }
     }
+
 
     fun createAccount(email: String, password: String, name: String, username: String, imageUri: Uri, biography: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
@@ -33,8 +34,8 @@ class AuthViewModel : ViewModel() {
     fun deleteAuthUser(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         viewModelScope.launch {
             try {
-             auth.deleteAuthUser()
-             onSuccess()
+                auth.deleteAuthUser()
+                onSuccess()
             } catch (e: Exception) {
                 onFailure(e)
             }
@@ -42,7 +43,6 @@ class AuthViewModel : ViewModel() {
     }
     fun signIn(email: String,password: String,onSuccess: () -> Unit,onFailure: (Exception) -> Unit) {
         auth.signIn(email,password,onSuccess,onFailure)
-
     }
 
     fun signOut(){
@@ -58,7 +58,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun getCurrentUserUid() : String {
-       return auth.getCurrentUserUid()
+        return auth.getCurrentUserUid()
     }
 
 }
