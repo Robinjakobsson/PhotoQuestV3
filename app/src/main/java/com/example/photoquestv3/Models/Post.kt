@@ -12,7 +12,8 @@ data class Post(
     val userid: String = "",
     val likes: Int = 0,
     val timestamp: Timestamp? = null,
-    var isChecked : Boolean = false
+    var isChecked : Boolean = false,
+    val likedBy: List<String> = emptyList()
 
 )
 

@@ -1,6 +1,7 @@
 package com.example.photoquestv3.Adapter
 
 
+import android.animation.Animator
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +43,7 @@ class PostAdapter(
         val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
         var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
         val cardView : CardView = itemView.findViewById(R.id.itemCardView)
+        val heartAnim: com.airbnb.lottie.LottieAnimationView = itemView.findViewById(R.id.heartAnim)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -57,6 +59,13 @@ class PostAdapter(
         val post = postList[position]
         holder.userName.text = post.username
         holder.description.text = post.description
+
+        val currentUserId = Firebase.auth.currentUser?.uid
+        if (post.likedBy.contains(currentUserId)){
+            holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
+        } else{
+            holder.likeButton.setImageResource(R.drawable.heart_icon)
+        }
 
 
         if(post.isChecked) {
@@ -82,9 +91,28 @@ class PostAdapter(
         }
 
         holder.likeButton.setOnClickListener {
-            postVm.addLikesToPost(post.postId)
-        }
+            val currentUserid = Firebase.auth.currentUser?.uid
+            if (currentUserid != null && !post.likedBy.contains(currentUserid)) {
+                if (!post.isChecked) {
+                    postVm.addLikesToPost(post.postId)
+                    holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
+                    post.isChecked = true
 
+                    holder.heartAnim.visibility = View.VISIBLE
+                    holder.heartAnim.playAnimation()
+                    holder.heartAnim.addAnimatorListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator) {}
+                        override fun onAnimationEnd(animation: Animator) {
+                            holder.heartAnim.visibility = View.GONE
+                            holder.heartAnim.removeAllAnimatorListeners()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator) {}
+                        override fun onAnimationRepeat(animation: Animator) {}
+                    })
+                }
+            }
+        }
 
         holder.optionImage.setOnClickListener() {
             postVm.setItemId(post.postId)
