@@ -86,57 +86,39 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
                 <FrameLayout
                     android:id="@+id/heartFrame"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="17dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/likeCounter"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="10dp"
+                    >
 
                     <ImageView
                         android:id="@+id/likeIcon"
-                        android:layout_width="35dp"
+                        android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_marginStart="8dp"
                         android:contentDescription="@string/trash_image"
                         android:src="@drawable/photoquest_heart_icon_outline"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"/>
+                        />
                 </FrameLayout>
+
+            <TextView
+                android:id="@+id/likeCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:text="0"
+                />
 
                 <ImageView
                     android:id="@+id/addComment"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginEnd="300dp"
                     android:contentDescription="@string/comment_section"
                     android:src="@drawable/photoquest_comment_icon_outline"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"/>
+                    />
 
-                <TextView
-                    android:id="@+id/likeCounter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="0"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/addComment"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.238"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
         <TextView
