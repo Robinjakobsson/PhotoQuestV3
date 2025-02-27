@@ -22,6 +22,7 @@ import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
+import com.example.photoquestv3.ViewModel.UserViewModel
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentHomeBinding
 import java.util.Calendar
@@ -35,13 +36,14 @@ class HomeFragment : Fragment() {
     private lateinit var vmFireStore: FireStoreViewModel
     private lateinit var postVm: PostViewModel
     private lateinit var authVm: AuthViewModel
+    private lateinit var userVm: UserViewModel
     lateinit var adapter: PostAdapter
     private lateinit var currentUserId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,17 +51,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViewModels()
-        currentUserId = authVm.getCurrentUser()?.uid.toString()
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        currentUserId = authVm.getCurrentUserUid()
         adapter = PostAdapter(
-            emptyList(),
-            postVm,
-            onPostTextClicked = { post -> editPostTextDialog(post) },
+            postList = emptyList(),
+            postVm = postVm,
+            currentUserId = currentUserId,
+            currentUserProfileUrl = userVm.userData.value?.imageUrl,
             onPostClicked = { post ->
                 navigateToProfile(post.userid)
-            })
+            },
+            onPostTextClicked = { post ->
+                editPostTextDialog(post)
+            },
+            currentUserData = userVm.userData.value
+        )
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+
+        userVm.userData.observe(viewLifecycleOwner) { user ->
+            adapter.currentUserProfileUrl = user?.imageUrl
+            adapter.notifyDataSetChanged()
+        }
 
         postVm.toastMessage.observe(viewLifecycleOwner) { messages ->
             messages?.let {
@@ -125,6 +137,7 @@ class HomeFragment : Fragment() {
         vmFireStore = ViewModelProvider(this)[FireStoreViewModel::class.java]
         postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
         authVm = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
+        userVm = ViewModelProvider(requireActivity())[UserViewModel::class.java]
     }
 
 

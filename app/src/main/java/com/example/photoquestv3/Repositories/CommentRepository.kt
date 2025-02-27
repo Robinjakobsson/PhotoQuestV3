@@ -22,6 +22,9 @@ class CommentRepository {
 
     private var commentsListener: ListenerRegistration? = null
 
+    /**
+     * Adds a comment to the database
+     */
     fun addComment(
         postId: String,
         commentText: String,
@@ -57,6 +60,9 @@ class CommentRepository {
             }
     }
 
+    /**
+     * Updates a comment in the database
+     */
     fun updateComment(commentId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         Log.d(TAG, "[UPDATE] Updating comments for post $commentId")
         db.collection("comments").document(commentId)
@@ -70,6 +76,9 @@ class CommentRepository {
             }
     }
 
+    /**
+     * Deletes a comment from the database
+     */
     fun deleteComment(commentId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.collection("comments").document(commentId)
             .delete()
@@ -82,6 +91,9 @@ class CommentRepository {
             }
     }
 
+    /**
+     * Listeners to comments
+     */
     fun stopListeningToComments() {
         commentsListener?.remove()
         commentsListener = null

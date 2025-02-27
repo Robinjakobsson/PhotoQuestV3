@@ -46,8 +46,8 @@
                     android:layout_width="72dp"
                     android:layout_height="66dp"
                     android:visibility="visible"
-                    android:scaleX="1.78"
-                    android:scaleY="1.5"
+                    android:scaleX="1"
+                    android:scaleY="1"
                     android:layout_marginBottom="4dp"
                     app:layout_constraintBottom_toBottomOf="@+id/starImageView"
                     app:layout_constraintEnd_toEndOf="@+id/starImageView"
@@ -55,7 +55,7 @@
                     app:layout_constraintTop_toTopOf="@+id/starImageView"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/starstroke">
+                    app:lottie_rawRes="@raw/star">
 
                 </com.airbnb.lottie.LottieAnimationView>
 
