@@ -1,5 +1,8 @@
 [![Build Test](https://github.com/Robinjakobsson/PhotoQuestV3/actions/workflows/build.yaml/badge.svg)](https://github.com/Robinjakobsson/PhotoQuestV3/actions/workflows/build.yaml)
-![photoquest_github_banner](https://github.com/user-attachments/assets/54fe7029-302c-41a0-84d8-f9734fb5c7ff)
+
+https://github.com/user-attachments/assets/c009c823-5ec2-4408-ba40-62bc1d170cf1
+
+
 
 ## Run Locally
 
@@ -16,7 +19,11 @@ Go to the project directory
 ```
 For Google and Facebook auth, you need to connect your app with your dev account for a key.
 
-
+# Releases
+|        |          |
+| ------ | -------- |
+| [MVP](https://github.com/Robinjakobsson/PhotoQuestV3/releases/tag/MVP) | This is the MVP version of the app.
+| [V1]() | We're excited to announce version 1 of PhotoQuest!
 
 
 ## Contributors
