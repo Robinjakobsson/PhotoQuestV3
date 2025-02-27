@@ -94,25 +94,21 @@ class PostAdapter(
             val currentUserid = Firebase.auth.currentUser?.uid
             //  fun for checking and saving like state and animation
             if (currentUserid != null && !post.likedBy.contains(currentUserid)) {
-                if (!post.isChecked) {
-                    postVm.addLikesToPost(post.postId)
-                    holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
-                    post.isChecked = true
+                postVm.addLikesToPost(post.postId)
+                holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
 
-                  //  Heart animation control
-                    holder.heartAnim.visibility = View.VISIBLE
-                    holder.heartAnim.playAnimation()
-                    holder.heartAnim.addAnimatorListener(object : Animator.AnimatorListener {
-                        override fun onAnimationStart(animation: Animator) {}
-                        override fun onAnimationEnd(animation: Animator) {
-                            holder.heartAnim.visibility = View.GONE
-                            holder.heartAnim.removeAllAnimatorListeners()
-                        }
-
-                        override fun onAnimationCancel(animation: Animator) {}
-                        override fun onAnimationRepeat(animation: Animator) {}
-                    })
-                }
+                //  Heart animation control
+                holder.heartAnim.visibility = View.VISIBLE
+                holder.heartAnim.playAnimation()
+                holder.heartAnim.addAnimatorListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+                    override fun onAnimationEnd(animation: Animator) {
+                        holder.heartAnim.visibility = View.GONE
+                        holder.heartAnim.removeAllAnimatorListeners()
+                    }
+                    override fun onAnimationCancel(animation: Animator) {}
+                    override fun onAnimationRepeat(animation: Animator) {}
+                })
             }
         }
 
