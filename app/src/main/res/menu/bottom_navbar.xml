@@ -3,28 +3,28 @@
 
     <item android:title="Home"
         android:id="@+id/home"
-        android:icon="@drawable/home_vector"
+        android:icon="@drawable/photoquest_home_black"
         />
 
-    <item android:title="Star"
+    <item android:title="Quest"
         android:id="@+id/star"
-        android:icon="@drawable/star_vector"
+        android:icon="@drawable/photoquest_star_black"
         />
 
 
     <item android:title="Post"
         android:id="@+id/post"
-        android:icon="@drawable/post_vector"
+        android:icon="@drawable/photoquest_posts_black"
         />
 
     <item android:title="Search"
         android:id="@+id/search"
-        android:icon="@drawable/search_vector"
+        android:icon="@drawable/photoquest_search_black_new"
         />
 
 
     <item android:title="Profile"
         android:id="@+id/profile"
-        android:icon="@drawable/profile_vector"
+        android:icon="@drawable/photoquest_profile_black"
         />
 </menu>

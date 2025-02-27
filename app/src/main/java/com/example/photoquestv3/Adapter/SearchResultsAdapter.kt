@@ -12,12 +12,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
-import com.example.photoquestv3.Views.Fragments.LoginFragment
-import com.example.photoquestv3.Views.Fragments.ProfileFragment
 
 class SearchResultsAdapter(
     val context: Context,
     val matchingUsers: MutableList<User>,
+    val onUserClicked: (User) -> Unit
+
 ) :
     RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
@@ -42,7 +42,7 @@ class SearchResultsAdapter(
         val chosenUser = matchingUsers[position]
         holder.userName.text = matchingUsers[position].username
         holder.itemView.setOnClickListener {
-            //TODO add something that will open a profile fragment
+            onUserClicked(chosenUser)
         }
         Glide.with(context)
             .load(matchingUsers[position].imageUrl)
@@ -53,6 +53,12 @@ class SearchResultsAdapter(
 
     override fun getItemCount(): Int {
         return matchingUsers.size
+    }
+
+    fun updateData(newList: List<User>) {
+        matchingUsers.clear()
+        matchingUsers.addAll(newList)
+        notifyDataSetChanged()
     }
 
 

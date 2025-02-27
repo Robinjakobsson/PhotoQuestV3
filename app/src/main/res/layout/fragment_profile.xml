@@ -1,28 +1,243 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Views.Fragments.ProfileFragment">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_logout"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/sign_out"
-        android:fontFamily="@font/impetus_heavy"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:background="@drawable/button_gradient_main"
-        android:stateListAnimator="@null"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <LinearLayout
+            android:id="@+id/settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+            
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/profile_Setting_Button"
+                android:layout_weight="0"
+                android:layout_width="52dp"
+                android:layout_height="45dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/photoquest_settings" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/follow_button">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/card_gradient" />
+
+            <LinearLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+
+                <LinearLayout
+                    android:id="@+id/inside_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/user_bio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="start">
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:id="@+id/profile_Name_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.014"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.197" />
+
+                        <TextView
+                            android:id="@+id/user_Quote_TextView"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="Your story here"
+                            android:maxLines="2"
+                            android:lines="2"
+                             />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/icons_numbers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        >
+
+                        <LinearLayout
+                            android:id="@+id/icons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="end"
+                            android:layout_weight="1"
+                            android:gravity="end">
+
+                            <ImageView
+                                android:id="@+id/profile_post_button"
+                                android:layout_gravity="start"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:layout_marginEnd="20dp"
+                                android:src="@drawable/photoquest_posts"
+                                android:scaleType="fitXY" />
+
+                            <ImageView
+                                android:id="@+id/profile_heart_Button"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:layout_marginEnd="20dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/photoquest_star" />
+
+                            <ImageView
+                                android:id="@+id/profile_Follower_Button"
+                                android:layout_gravity="end"
+                                android:layout_width="52dp"
+                                android:layout_height="45dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/photoquest_profile" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/numbers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:gravity="end">
+
+                            <TextView
+                                android:id="@+id/profile_Post_TextView"
+                                android:layout_gravity="start"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:text="123p" />
+
+                            <TextView
+                                android:id="@+id/profile_Heart_TextView"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:text="0" />
+
+                            <TextView
+                                android:id="@+id/profile_Follower_TextView"
+                                android:layout_gravity="end"
+                                android:gravity="center_horizontal"
+                                android:layout_width="52dp"
+                                android:layout_height="wrap_content"
+                                android:text="123f" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="0dp"
+            android:padding="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_cardview"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="15dp"
+            android:layout_marginTop="30dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/settings_layout">
+
+            <ImageView
+                android:id="@+id/profile_Image_ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/photoquest_profile" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/follow_button"
+            android:background="@drawable/button_gradient_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/impetus_heavy"
+            android:layout_marginTop="20dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:stateListAnimator="@null"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@+id/profile_cardview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/follow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

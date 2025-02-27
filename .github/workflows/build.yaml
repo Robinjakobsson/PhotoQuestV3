@@ -1,9 +1,13 @@
-name: Build Test
+name: CI Test
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - '*.md'
   pull_request:
     branches: [master]
+    paths-ignore:
+      - '*.md'
 
 jobs:
   build:
@@ -31,7 +35,7 @@ jobs:
           ./gradlew
 
       - name: check dependencies
-        run: ./gradlew dependencies
+        run: ./gradlew :app:androidDependencies
 
       - name: Build Gradle
         run: ./gradlew build

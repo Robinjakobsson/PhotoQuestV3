@@ -1,13 +1,28 @@
 package com.example.photoquestv3.Repositories
 
-import android.net.Uri
-import com.example.photoquestv3.Models.Post
+import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.tasks.await
-import java.util.UUID
 
 class PostRepository {
 
+    private val db = Firebase.firestore
+
+    fun updatePostText(
+        postId: String,
+        newText: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        Log.d("PostRepository", "[UPDATE] Updating comments for post $postId")
+        db.collection("posts").document(postId)
+            .update("description", newText)
+            .addOnFailureListener {
+                Log.d(TAG, "[UPDATE] Post text successfully updated")
+                onSuccess()
+            }.addOnFailureListener {
+                Log.e(TAG, "[UPDATE] Error updating post text")
+                onFailure(Exception("Error updating post text"))
+            }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.photoquestv3.ViewModel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,9 +13,20 @@ class StorageViewModel : ViewModel() {
 
     private val storage = StorageRepository()
 
-    fun uploadPost(imageUri: Uri,description : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
+    fun uploadProfileImage(imageUri : Uri, onSuccess : (String) -> Unit, onFailure : (Exception) -> Unit) {
         viewModelScope.launch {
-            storage.uploadPost(imageUri,description,onSuccess,onFailure)
+           try {
+               val imageUrl = storage.uploadProfileImage(imageUri)
+               onSuccess(imageUrl)
+           } catch (e: Exception) {
+               onFailure(e)
+           }
+        }
+    }
+    fun uploadPost(imageUri: Uri,description : String, isChecked : Boolean, onSuccess : () -> Unit, onFailure : (Exception) -> Unit) {
+        viewModelScope.launch {
+            Log.d("viewmodel","$isChecked")
+            storage.uploadPost(imageUri,description,isChecked,onSuccess,onFailure)
         }
     }
 }

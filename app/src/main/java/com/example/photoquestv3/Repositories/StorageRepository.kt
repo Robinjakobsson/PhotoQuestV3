@@ -15,9 +15,10 @@ class StorageRepository {
     suspend fun uploadProfileImage(imageUri : Uri) : String {
         val profileImageRef = storage.reference.child("profile_images/${UUID.randomUUID()}.jpg")
         profileImageRef.putFile(imageUri).await()
+        Log.d("StorageRepository","$imageUri")
         return  profileImageRef.downloadUrl.await().toString()
     }
-    suspend fun uploadPost(imageUri: Uri, description : String, onSuccess : () -> Unit, onFailure : (Exception) -> Unit ) {
+    suspend fun uploadPost(imageUri: Uri, description : String, isChecked : Boolean, onSuccess : () -> Unit, onFailure : (Exception) -> Unit ) {
         try {
             val imageFileName = "posts/${UUID.randomUUID()}.jpg"
             val storageRef = storage.reference.child(imageFileName)
@@ -26,16 +27,17 @@ class StorageRepository {
 
             val downloadUrl = storageRef.downloadUrl.await().toString()
 
-            savePostToDataBase(downloadUrl,description)
+            savePostToDataBase(downloadUrl,description,isChecked)
             onSuccess()
+            Log.d("storage","$isChecked")
         } catch (e : Exception) {
             onFailure(e)
             Log.d("Could not upload picture to Database...", e.toString())
         }
     }
 
-    suspend fun savePostToDataBase(imageUrl : String, description : String) {
-        db.savePostToDatabase(imageUrl,description)
+    suspend fun savePostToDataBase(imageUrl: String, description: String, isChecked: Boolean) {
+        db.savePostToDatabase(imageUrl,description,isChecked)
     }
 
 }
