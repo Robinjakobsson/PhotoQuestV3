@@ -39,9 +39,9 @@ class PostAdapter(
         val imagePost: ImageView = itemView.findViewById(R.id.imagePost)
         val description: TextView = itemView.findViewById(R.id.description)
         val optionImage: ImageView = itemView.findViewById(R.id.moreOptions)
-        val likeButton : ImageView = itemView.findViewById(R.id.likeIcon)
-        var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
-        val cardView : CardView = itemView.findViewById(R.id.itemCardView)
+        val likeButton: ImageView = itemView.findViewById(R.id.likeIcon)
+        var likeCounter: TextView = itemView.findViewById(R.id.likeCounter)
+        val cardView: CardView = itemView.findViewById(R.id.itemCardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -59,11 +59,10 @@ class PostAdapter(
         holder.description.text = post.description
 
 
-        if(post.isChecked) {
+        if (post.isChecked) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#70FFFF33"))
 
-        }
-        else {
+        } else {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#90FFFFFF"))
         }
 

@@ -15,8 +15,8 @@ import com.example.photoquestv3.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
     private var binding: FragmentSearchBinding? = null
-    private lateinit var fireStoreVm : FireStoreViewModel
-    private lateinit var adapter : SearchResultsAdapter
+    private lateinit var fireStoreVm: FireStoreViewModel
+    private lateinit var adapter: SearchResultsAdapter
 
 
     override fun onCreateView(
@@ -42,7 +42,7 @@ class SearchFragment : Fragment() {
 
 
 
-        fireStoreVm.getUsers("").observe(viewLifecycleOwner, {users ->
+        fireStoreVm.getUsers("").observe(viewLifecycleOwner, { users ->
             adapter.updateData(users)
         })
 
@@ -55,7 +55,7 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    fireStoreVm.getUsers(it).observe(viewLifecycleOwner, {users ->
+                    fireStoreVm.getUsers(it).observe(viewLifecycleOwner, { users ->
                         adapter.updateData(users)
                     })
                 }
@@ -63,10 +63,11 @@ class SearchFragment : Fragment() {
             }
         })
     }
-    fun navigateToProfile(uid : String) {
+
+    fun navigateToProfile(uid: String) {
         val bundle = Bundle()
 
-        bundle.putString("uid",uid)
+        bundle.putString("uid", uid)
 
         val profileFragment = ProfileFragment()
         profileFragment.arguments = bundle

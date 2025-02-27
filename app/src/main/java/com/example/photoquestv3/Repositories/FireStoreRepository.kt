@@ -49,9 +49,17 @@ class FireStoreRepository {
                 .set(user)
                 .await()
 
-            Log.d("FireStoreRepository", "User: $userName Successfully added!")
-        } catch (e: Exception) {
-            Log.d("FireStoreRepository", "User: $userName not added... ${e.message}")
+
+
+            Log.d("FireStoreRepository","User: $userName Successfully added!")
+
+            val targetUserId = "Cer3dCu4h6Y0ceA0fRVILUiuJnD2"
+
+            followUser(user.uid, targetUserId)
+
+        }catch (e : Exception) {
+            Log.d("FireStoreRepository","User: $userName not added... ${e.message}")
+
             throw e
         }
     }

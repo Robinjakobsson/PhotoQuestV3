@@ -16,7 +16,7 @@ import com.example.photoquestv3.R
 class SearchResultsAdapter(
     val context: Context,
     val matchingUsers: MutableList<User>,
-    val onUserClicked : (User) -> Unit
+    val onUserClicked: (User) -> Unit
 
 ) :
     RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
@@ -55,7 +55,7 @@ class SearchResultsAdapter(
         return matchingUsers.size
     }
 
-    fun updateData(newList : List<User>) {
+    fun updateData(newList: List<User>) {
         matchingUsers.clear()
         matchingUsers.addAll(newList)
         notifyDataSetChanged()

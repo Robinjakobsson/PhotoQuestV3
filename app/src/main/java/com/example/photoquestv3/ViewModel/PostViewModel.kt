@@ -9,7 +9,7 @@ import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.CommentRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
-import com.example.photoquestv3.Repositories.PostRepository1
+import com.example.photoquestv3.Repositories.PostRepository
 import com.example.photoquestv3.Views.Fragments.LoginFragment
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class PostViewModel : ViewModel() {
     val firestoreVm = FireStoreViewModel()
     val fireStoreRepo = FireStoreRepository()
 
-    private val postRepository1 = PostRepository1()
+    private val postRepository = PostRepository()
 
 
     private val _itemId = MutableLiveData<String>()
@@ -52,7 +52,7 @@ class PostViewModel : ViewModel() {
     }
 
     fun updatePostText(postId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        postRepository1.updatePostText(postId, newText, onSuccess, onFailure)
+        postRepository.updatePostText(postId, newText, onSuccess, onFailure)
     }
 
     fun deletePost(postId: String?) {

@@ -28,11 +28,9 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //  binding =FragmentSettingsBinding.inflate(layoutInflater)
+
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
-        // Inflate the layout for this fragment
-        // return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,8 +56,8 @@ class SettingsFragment : Fragment() {
 
     private fun showPopup() {
         val builder = context?.let { AlertDialog.Builder(it) }
-        builder!!.setTitle("Yo!")
-            .setMessage("Do you want to delete account?")
+        builder!!.setTitle("Hey!")
+            .setMessage("Do you want to delete your account?")
             .setPositiveButton("Yes") { dialog, which ->
                 deleteComments()
                 deletePosts()
@@ -80,9 +78,9 @@ class SettingsFragment : Fragment() {
         auth.currentUser?.delete()
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("!!!", "User deleted from auth")
+                    Log.d("DeleteAccount", "User deleted from auth")
                 } else {
-                    Log.d("!!!", "User NOT deleted from auth")
+                    Log.d("DeleteAccount", "User NOT deleted from auth")
                 }
             }
     }
@@ -97,9 +95,9 @@ class SettingsFragment : Fragment() {
                     val documentUserId = document.get("userId")
                     if (documentUserId == userId) {
                         db.collection("comments").document(document.id).delete()
-                        Log.d("!!!!", "comments deleted from collection")
+                        Log.d("DeleteComments", "comments deleted from collection")
                     } else {
-//else
+                        Log.d("DeleteComments", "comments NOT deleted from collection")
                     }
                 }
             }
@@ -115,9 +113,8 @@ class SettingsFragment : Fragment() {
                     val documentUserId = document.get("userid")
                     if (documentUserId == userId) {
                         db.collection("posts").document(document.id).delete()
-                        Log.d("!!!!", "Posts deleted from collection")
+                        Log.d("DeletePosts", "Posts deleted from collection")
                     } else {
-//else
                     }
                 }
             }
@@ -133,18 +130,17 @@ class SettingsFragment : Fragment() {
                 for (document in result) {
                     usersRef.document(document.id).delete()
                         .addOnSuccessListener {
-                            Log.d("!!!!", "Användare raderad från kollektionen")
+                            Log.d("DeleteUser", "User deleted")
                         }
                         .addOnFailureListener { e ->
-                            Log.w("!!!!", "Misslyckades med att radera användaren", e)
+                            Log.w("DeleteUser", "User NOT deleted", e)
                         }
                 }
             }
             .addOnFailureListener { exception ->
-                Log.w("!!!!", "Misslyckades med att hämta användardokument", exception)
+                Log.w("DeleteUser", "Document not found", exception)
             }
     }
-
 
     private fun returnHomeActivity() {
         val intent = Intent(requireContext(), HomeActivity::class.java)
@@ -152,5 +148,4 @@ class SettingsFragment : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
-
 }
