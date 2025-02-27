@@ -44,6 +44,7 @@ class PostAdapter(
         var likeCounter : TextView = itemView.findViewById(R.id.likeCounter)
         val cardView : CardView = itemView.findViewById(R.id.itemCardView)
         val heartAnim: com.airbnb.lottie.LottieAnimationView = itemView.findViewById(R.id.heartAnim)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -68,11 +69,10 @@ class PostAdapter(
         }
 
 
-        if(post.isChecked) {
+        if (post.isChecked) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#70FFFF33"))
 
-        }
-        else {
+        } else {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#90FFFFFF"))
         }
 

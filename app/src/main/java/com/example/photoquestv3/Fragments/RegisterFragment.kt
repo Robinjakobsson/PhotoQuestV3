@@ -22,9 +22,9 @@ import com.example.photoquestv3.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
 
-    private var binding : FragmentRegisterBinding? = null
-    private lateinit var auth : AuthViewModel
-    private var selectedImageUri : Uri? = null
+    private var binding: FragmentRegisterBinding? = null
+    private lateinit var auth: AuthViewModel
+    private var selectedImageUri: Uri? = null
 
     private val challenges = ChallengesRepository()
 
@@ -32,34 +32,33 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-            binding = FragmentRegisterBinding.inflate(inflater,container,false)
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = ViewModelProvider(this)[AuthViewModel::class.java]
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                (activity as? HomeActivity)?.getButtonsBack()
-                parentFragmentManager.beginTransaction().remove(this@RegisterFragment).commit()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    (activity as? HomeActivity)?.getButtonsBack()
+                    parentFragmentManager.beginTransaction().remove(this@RegisterFragment).commit()
+                }
+            })
         val pickImageLauncher =
-            registerForActivityResult(ActivityResultContracts.GetContent()) {uri: Uri? ->
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 if (uri != null) {
                     selectedImageUri = uri
                     binding?.imagePicker?.setImageURI(selectedImageUri)
                 }
             }
-
         binding?.imagePicker?.setOnClickListener { pickImageLauncher.launch("image/*") }
-
         binding?.registerButton?.setOnClickListener { register() }
-
     }
 
-    //
+
     private fun register() {
         val email = binding?.emailEt?.text.toString()
         val password = binding?.passwordEt?.text.toString()
@@ -71,15 +70,14 @@ class RegisterFragment : Fragment() {
         binding?.progressBar?.visibility = View.VISIBLE
 
         if (email.isEmpty() || password.isEmpty() || name.isEmpty() || bio.isEmpty() || username.isEmpty()) {
-            Toast.makeText(requireContext(),"All fields are required!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
             return
         }
         if (imageUri == null) {
-            Toast.makeText(requireContext(),"Please select a picture!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please select a picture!", Toast.LENGTH_SHORT).show()
             return
-        }else {
-            auth.createAccount(email,password,name,username,imageUri,bio, onSuccess = {
-
+        } else {
+            auth.createAccount(email, password, name, username, imageUri, bio, onSuccess = {
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     challenges.addChallengesToNewUser()
@@ -91,17 +89,18 @@ class RegisterFragment : Fragment() {
 
             }, onFailure = {
                 binding?.progressBar?.visibility = View.GONE
-                Toast.makeText(requireContext(),"Account not created..",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Account not created..", Toast.LENGTH_SHORT).show()
             })
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
+
     fun startFeedActivity() {   //copypaste from LoginFragment
         val intent = Intent(requireActivity(), FeedActivity::class.java)
         requireActivity().startActivity(intent)
-
     }
 }
