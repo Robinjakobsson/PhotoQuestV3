@@ -56,7 +56,8 @@ class HomeFragment : Fragment() {
             },
             onPostTextClicked = { post ->
                 editPostTextDialog(post)
-            }
+            },
+            currentUserData = userVm.userData.value
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter

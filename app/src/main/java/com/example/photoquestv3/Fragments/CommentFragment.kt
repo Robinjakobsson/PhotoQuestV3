@@ -56,7 +56,7 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         }
 
         vmUser.userData.observe(viewLifecycleOwner) { user ->
-            commentAdapter.currentUserProfileUrl = user?.imageUrl
+            commentAdapter.currentUserData = user
             commentAdapter.notifyDataSetChanged()
         }
 
@@ -129,7 +129,11 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
      */
     private fun recycleViewSetup()  {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
-        commentAdapter = CommentAdapter(emptyList(), currentUserProfileUrl = null) { comment -> editCommentDialog(comment) }
+        commentAdapter = CommentAdapter(
+            emptyList(),
+            currentUserData = vmUser.userData.value,
+        ) { comment ->
+            editCommentDialog(comment) }
         binding.commentSection.adapter = commentAdapter
     }
 

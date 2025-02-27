@@ -8,9 +8,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.photoquestv3.Fragments.ChallengesFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.photoquestv3.Models.Post
-import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.ViewModel.AuthViewModel
@@ -18,7 +15,6 @@ import com.example.photoquestv3.Views.Fragments.PostFragment
 import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.Views.Fragments.SearchFragment
 import com.example.photoquestv3.databinding.ActivityFeedBinding
-import kotlinx.coroutines.processNextEventInCurrentThread
 
 class FeedActivity : AppCompatActivity() {
     lateinit var binding: ActivityFeedBinding

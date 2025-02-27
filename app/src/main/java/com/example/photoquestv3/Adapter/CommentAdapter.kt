@@ -8,13 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.photoquestv3.Models.Comment
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class CommentAdapter(
     private var commentList: List<Comment>,
-    var currentUserProfileUrl: String?,
+    var currentUserData: User?,
     private val onCommentClicked: (Comment) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
@@ -30,26 +31,26 @@ class CommentAdapter(
         return CommentViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return commentList.size
-    }
+    override fun getItemCount(): Int = commentList.size
 
-    /**
-     * Binds the comment data to the view holder
-     */
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        val commentsItem = commentList[position]
+        val commentItem = commentList[position]
+        val userData = currentUserData
 
-        holder.username.text = commentsItem.username
-        holder.comment.text = commentsItem.comment
+        val displayName = if (commentItem.userId == Firebase.auth.currentUser?.uid && userData != null) {
+            userData.username
+        } else {
+            commentItem.username
+        }
+        holder.username.text = displayName
+        holder.comment.text = commentItem.comment
         holder.heart.setImageResource(R.drawable.ic_heart)
 
-        val profileUrl = if (commentsItem.userId == Firebase.auth.currentUser?.uid) {
-            currentUserProfileUrl ?: commentsItem.profilePicture
+        val profileUrl = if (commentItem.userId == Firebase.auth.currentUser?.uid && userData != null) {
+            userData.imageUrl
         } else {
-            commentsItem.profilePicture
+            commentItem.profilePicture
         }
-
         Glide.with(holder.itemView.context)
             .load(profileUrl)
             .placeholder(R.drawable.ic_person)
@@ -57,21 +58,21 @@ class CommentAdapter(
 
         holder.itemView.setOnClickListener {
             val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
-            if (commentsItem.userId == currentUser) {
-                onCommentClicked(commentsItem)
+            if (commentItem.userId == currentUser) {
+                onCommentClicked(commentItem)
             }
         }
     }
 
     /**
-     * Returns the comment at the given position
+     * Returnerar kommentaren på given position.
      */
     fun getCommentAt(position: Int): Comment {
         return commentList[position]
     }
 
     /**
-     * Updates the list of comments
+     * Uppdaterar listan med kommentarer och uppdaterar vyerna.
      */
     fun updateComments(newComments: List<Comment>) {
         commentList = newComments

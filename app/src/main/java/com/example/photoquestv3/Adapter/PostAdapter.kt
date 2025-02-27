@@ -14,6 +14,7 @@ import com.example.photoquestv3.Fragments.CommentFragment
 import com.example.photoquestv3.Fragments.LikesFragment
 import com.example.photoquestv3.Fragments.MoreOptionsPostBottomSheetFragment
 import com.example.photoquestv3.Models.Post
+import com.example.photoquestv3.Models.User
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.google.firebase.auth.ktx.auth
@@ -25,6 +26,7 @@ class PostAdapter(
     private val currentUserId: String,
     var currentUserProfileUrl: String?,
     val onPostClicked: (Post) -> Unit,
+    val currentUserData: User?,
     val onPostTextClicked: (Post) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -54,6 +56,14 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
         holder.userName.text = post.username
+        holder.description.text = post.description
+
+        val displayName = if (post.userid == currentUserId && currentUserData != null) {
+                  currentUserData.username
+        } else {
+            post.username
+        }
+        holder.userName.text = displayName
         holder.description.text = post.description
 
         // Sätt bakgrund baserat på post.isChecked
