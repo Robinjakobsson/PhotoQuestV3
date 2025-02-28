@@ -68,6 +68,10 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
                 false
             }
         }
+
+        binding.commentSendButton.setOnClickListener{
+            addComment()
+        }
     }
 
     override fun onDestroyView() {
