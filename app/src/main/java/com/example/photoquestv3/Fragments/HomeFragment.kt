@@ -142,31 +142,28 @@ class HomeFragment : Fragment() {
 
 
     private fun editPostTextDialog(post: Post) {
-
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Edit Post")
+        builder.setTitle(getString(R.string.edit_post))
 
         val input = EditText(requireContext())
         input.setText(post.description)
         builder.setView(input)
 
-        builder.setPositiveButton("Update") { dialog, _ ->
-
+        builder.setPositiveButton(getString(R.string.update)) { dialog, _ ->
             val newText = input.text.toString().trim()
             if (newText.isNotEmpty()) {
                 postVm.updatePostText(post.postId, newText, onSuccess = {
-                    Toast.makeText(requireContext(), "Post updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.post_updated), Toast.LENGTH_SHORT).show()
                 }, onFailure = {
-                    Toast.makeText(requireContext(), "Failed to update post", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireContext(), getString(R.string.failed_update_post), Toast.LENGTH_SHORT).show()
                 })
             } else {
-                Toast.makeText(requireContext(), "Please enter new text", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.enter_new_text), Toast.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
         builder.show()

@@ -1,11 +1,13 @@
 package com.example.photoquestv3.ViewModel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.photoquestv3.Models.User
+import com.example.photoquestv3.R
 import com.example.photoquestv3.Repositories.AuthRepository
 import com.example.photoquestv3.Repositories.CommentRepository
 import com.example.photoquestv3.Repositories.FireStoreRepository
@@ -68,18 +70,11 @@ class PostViewModel : ViewModel() {
             }
         }
     }
-
     fun addLikesToPost(postId: String?) {
         viewModelScope.launch {
             if (postId != null) {
                 setItemId(postId)
-
-                val success = fireStoreRepo.addLikesToPost(postId)
-                if (success) {
-                    _toastMessage.value = "Successfully added a like!"
-                } else {
-                    _toastMessage.value = "Already liked"
-                }
+                fireStoreRepo.addLikesToPost(postId)
                 _dataChanged.value = true
                 _toastMessage.value = null
             }

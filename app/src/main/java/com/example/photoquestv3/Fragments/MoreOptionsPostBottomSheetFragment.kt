@@ -65,6 +65,7 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
                             }
 
                             1 -> {
+
                                 postVm.deletePost(postId)
                                 postVm.updatePostAdapter()
 

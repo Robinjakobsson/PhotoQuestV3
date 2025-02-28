@@ -13,12 +13,12 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.R
 import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.Views.FeedActivity
 import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentRegisterBinding
-
 
 class RegisterFragment : Fragment() {
 
@@ -58,7 +58,6 @@ class RegisterFragment : Fragment() {
         binding?.registerButton?.setOnClickListener { register() }
     }
 
-
     private fun register() {
         val email = binding?.emailEt?.text.toString()
         val password = binding?.passwordEt?.text.toString()
@@ -70,11 +69,11 @@ class RegisterFragment : Fragment() {
         binding?.progressBar?.visibility = View.VISIBLE
 
         if (email.isEmpty() || password.isEmpty() || name.isEmpty() || bio.isEmpty() || username.isEmpty()) {
-            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.all_fields_required), Toast.LENGTH_SHORT).show()
             return
         }
         if (imageUri == null) {
-            Toast.makeText(requireContext(), "Please select a picture!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.please_select_picture), Toast.LENGTH_SHORT).show()
             return
         } else {
             auth.createAccount(email, password, name, username, imageUri, bio, onSuccess = {
@@ -82,14 +81,14 @@ class RegisterFragment : Fragment() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     challenges.addChallengesToNewUser()
 
-                    Toast.makeText(requireContext(), "Welcome $username", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.welcome_user, username), Toast.LENGTH_SHORT).show()
                     binding?.progressBar?.visibility = View.GONE
                     startFeedActivity()
                 }, 1000)
 
             }, onFailure = {
                 binding?.progressBar?.visibility = View.GONE
-                Toast.makeText(requireContext(), "Account not created..", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.account_not_created), Toast.LENGTH_SHORT).show()
             })
         }
     }
@@ -99,7 +98,7 @@ class RegisterFragment : Fragment() {
         binding = null
     }
 
-    fun startFeedActivity() {   //copypaste from LoginFragment
+    fun startFeedActivity() {
         val intent = Intent(requireActivity(), FeedActivity::class.java)
         requireActivity().startActivity(intent)
     }
