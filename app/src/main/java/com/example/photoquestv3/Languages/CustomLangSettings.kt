@@ -1,16 +1,20 @@
 package com.example.photoquestv3.Languages
 
 import android.app.Application
-import android.content.Context
+import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
-class CustomLangSettings: Application() {
+class CustomLangSettings : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        val languageKey = stringPreferencesKey("selected_language")
+        val prefsFlow = applicationContext.dataStore.data
 
-        val prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE)
-        val languageCode = prefs.getString("selected_language", null)
+        val prefs = runBlocking { prefsFlow.first() }
+        val languageCode = prefs[languageKey]
         if (languageCode != null) {
             setLocale(languageCode)
         }
@@ -23,6 +27,4 @@ class CustomLangSettings: Application() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
-
 }
-

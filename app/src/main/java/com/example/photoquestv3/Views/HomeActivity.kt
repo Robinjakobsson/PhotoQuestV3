@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.example.photoquestv3.BaseActivity
 import com.example.photoquestv3.Fragments.RegisterFragment
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Repositories.FireStoreRepository
@@ -23,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
     lateinit var binding: ActivityHomeBinding
 
     lateinit var auth: FirebaseAuth

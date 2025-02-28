@@ -6,18 +6,15 @@ import com.example.photoquestv3.R
 import java.util.Locale
 
 class LanguageManager {
-
     companion object {
         fun setLanguage(activity: AppCompatActivity, language: String) {
             val setLang = Locale(language)
             Locale.setDefault(setLang)
-
-            val config = android.content.res.Configuration(activity.resources.configuration)
+            val config = activity.resources.configuration
             config.setLocale(setLang)
             activity.baseContext.resources.updateConfiguration(
                 config,
-                activity.
-                baseContext.resources.displayMetrics
+                activity.baseContext.resources.displayMetrics
             )
 
             activity.supportFragmentManager.beginTransaction().apply {
@@ -27,5 +24,4 @@ class LanguageManager {
             }
         }
     }
-
 }

@@ -12,8 +12,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.photoquestv3.Languages.LanguageManager
+import com.example.photoquestv3.Languages.dataStore
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
@@ -22,6 +26,7 @@ import com.example.photoquestv3.Views.HomeActivity
 import com.example.photoquestv3.databinding.FragmentSettingsBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
 
@@ -86,9 +91,9 @@ class SettingsFragment : Fragment() {
 
     private fun showPopup() {
         val builder = context?.let { AlertDialog.Builder(it) }
-        builder!!.setTitle("Yo!")
-            .setMessage("Do you want to delete account?")
-            .setPositiveButton("Yes") { _, _ ->
+        builder!!.setTitle(getString(R.string.hello))
+            .setMessage(getString(R.string.do_you_want_to_delete_this_account))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 userVm.deleteUserAccount(onSuccess = {
                     returnHomeActivity()
                     Toast.makeText(
@@ -104,7 +109,7 @@ class SettingsFragment : Fragment() {
                     ).show()
                 })
             }
-            .setNegativeButton("No") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
         val alertDialog: AlertDialog = builder.create()
@@ -250,11 +255,13 @@ class SettingsFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Choose language")
             .setItems(languages) { dialog, which ->
-
-                val prefs = requireContext().getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE)
-                prefs.edit().putString("selected_language", languagesCode[which]).apply()
-
-                LanguageManager.setLanguage(requireActivity() as AppCompatActivity, languagesCode[which])
+                val selectedLanguage = languagesCode[which]
+                lifecycleScope.launch {
+                    requireContext().dataStore.edit { preferences ->
+                        preferences[stringPreferencesKey("selected_language")] = selectedLanguage
+                    }
+                    LanguageManager.setLanguage(requireActivity() as AppCompatActivity, selectedLanguage)
+                }
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
