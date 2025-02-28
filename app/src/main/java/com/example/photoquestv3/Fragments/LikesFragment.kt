@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.photoquestv3.Adapter.LikesAdapter
+import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.example.photoquestv3.databinding.FragmentLikesBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -35,7 +37,9 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
         postVm = ViewModelProvider(this)[PostViewModel::class.java]
 
         binding.likesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = LikesAdapter(mutableListOf())
+        adapter = LikesAdapter(mutableListOf(), onUserClicked = {User ->
+            navigateToProfile(User.uid)
+        })
         binding.likesRecyclerView.adapter = adapter
 
         postVm.fetchFriendList(postId).observe(viewLifecycleOwner) { friends ->
@@ -43,9 +47,23 @@ class LikesFragment(val postId: String) : BottomSheetDialogFragment() {
             adapter.updateList(friends)
 
         }
+
+        }
+
+    fun navigateToProfile(uid: String) {
+        val bundle = Bundle().apply {
+            putString("uid", uid)
+        }
+        val profileFragment = ProfileFragment().apply {
+            arguments = bundle
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, profileFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
-    override fun onDestroyView() {
+        override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

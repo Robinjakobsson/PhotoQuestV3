@@ -15,6 +15,7 @@ import com.example.photoquestv3.R
 
 class LikesAdapter(
     private var friendList: MutableList<User>,
+    private val onUserClicked: (User) -> Unit
 ) : RecyclerView.Adapter<LikesAdapter.LikesViewHolder>() {
 
     inner class LikesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,6 +37,12 @@ class LikesAdapter(
 
         holder.username.text = friendItem.username
         holder.profileImage.setImageResource(R.drawable.ic_person)
+        holder.profileImage.setOnClickListener{
+            onUserClicked(friendItem)
+        }
+        holder.username.setOnClickListener{
+            onUserClicked(friendItem)
+        }
 
         Glide.with(holder.itemView.context)
             .load(friendItem.imageUrl)
