@@ -24,7 +24,7 @@ For Google and Facebook auth, you need to connect your app with your dev account
 |        |          |
 | ------ | -------- |
 | [MVP](https://github.com/Robinjakobsson/PhotoQuestV3/releases/tag/MVP) | This is the MVP version of the app.
-| [V1]() | We're excited to announce version 1 of PhotoQuest!
+| [V1](https://github.com/Robinjakobsson/PhotoQuestV3/releases/tag/1.0.0) | We're excited to announce version 1 of PhotoQuest!
 
 
 ## Contributors
