@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.UserViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -85,12 +86,12 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
     private fun addComment() {
         val input = binding.editTextComment.text.toString()
         if (input.isEmpty()) {
-            Toast.makeText(requireContext(), "Please enter a comment", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.please_enter_comment), Toast.LENGTH_SHORT).show()
         } else {
             vmComment.addComment(postId, input, onSuccess = {
                 binding.editTextComment.text.clear()
             }, onFailure = {
-                Toast.makeText(requireContext(), "Failed to add comment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.failed_to_add_comment), Toast.LENGTH_SHORT).show()
             })
         }
     }
@@ -99,30 +100,28 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
      * Edits a comment in the database by calling the updateComment() function in the CommentViewModel.
      */
     private fun editCommentDialog(comment: Comment) {
-
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Edit Comment")
+        builder.setTitle(getString(R.string.edit_comment))
 
         val input = EditText(requireContext())
         input.setText(comment.comment)
         builder.setView(input)
 
-        builder.setPositiveButton("Update") { dialog, _ ->
-
+        builder.setPositiveButton(getString(R.string.update)) { dialog, _ ->
             val newText = input.text.toString().trim()
             if (newText.isNotEmpty()) {
                 vmComment.updateComment(comment.commentId, newText, onSuccess = {
-                    Toast.makeText(requireContext(), "Comment updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.comment_updated), Toast.LENGTH_SHORT).show()
                 }, onFailure = {
-                    Toast.makeText(requireContext(), "Failed to update comment", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.failed_to_update_comment), Toast.LENGTH_SHORT).show()
                 })
             } else {
-                Toast.makeText(requireContext(), "Please enter a comment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.please_enter_comment), Toast.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
         builder.show()
@@ -157,20 +156,18 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
                 val position = viewHolder.adapterPosition
-
                 val commentToDelete = commentAdapter.getCommentAt(position)
                 val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
 
                 if (commentToDelete.userId == currentUser) {
                     vmComment.deleteComment(commentToDelete.commentId, onSuccess = {
-                        Toast.makeText(requireContext(), "Comment deleted", Toast.LENGTH_SHORT).show()
-                    },onFailure = {
-                        Toast.makeText(requireContext(), "Failed to delete comment", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.comment_deleted), Toast.LENGTH_SHORT).show()
+                    }, onFailure = {
+                        Toast.makeText(requireContext(), getString(R.string.failed_to_delete_comment), Toast.LENGTH_SHORT).show()
                     })
                 } else {
-                    Toast.makeText(requireContext(), "You can only delete your own comments", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.only_delete_own_comments), Toast.LENGTH_SHORT).show()
                     commentAdapter.notifyItemChanged(position)
                 }
             }

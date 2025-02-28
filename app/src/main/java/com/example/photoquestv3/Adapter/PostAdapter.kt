@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -107,6 +108,12 @@ class PostAdapter(
                 postVm.addLikesToPost(post.postId)
                 holder.likeButton.setImageResource(R.drawable.photoquest_heart_icon)
 
+                Toast.makeText(
+                    holder.itemView.context,
+                    holder.itemView.context.getString(R.string.successfully_added_like),
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 //  Heart animation control
                 holder.heartAnim.visibility = View.VISIBLE
                 holder.heartAnim.playAnimation()
@@ -119,6 +126,12 @@ class PostAdapter(
                     override fun onAnimationCancel(animation: Animator) {}
                     override fun onAnimationRepeat(animation: Animator) {}
                 })
+            } else {
+                Toast.makeText(
+                    holder.itemView.context,
+                    holder.itemView.context.getString(R.string.already_liked),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

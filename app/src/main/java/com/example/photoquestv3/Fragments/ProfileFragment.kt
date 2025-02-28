@@ -128,8 +128,7 @@ class ProfileFragment : Fragment() {
             binding.followButton.visibility = View.VISIBLE
 
             binding.followButton.setOnClickListener {
-
-                if (binding.followButton.text.toString() == "Follow") {
+                if (binding.followButton.text.toString() == getString(R.string.follow)) {
                     binding.followButton.text = getString(R.string.unfollow)
                     if (currentUser != null) {
                         fireStoreVm.followUser(currentUser.uid, user.uid)
@@ -167,9 +166,9 @@ class ProfileFragment : Fragment() {
             fireStoreVm.checkFollowingStatus(currentUser.uid, user.uid)
                 .observe(viewLifecycleOwner) { isFollowing ->
                     if (isFollowing) {
-                        binding.followButton.text = "Unfollow"
+                        binding.followButton.text = getString(R.string.unfollow)
                     } else {
-                        binding.followButton.text = "Follow"
+                        binding.followButton.text = getString(R.string.follow)
                     }
                 }
         }

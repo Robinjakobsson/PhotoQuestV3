@@ -114,7 +114,7 @@ class LoginFragment : Fragment() {
                     Log.d("FBLogin", "Facebook login cancelled by user.")
                     Toast.makeText(
                         requireActivity(),
-                        "Facebook login cancelled.",
+                        getString(R.string.fb_login_cancelled),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -123,14 +123,13 @@ class LoginFragment : Fragment() {
                     Log.e("FBLogin", "Error during Facebook login: ${error.message}", error)
                     Toast.makeText(
                         requireActivity(),
-                        "Facebook login error: ${error.message}",
+                        getString(R.string.fb_login_error, error.message),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
 
                 override fun onSuccess(result: LoginResult) {
                     handleFacebookAccessToken(result.accessToken)
-
                 }
             })
     }
@@ -170,8 +169,7 @@ class LoginFragment : Fragment() {
                             )
                             Handler(Looper.getMainLooper()).postDelayed({
                                 challenges.addChallengesToNewUser()
-                                Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(requireContext(), getString(R.string.welcome), Toast.LENGTH_SHORT).show()
                                 startFeedActivity()
                             }, 1000)
                         }
@@ -193,13 +191,19 @@ class LoginFragment : Fragment() {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
         firebaseAuth.signInWithCredential(credential)
             .addOnFailureListener {
-                Log.d(
-                    "FacebookDebug",
-                    "Facebook authentication failed: ${it.message}"
-                )
+                Log.d("FacebookDebug", "Facebook authentication failed: ${it.message}")
                 Toast.makeText(
                     requireActivity(),
-                    "Facebook authentication failed.",
+                    getString(R.string.fb_auth_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .addOnSuccessListener { result ->
+                val email = result.user?.email
+                Log.d("FacebookDebug", "Facebook authentication successful. Email: $email")
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.fb_auth_success),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -211,7 +215,7 @@ class LoginFragment : Fragment() {
                 )
                 Toast.makeText(
                     requireActivity(),
-                    "Facebook authentication successful.",
+                    getString(R.string.fb_auth_success),
                     Toast.LENGTH_SHORT
                 ).show()
                 getDataFromFb()
@@ -219,7 +223,7 @@ class LoginFragment : Fragment() {
                     val challenges = ChallengesRepository()
                     Handler(Looper.getMainLooper()).postDelayed({
                         challenges.addChallengesToNewUser()
-                        Toast.makeText(requireContext(), "Welcome!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.welcome), Toast.LENGTH_SHORT).show()
                         startFeedActivity()
                     }, 1000)
                 } else {
@@ -245,18 +249,17 @@ class LoginFragment : Fragment() {
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(
                 requireContext(),
-                "All fields are required!",
+                getString(R.string.all_fields_required),
                 Toast.LENGTH_SHORT
             )
                 .show()
             return
         } else {
-            binding.progressBarLogin.visibility = View.VISIBLE
             auth.signIn(email, password, onSuccess = {
                 binding.progressBarLogin.visibility = View.GONE
                 Toast.makeText(
                     requireContext(),
-                    "Welcome! $email",
+                    getString(R.string.welcome_user, email),
                     Toast.LENGTH_SHORT
                 ).show()
                 startFeedActivity()
@@ -264,7 +267,7 @@ class LoginFragment : Fragment() {
                 binding.progressBarLogin.visibility = View.GONE
                 Toast.makeText(
                     requireContext(),
-                    "Login failed..",
+                    getString(R.string.login_failed),
                     Toast.LENGTH_SHORT
                 ).show()
             })
@@ -276,21 +279,20 @@ class LoginFragment : Fragment() {
         if (email.isNotEmpty()) {
             auth.forgotPassword(email,
                 onSuccess = {
-                    Toast.makeText(context, "Mail sent!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.mail_sent), Toast.LENGTH_SHORT).show()
                 },
                 onFailure = { exception ->
                     Toast.makeText(
                         context,
-                        "Ooops: ${exception.message}",
+                        getString(R.string.oops_error, exception.message),
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 }
             )
         } else {
             Toast.makeText(
                 context,
-                "Enter a valid email-address",
+                getString(R.string.enter_valid_email),
                 Toast.LENGTH_SHORT
             ).show()
         }

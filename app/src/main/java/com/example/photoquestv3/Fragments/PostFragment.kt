@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.ViewModel.StorageViewModel
@@ -77,22 +78,20 @@ class PostFragment : Fragment() {
 
         if (selectedImageUri != null && description.isNotBlank()) {
             storageVm.uploadPost(selectedImageUri!!, description, isChecked, onSuccess = {
-                Toast.makeText(requireContext(), "Successfully Uploaded Post!", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), getString(R.string.post_upload_success), Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
                 Log.d("ASD", "$isChecked")
             }, onFailure = {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_upload_post), Toast.LENGTH_SHORT).show()
                 binding.progressBar.visibility = View.GONE
             })
         } else {
             Toast.makeText(
                 requireContext(),
-                "Please Enter a text and a picture!",
+                getString(R.string.enter_text_and_picture),
                 Toast.LENGTH_SHORT
             ).show()
         }
-
     }
 
     private fun showDailyChallenge() {

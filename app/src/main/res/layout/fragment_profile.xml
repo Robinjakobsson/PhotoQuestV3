@@ -81,7 +81,7 @@
                             android:id="@+id/profile_Name_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Name"
+                            android:text="@string/name"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.014"
@@ -94,7 +94,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:text="Your story here"
+                            android:text="@string/your_story_here"
                             android:maxLines="2"
                             android:lines="2"
                              />
