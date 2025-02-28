@@ -16,7 +16,8 @@ import com.google.firebase.ktx.Firebase
 class CommentAdapter(
     private var commentList: List<Comment>,
     var currentUserData: User?,
-    private val onCommentClicked: (Comment) -> Unit
+    private val onCommentClicked: (Comment) -> Unit,
+    private val onUserClicked: (Comment) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -56,11 +57,14 @@ class CommentAdapter(
             .placeholder(R.drawable.ic_person)
             .into(holder.imageProfile)
 
-        holder.itemView.setOnClickListener {
+        holder.comment.setOnClickListener {
             val currentUser = Firebase.auth.currentUser?.uid ?: "No user here"
             if (commentItem.userId == currentUser) {
                 onCommentClicked(commentItem)
             }
+        }
+        holder.imageProfile.setOnClickListener {
+            onUserClicked(commentItem)
         }
     }
 

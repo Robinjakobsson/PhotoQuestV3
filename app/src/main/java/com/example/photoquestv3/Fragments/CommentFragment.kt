@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.UserViewModel
+import com.example.photoquestv3.Views.Fragments.ProfileFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -127,16 +128,18 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         builder.show()
     }
 
+
+
     /**
      * Sets up the RecyclerView for displaying comments.
      */
     private fun recycleViewSetup()  {
         binding.commentSection.layoutManager = LinearLayoutManager(requireContext())
-        commentAdapter = CommentAdapter(
-            emptyList(),
-            currentUserData = vmUser.userData.value,
-        ) { comment ->
-            editCommentDialog(comment) }
+        commentAdapter = CommentAdapter(emptyList(), currentUserData = vmUser.userData.value, onCommentClicked = {
+                comment -> editCommentDialog(comment)
+        }, onUserClicked = { user ->
+            navigateToProfile(user.userId)
+        })
         binding.commentSection.adapter = commentAdapter
     }
 
@@ -174,6 +177,22 @@ class CommentFragment(private val postId: String) : BottomSheetDialogFragment() 
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
         itemTouchHelper.attachToRecyclerView(binding.commentSection)
+    }
+
+    private fun navigateToProfile(uid: String) {
+        val bundle = Bundle()
+
+        bundle.putString("uid", uid)
+
+        val profileFragment = ProfileFragment()
+
+        profileFragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, profileFragment)
+            .addToBackStack(null)
+            .commit()
+
     }
 
 }
