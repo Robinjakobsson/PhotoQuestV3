@@ -1,9 +1,8 @@
 <resources>
     <string name="facebook_app_id">1899240990820663</string>
-    <string name="fb_login_protocol_scheme">fb1899240990820663</string>
     <string name="facebook_client_token">3989b6db92ec67fa729b26f10bfd0925</string>
-    <string name="your_web_client_id">836432747588-26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
-    <string name="web_client_id">836432747588-3u0gpe8vh1ghvufqnth3lr39pn3mohee.apps.googleusercontent.com</string>
+    <string name="your_web_client_id">836432747588–26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
+    <string name="web_client_id">836432747588–3u0gpe8vh1ghvufqnth3lr39pn3mohee.apps.googleusercontent.com</string>
     <string name="sign_in">Logga in</string>
     <string name="email">E-post</string>
     <string name="letsgo">Nu kör vi!</string>
