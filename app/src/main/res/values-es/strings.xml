@@ -1,6 +1,5 @@
 <resources>
     <string name="facebook_app_id">1899240990820663</string>
-    <string name="facebook_client_token">3989b6db92ec67fa729b26f10bfd0925</string>
     <string name="your_web_client_id">836432747588–26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
     <string name="web_client_id">836432747588–3u0gpe8vh1ghvufqnth3lr39pn3mohee.apps.googleusercontent.com</string>
     <string name="sign_in">Iniciar sesión</string>
@@ -92,4 +91,5 @@
     <string name="do_you_want_to_delete_this_account">Quieres eliminar esta cuenta?</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
+    <string name="edit_others_description">¡No puedes editar las publicaciones de otros!</string>
 </resources>
