@@ -113,7 +113,7 @@ class FeedActivity : AppCompatActivity() {
         }
 
         if (dueTime.before(currentTime)) {
-            dueTime.add(Calendar.HOUR_OF_DAY, 12)
+            dueTime.add(Calendar.HOUR_OF_DAY, 24)
         }
 
         val delay = dueTime.timeInMillis - currentTime.timeInMillis
@@ -124,7 +124,7 @@ class FeedActivity : AppCompatActivity() {
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             "DailyPhotoFetch",
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.KEEP,
             dailyAPIRequest
         )
 

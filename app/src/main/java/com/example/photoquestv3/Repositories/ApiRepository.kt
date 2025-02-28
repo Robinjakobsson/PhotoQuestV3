@@ -50,7 +50,6 @@ class ApiRepository {
         val user = fetchUserData(targetUserId)
 
         val name = "PhotoCat"
-        val description1 = "Today's pic!"
 
         Log.d("123", "Hämtad användare: ${user?.username}")
 
@@ -62,7 +61,7 @@ class ApiRepository {
                 "username" to (name),
                 "profilePic" to (user?.imageUrl),
                 "imageUrl" to imageUrl,
-                "description" to description1,
+                "description" to description,
                 "userid" to (user?.uid),
                 "likes" to 0,
                 "likedBy" to emptyList<String>(),
