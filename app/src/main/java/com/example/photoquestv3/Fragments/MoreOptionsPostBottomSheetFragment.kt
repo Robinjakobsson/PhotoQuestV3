@@ -16,7 +16,9 @@ import com.example.photoquestv3.R
 import com.example.photoquestv3.ViewModel.PostViewModel
 import com.example.photoquestv3.databinding.MoreOptionsPostBottonSheetFragmentBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -88,48 +90,60 @@ class MoreOptionsPostBottomSheetFragment : BottomSheetDialogFragment() {
         if (postId != null) {
             val db = FirebaseFirestore.getInstance()
             val documentRef = db.collection("posts").document(postId)
+
             documentRef.get().addOnSuccessListener { document ->
+                val userId = document.getString("userid") ?: ""
+                val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+                Log.d("!!!", userId)
+                Log.d("!!!", currentUserId)
+                if (userId == currentUserId) {
 
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle(getString(R.string.edit_post))
-                val input = EditText(requireContext())
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle(getString(R.string.edit_post))
+                    val input = EditText(requireContext())
+                    val currentDescription = document.getString("description") ?: ""
+                    input.setText(currentDescription)
+                    builder.setView(input)
 
-                val currentDescription = document.getString("description") ?: ""
-                input.setText(currentDescription)
-                builder.setView(input)
-
-                builder.setPositiveButton(getString(R.string.update)) { dialog, _ ->
-                    val newText = input.text.toString().trim()
-                    if (newText.isNotEmpty()) {
-                        postVm.updatePostText(postId, newText, onSuccess = {
+                    builder.setPositiveButton(getString(R.string.update)) { dialog, _ ->
+                        val newText = input.text.toString().trim()
+                        if (newText.isNotEmpty()) {
+                            postVm.updatePostText(postId, newText, onSuccess = {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.post_updated),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }, onFailure = {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.failed_update_post),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            })
+                        } else {
                             Toast.makeText(
                                 requireContext(),
-                                getString(R.string.post_updated),
+                                getString(R.string.enter_new_text),
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }, onFailure = {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.failed_update_post),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        })
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.enter_new_text),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        }
+                        dialog.dismiss()
                     }
-                    dialog.dismiss()
+
+                    builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    builder.show()
+                }else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.edit_others_description),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
-                builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                builder.show()
             }
-
         }
     }
 }
