@@ -18,6 +18,7 @@ import androidx.work.WorkManager
 import com.example.photoquestv3.API.ApiWorker
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.Adapter.PostAdapter
+import com.example.photoquestv3.BaseActivity
 import com.example.photoquestv3.R
 import com.example.photoquestv3.Fragments.HomeFragment
 import com.example.photoquestv3.Repositories.ApiRepository
@@ -32,7 +33,7 @@ import kotlinx.coroutines.processNextEventInCurrentThread
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-class FeedActivity : AppCompatActivity() {
+class FeedActivity : BaseActivity() {
     lateinit var binding: ActivityFeedBinding
     lateinit var auth: AuthViewModel
     lateinit var apiRepository: ApiRepository
@@ -113,7 +114,7 @@ class FeedActivity : AppCompatActivity() {
         }
 
         if (dueTime.before(currentTime)) {
-            dueTime.add(Calendar.HOUR_OF_DAY, 12)
+            dueTime.add(Calendar.HOUR_OF_DAY, 24)
         }
 
         val delay = dueTime.timeInMillis - currentTime.timeInMillis
@@ -124,7 +125,7 @@ class FeedActivity : AppCompatActivity() {
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             "DailyPhotoFetch",
-            ExistingWorkPolicy.REPLACE,
+            ExistingWorkPolicy.KEEP,
             dailyAPIRequest
         )
 

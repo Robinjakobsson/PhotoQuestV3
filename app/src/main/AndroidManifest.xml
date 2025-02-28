@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
-    <uses-permission android:name=
-        "android.permission.POST_NOTIFICATIONS">
-    </uses-permission>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
 
     <application
         android:name=".Languages.CustomLangSettings"
@@ -23,10 +21,8 @@
         android:theme="@style/Theme.PhotoQuestv3"
         tools:targetApi="31">
 
-
         <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="PhotoQuest" />
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -35,10 +31,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <data android:scheme="fb1899240990820663" />
             </intent-filter>
         </activity>
-
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
@@ -47,11 +42,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Views.HomeActivity"
             android:exported="false"
@@ -60,6 +53,5 @@
             android:name=".Views.FeedActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
-        </application>
-
+    </application>
 </manifest>

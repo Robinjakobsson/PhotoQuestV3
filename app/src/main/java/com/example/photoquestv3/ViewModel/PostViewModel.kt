@@ -53,8 +53,15 @@ class PostViewModel : ViewModel() {
         _dataChanged.value = true
     }
 
-    fun updatePostText(postId: String, newText: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        postRepository.updatePostText(postId, newText, onSuccess, onFailure)
+    fun updatePostText(
+        postId: String?,
+        newText: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if (postId != null) {
+            postRepository.updatePostText(postId, newText, onSuccess, onFailure)
+        }
     }
 
     fun deletePost(postId: String?) {
@@ -70,6 +77,7 @@ class PostViewModel : ViewModel() {
             }
         }
     }
+
     fun addLikesToPost(postId: String?) {
         viewModelScope.launch {
             if (postId != null) {
@@ -80,13 +88,14 @@ class PostViewModel : ViewModel() {
             }
         }
     }
+
     override fun onCleared() {
         super.onCleared()
         fireStoreRepo.stopListeningToLikes()
     }
 
-    fun fetchFriendList(postId: String) : LiveData<List<User>> {
-       return fireStoreRepo.fetchFriendList(postId)
+    fun fetchFriendList(postId: String): LiveData<List<User>> {
+        return fireStoreRepo.fetchFriendList(postId)
     }
 
 }

@@ -1,5 +1,4 @@
 <resources>
-    <!-- Cadenas existentes -->
     <string name="facebook_app_id">1899240990820663</string>
     <string name="facebook_client_token">3989b6db92ec67fa729b26f10bfd0925</string>
     <string name="your_web_client_id">836432747588–26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
@@ -87,6 +86,10 @@
     <string name="failed_upload_image">Error al subir imagen: %1$s</string>
     <string name="please_select_picture">Selecciona una imagen, porfavor</string>
     <string name="account_not_created">Cuenta no fue creada..</string>
-    <string name="successfully_added_like">¡Se ha añadido un like exitosamente!</string>
+    <string name="successfully_added_like">Añadistes un like!</string>
     <string name="already_liked">Ya has dado like</string>
+    <string name="hello">Hola!</string>
+    <string name="do_you_want_to_delete_this_account">Quieres eliminar esta cuenta?</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
 </resources>
