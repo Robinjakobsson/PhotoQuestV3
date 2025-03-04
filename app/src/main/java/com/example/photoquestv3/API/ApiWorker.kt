@@ -27,8 +27,9 @@ class ApiWorker(context: Context, params: WorkerParameters) : CoroutineWorker(co
                 Log.d("!!!", "Did fetch photo!!!!!")
                 return Result.success()
             } else {
-                return Result.failure()
                 Log.d("!!!", "Did not fetch photo")
+                return Result.failure()
+
             }
 
         } catch (e: Exception) {

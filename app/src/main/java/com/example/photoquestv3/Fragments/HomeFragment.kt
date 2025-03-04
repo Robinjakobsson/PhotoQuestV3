@@ -18,6 +18,7 @@ import com.example.photoquestv3.API.ApiWorker
 import com.example.photoquestv3.Adapter.PostAdapter
 import com.example.photoquestv3.Models.Post
 import com.example.photoquestv3.R
+import com.example.photoquestv3.Repositories.ChallengesRepository
 import com.example.photoquestv3.ViewModel.AuthViewModel
 import com.example.photoquestv3.ViewModel.ChallengesViewModel
 import com.example.photoquestv3.ViewModel.FireStoreViewModel
@@ -39,6 +40,7 @@ class HomeFragment : Fragment() {
     private lateinit var userVm: UserViewModel
     lateinit var adapter: PostAdapter
     private lateinit var currentUserId: String
+    private lateinit var challengesRepository: ChallengesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,6 +93,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        challengesRepository.addChallengesToDatabase()
         showDailyChallenge()
 
     }
@@ -138,6 +141,7 @@ class HomeFragment : Fragment() {
         postVm = ViewModelProvider(requireActivity())[PostViewModel::class.java]
         authVm = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
         userVm = ViewModelProvider(requireActivity())[UserViewModel::class.java]
+        challengesRepository = ChallengesRepository()
     }
 
 
