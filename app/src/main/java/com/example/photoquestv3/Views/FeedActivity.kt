@@ -128,36 +128,5 @@ class FeedActivity : BaseActivity() {
             ExistingWorkPolicy.KEEP,
             dailyAPIRequest
         )
-
-
-    }
-
-    fun fetchAndPostAPIPost() {
-
-        apiViewModel.fetchRandomPhoto("xoqINlwV1EP_aaTfLsLqwPpqlGMM9Wau696KtmitXtg") { photo ->
-
-            if (photo != null) {
-
-                Log.d("!!!", "Did fetch photo!")
-
-                val description = photo.description
-
-                val photoUrl = photo.urls?.regular
-
-                Log.d("!!!", photo.toString())
-
-                if (photoUrl != null) {
-
-                    lifecycleScope.launch {
-
-                        apiRepository.saveApiPostToDatabase(photoUrl, description)
-                    }
-                } else {
-                    Log.d("!!!", "photoUrl is null")
-                }
-            } else {
-                Log.d("!!!", "Did not fetch photo")
-            }
-        }
     }
 }
