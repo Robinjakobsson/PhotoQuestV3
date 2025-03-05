@@ -134,7 +134,7 @@ class LoginFragment : Fragment() {
             })
     }
 
-    //ignore!
+    //ignore!!
     fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
