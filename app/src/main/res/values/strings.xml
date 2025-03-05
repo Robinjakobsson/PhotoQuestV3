@@ -1,9 +1,10 @@
 <resources>
     <string name="facebook_app_id">1899240990820663</string>
-    <string name="fb_login_protocol_scheme">fb1899240990820663</string>
-    <string name="facebook_client_token">3989b6db92ec67fa729b26f10bfd0925</string>
-    <string name="your_web_client_id">836432747588-26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
-    <string name="web_client_id">836432747588-3u0gpe8vh1ghvufqnth3lr39pn3mohee.apps.googleusercontent.com</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1899240990820663</string>
+    <string name="your_web_client_id">836432747588–26iv4k8po8il5h2j80gl6oiaa6jk1pp4.apps.googleusercontent.com</string>
+  <string name="facebook_client_token">3989b6db92ec67fa729b26f10bfd0925</string>
+      
+  <string name="web_client_id">836432747588–3u0gpe8vh1ghvufqnth3lr39pn3mohee.apps.googleusercontent.com</string>
     <string name="sign_in">Sign in</string>
     <string name="email">E-mail</string>
     <string name="letsgo">Let\'s go!</string>
@@ -37,7 +38,7 @@
     <string name="a_comment_has_been_made">A comment has been made</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
-    <string name="your_post_is_liked_by">Your post is liked by:</string>
+    <string name="your_post_is_liked_by">Likes</string>
     <string name="upload_image">Upload image</string>
     <string name="delete_account">Delete account</string>
     <string name="update">UPDATE</string>
@@ -89,6 +90,10 @@
     <string name="account_not_created">Account not created..</string>
     <string name="successfully_added_like">Successfully added a like!</string>
     <string name="already_liked">Already liked</string>
+    <string name="hello">Hello</string>
+    <string name="do_you_want_to_delete_this_account">Do you want to delete this account?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="edit_others_description">You can not edit others posts!</string>
-    <string name="ignore">Ignore!!</string>
+
 </resources>

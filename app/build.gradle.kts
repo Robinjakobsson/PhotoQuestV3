@@ -67,14 +67,24 @@ dependencies {
         androidTestImplementation(libs.androidx.espresso.core)
 
         implementation(libs.facebook.login.vlatestrelease)
+
+    //  Facebook Shimmer
+        implementation(libs.shimmer)
+
+    //  Lottie
         implementation(libs.lottie)
 
-        implementation(libs.retrofit)
-        implementation(libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+
+
+    implementation(libs.androidx.datastore.preferences)
+
 
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.work.runtime.ktx)
+  
 
 
 }
