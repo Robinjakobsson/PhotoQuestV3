@@ -30,8 +30,7 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+   lateinit var binding: FragmentHomeBinding
 
     private lateinit var challengesVm: ChallengesViewModel
     private lateinit var vmFireStore: FireStoreViewModel
@@ -46,7 +45,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+       binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -126,7 +125,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+       // _binding = null
     }
 
     fun observeAndDisplayPosts() {
