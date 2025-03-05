@@ -90,5 +90,5 @@
     <string name="successfully_added_like">Successfully added a like!</string>
     <string name="already_liked">Already liked</string>
     <string name="edit_others_description">You can not edit others posts!</string>
-    <string name="ignore">Ignore</string>
+    <string name="ignore">Ignore!</string>
 </resources>
