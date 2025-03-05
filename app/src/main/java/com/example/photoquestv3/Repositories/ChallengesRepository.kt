@@ -71,13 +71,13 @@ class ChallengesRepository {
         }
     }
 
-
-    //Works fine to add a list of object from ChallengeObjects to database.(Tested in ChallengesFragment).
+    /**
+     * Adds challenges to each user. If there is no new challenges,
+     * it won't add anything. Add challenges to ChallengesList in ChallengeObjects.
+     */
     fun addChallengesToDatabase() {
 
         val db = FirebaseFirestore.getInstance()
-        // val user = FirebaseAuth.getInstance().currentUser
-
         val userIds = mutableListOf<String>()
 
         db.collection("users")
@@ -89,17 +89,33 @@ class ChallengesRepository {
                 }
                 Log.d("!!!!", "All userIDs: $userIds")
 
-                // listOfChallenges.clear()
-
                 for (uid in userIds) {
                     val userDocRef = db.collection("users").document(uid)
 
                     for (challenge in ChallengeObjects.ChallengeLists) {
-                        userDocRef.collection("challenges").add(challenge)
-                            .addOnSuccessListener {
-                                Log.d("!!!", "challenge added Success")
-                            }.addOnFailureListener {
-                                Log.d("!!!", "challenge added Failed.")
+                        val challengesDate = challenge.date
+
+                        //Adds new challenges to the users if there is new ones. Compare the date, if there is already a
+                        // challenge with that date, it won't be added.
+
+                        userDocRef.collection("challenges")
+                            .whereEqualTo("date", challengesDate)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                if (documents.isEmpty) {
+                                    userDocRef.collection("challenges").add(challenge)
+                                        .addOnSuccessListener {
+                                            Log.d("!!!", "Challenges added")
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d("!!!", "Challenges not added", e)
+                                        }
+                                } else {
+                                    Log.d("!!!", "Challenges already added")
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d("!!!", "Error checking users challenges")
                             }
                     }
                 }
@@ -108,6 +124,10 @@ class ChallengesRepository {
             }
     }
 
+
+    /**
+     * Adds challenges upon registry, but may be redundant after change in function addChallengeToDatabase().
+     */
     fun addChallengesToNewUser() {
 
         val user = FirebaseAuth.getInstance().currentUser

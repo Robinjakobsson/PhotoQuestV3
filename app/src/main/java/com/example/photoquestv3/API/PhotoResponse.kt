@@ -4,7 +4,7 @@ import retrofit2.http.Url
 
 data class PhotoResponse(
     val id: String,
-    val description : String?,
+    var description : String?,
     val urls : Urls
 )
 

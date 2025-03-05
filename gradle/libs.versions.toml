@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.1"
+datastorePreferences = "1.1.3"
 facebookFacebookLogin = "latest.release"
 facebookLoginVersion = "[version]"
 glide = "4.14.2"
@@ -29,6 +30,7 @@ materialVersion = "1.11.0"
 facebookLogin = "17.0.0"
 playServicesAuth = "21.3.0"
 retrofit = "2.9.0"
+shimmer = "0.5.0"
 spotsDialog = "1.1"
 credentials = "1.3.0"
 credentialsPlayServicesAuth = "1.3.0"
@@ -37,6 +39,7 @@ workRuntimeKtx = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleLivedataKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookLoginVersion" }
@@ -68,6 +71,7 @@ material-v1110 = { module = "com.google.android.material:material", version.ref 
 facebook-login = {module = "com.facebook.android:facebook-login", version.ref = "junitVersion"}
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 spots-dialog = { module = "com.github.d-max:spots-dialog", version.ref = "spotsDialog" }
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
