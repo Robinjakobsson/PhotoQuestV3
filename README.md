@@ -1,7 +1,8 @@
 [![Build Test](https://github.com/Robinjakobsson/PhotoQuestV3/actions/workflows/build.yaml/badge.svg)](https://github.com/Robinjakobsson/PhotoQuestV3/actions/workflows/build.yaml)
 
 
-https://github.com/user-attachments/assets/c009c823-5ec2-4408-ba40-62bc1d170cf1
+https://github.com/user-attachments/assets/2eaaf4e8-b997-458e-8e3e-d8c18fd6c49c
+
 
 
 
