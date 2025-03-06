@@ -100,12 +100,14 @@
       <TextView
           android:id="@+id/daily_challenge_post_tv"
           android:layout_width="0dp"
-          android:layout_height="70dp"
-          android:lines="2"
+          android:layout_height="wrap_content"
+          android:lines="3"
           android:text="@string/daily_challenge"
-          android:textSize="20sp"
+          android:textSize="18sp"
           android:layout_weight="1"
+          android:layout_gravity="top"
           android:layout_marginStart="10dp"
+          android:layout_marginEnd="10dp"
            />
 
       <CheckBox
